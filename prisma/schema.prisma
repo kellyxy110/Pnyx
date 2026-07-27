@@ -1,0 +1,204 @@
+generator client { provider = "prisma-client-js" }
+
+datasource db { provider = "postgresql" url = env("DATABASE_URL") }
+
+enum UserRole { MEMBER MODERATOR ADMIN }
+enum Visibility { PUBLIC SPACE_ONLY FOLLOWERS_ONLY PRIVATE }
+enum PostType { QUESTION DISCUSSION SHOWCASE TUTORIAL RESEARCH ANNOUNCEMENT POLL }
+enum ArtifactType { GUIDE ANSWER RESEARCH BENCHMARK CASE_STUDY }
+enum ArtifactStatus { DRAFT PUBLISHED COMMUNITY_REVIEWED VERIFIED }
+enum ReportStatus { OPEN REVIEWING RESOLVED DISMISSED }
+
+model User {
+  id String @id @default(cuid())
+  email String @unique
+  username String @unique
+  displayName String
+  bio String?
+  avatarUrl String?
+  role UserRole @default(MEMBER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  spaces SpaceMember[]
+  posts Post[]
+  replies Reply[]
+  artifacts Artifact[]
+  revisions ArtifactRevision[]
+  reports Report[] @relation("Reporter")
+  auditEvents AuditEvent[]
+  follows UserFollow[] @relation("Following")
+  followers UserFollow[] @relation("Followers")
+}
+
+model Space {
+  id String @id @default(cuid())
+  slug String @unique
+  name String
+  description String
+  rules String?
+  isPublic Boolean @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  members SpaceMember[]
+  posts Post[]
+  artifacts Artifact[]
+}
+
+model SpaceMember {
+  userId String
+  spaceId String
+  isModerator Boolean @default(false)
+  joinedAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  space Space @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  @@id([userId, spaceId])
+  @@index([spaceId, joinedAt])
+}
+
+model Post {
+  id String @id @default(cuid())
+  authorId String
+  spaceId String
+  type PostType
+  title String
+  body String
+  visibility Visibility @default(PUBLIC)
+  isDeleted Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  space Space @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  replies Reply[]
+  artifacts Artifact[]
+  reports Report[]
+  aiOutputs AiOutput[]
+  @@index([spaceId, createdAt])
+  @@index([authorId, createdAt])
+}
+
+model Reply {
+  id String @id @default(cuid())
+  postId String
+  authorId String
+  parentId String?
+  body String
+  isAccepted Boolean @default(false)
+  isDeleted Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parent Reply? @relation("ReplyThread", fields: [parentId], references: [id], onDelete: Cascade)
+  children Reply[] @relation("ReplyThread")
+  artifacts Artifact[]
+  @@index([postId, createdAt])
+}
+
+model Artifact {
+  id String @id @default(cuid())
+  authorId String
+  spaceId String
+  sourcePostId String?
+  sourceReplyId String?
+  type ArtifactType
+  status ArtifactStatus @default(DRAFT)
+  visibility Visibility @default(PUBLIC)
+  title String
+  summary String?
+  body String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  space Space @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  sourcePost Post? @relation(fields: [sourcePostId], references: [id], onDelete: SetNull)
+  sourceReply Reply? @relation(fields: [sourceReplyId], references: [id], onDelete: SetNull)
+  revisions ArtifactRevision[]
+  sources Source[]
+  @@index([spaceId, status, updatedAt])
+}
+
+model ArtifactRevision {
+  id String @id @default(cuid())
+  artifactId String
+  editorId String
+  title String
+  body String
+  revisionNumber Int
+  createdAt DateTime @default(now())
+  artifact Artifact @relation(fields: [artifactId], references: [id], onDelete: Cascade)
+  editor User @relation(fields: [editorId], references: [id], onDelete: Cascade)
+  @@unique([artifactId, revisionNumber])
+}
+
+model Source {
+  id String @id @default(cuid())
+  artifactId String
+  url String
+  title String?
+  addedAt DateTime @default(now())
+  artifact Artifact @relation(fields: [artifactId], references: [id], onDelete: Cascade)
+  @@index([artifactId])
+}
+
+model Report {
+  id String @id @default(cuid())
+  reporterId String
+  postId String?
+  reason String
+  details String?
+  status ReportStatus @default(OPEN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  reporter User @relation("Reporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  post Post? @relation(fields: [postId], references: [id], onDelete: Cascade)
+  @@index([status, createdAt])
+}
+
+model AiOutput {
+  id String @id @default(cuid())
+  postId String?
+  kind String
+  provider String
+  model String
+  policyVersion String
+  sourceIds Json?
+  output Json
+  status String
+  createdAt DateTime @default(now())
+  post Post? @relation(fields: [postId], references: [id], onDelete: Cascade)
+  @@index([postId, kind])
+}
+
+model UserFollow {
+  followerId String
+  followingId String
+  createdAt DateTime @default(now())
+  follower User @relation("Following", fields: [followerId], references: [id], onDelete: Cascade)
+  following User @relation("Followers", fields: [followingId], references: [id], onDelete: Cascade)
+  @@id([followerId, followingId])
+}
+
+model AuditEvent {
+  id String @id @default(cuid())
+  actorId String?
+  action String
+  entityType String
+  entityId String?
+  metadata Json?
+  createdAt DateTime @default(now())
+  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  @@index([entityType, entityId, createdAt])
+  @@index([actorId, createdAt])
+}
+
+model AnalyticsEvent {
+  id String @id @default(cuid())
+  name String
+  anonymousId String
+  userId String?
+  path String?
+  properties Json?
+  createdAt DateTime @default(now())
+  @@index([name, createdAt])
+  @@index([anonymousId, createdAt])
+}
