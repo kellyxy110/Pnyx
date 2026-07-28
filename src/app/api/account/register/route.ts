@@ -15,12 +15,14 @@ export async function POST(request: Request) {
   const token = createToken();
   await prisma.emailVerificationToken.create({ data: { tokenHash: token.hash, userId: user.id, expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000) } });
   try {
-    const url = `${process.env.APP_URL}/verify-email?token=${token.raw}`;
+    const appUrl = process.env.APP_URL?.replace(/\/$/, "");
+    if (!appUrl) throw new Error("APP_URL_NOT_CONFIGURED");
+    const url = `${appUrl}/verify-email?token=${token.raw}`;
     await sendAccountMail({ to: user.email, subject: "Verify your Pnyx email", html: `<p>Welcome to Pnyx.</p><p><a href="${url}">Verify your email address</a> within 24 hours.</p>` });
   } catch (error) {
     await prisma.user.delete({ where: { id: user.id } });
-    if (error instanceof Error && error.message === "EMAIL_PROVIDER_NOT_CONFIGURED") return NextResponse.json({ error: "Email delivery is not configured yet." }, { status: 503 });
-    return NextResponse.json({ error: "We could not send the verification email." }, { status: 503 });
+    if (error instanceof Error && (error.message === "EMAIL_PROVIDER_NOT_CONFIGURED" || error.message === "APP_URL_NOT_CONFIGURED")) return NextResponse.json({ error: "Email verification is not configured yet. Please try again later." }, { status: 503 });
+    return NextResponse.json({ error: "We could not deliver the verification email. Please try again later." }, { status: 503 });
   }
   return NextResponse.json({ message: "Account created. Check your email to verify it before signing in." }, { status: 201 });
 }
