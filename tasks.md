@@ -53,12 +53,12 @@ This is the initial implementation backlog. Work from top to bottom unless a dep
 
 ## Milestone 5 — Search and discovery
 
-- [ ] Implement indexed search over public Spaces, posts, replies, profiles, and artifacts.
-- [ ] Add filters for content type, Space, author, date, and verification status.
-- [ ] Add result explanations and empty/no-results recovery.
-- [ ] Add semantic retrieval only after keyword search has observable baseline metrics.
-- [ ] Exclude deleted, private, blocked, and restricted content from indexes and caches.
-- [ ] Add ranking evaluation set and monitor relevance, diversity, freshness, and safety.
+- [x] Implement indexed search over public Spaces, posts, replies, profiles, and artifacts.
+- [x] Add filters for content type, Space, author, date, and verification status.
+- [x] Add result explanations and empty/no-results recovery.
+- [x] Add semantic retrieval only after keyword search has observable baseline metrics.
+- [x] Exclude deleted, private, blocked, and restricted content from indexes and caches.
+- [x] Add ranking evaluation set and monitor relevance, diversity, freshness, and safety.
 
 ## Milestone 6 — Beta readiness
 
