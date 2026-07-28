@@ -12,6 +12,8 @@ export async function POST(request: Request) {
   if (!parsed.success) return NextResponse.json({ error: "Enter a valid email address." }, { status: 400 });
   const user = await prisma.user.findUnique({ where: { email: parsed.data.email }, select: { id: true, email: true, emailVerifiedAt: true } });
   if (!user || user.emailVerifiedAt) return NextResponse.json({ message: genericMessage });
+  const recentToken = await prisma.emailVerificationToken.findFirst({ where: { userId: user.id, createdAt: { gte: new Date(Date.now() - 10 * 60 * 1000) } }, select: { tokenHash: true } });
+  if (recentToken) return NextResponse.json({ message: genericMessage });
   const token = createToken();
   await prisma.emailVerificationToken.deleteMany({ where: { userId: user.id } });
   await prisma.emailVerificationToken.create({ data: { tokenHash: token.hash, userId: user.id, expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000) } });
