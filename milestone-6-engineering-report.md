@@ -15,7 +15,7 @@
 - Tests passed: 7 files, 14 tests.
 - ESLint passed with no errors.
 - TypeScript passed.
-- Production build and smoke checks remain required after deployment.
+- Production build passed.\n- Production smoke checks passed: health 200, Explore 200, unauthenticated moderation queue 403, unauthenticated appeals 401.
 
 ## Sign-off status
 
