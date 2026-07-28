@@ -33,12 +33,12 @@ This is the initial implementation backlog. Work from top to bottom unless a dep
 
 ## Milestone 3 — Knowledge layer
 
-- [ ] Design and implement knowledge artifact schema with authors, contributors, sources, revisions, status, and originating discussion.
-- [ ] Add “Convert to knowledge artifact” workflow from an answer or discussion.
-- [ ] Build reading and editing experiences for guides, answers, research notes, benchmarks, and case studies.
-- [ ] Add draft/published/community-reviewed/verified statuses and revision history.
-- [ ] Add source entry, citation display, related discussions, related Spaces, and report/correction flow.
-- [ ] Measure artifact creation, reading, saving, sharing, and correction rates.
+- [x] Design and implement knowledge artifact schema with authors, contributors, sources, revisions, status, and originating discussion.
+- [x] Add “Convert to knowledge artifact” workflow from an answer or discussion.
+- [x] Build reading and editing experiences for guides, answers, research notes, benchmarks, and case studies.
+- [x] Add draft/published/community-reviewed/verified statuses and revision history.
+- [x] Add source entry, citation display, related discussions, related Spaces, and report/correction flow.
+- [x] Measure artifact creation, reading, saving, sharing, and correction rates.
 
 ## Milestone 4 — AI assistance
 

@@ -69,6 +69,8 @@ model User {
   replies Reply[]
   artifacts Artifact[]
   revisions ArtifactRevision[]
+  artifactContributions ArtifactContributor[]
+  artifactReports ArtifactReport[] @relation("ArtifactReporter")
   reports Report[] @relation("Reporter")
   auditEvents AuditEvent[]
   follows UserFollow[] @relation("Following")
@@ -231,11 +233,14 @@ model Artifact {
   body String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  publishedAt DateTime?
   author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
   space Space @relation(fields: [spaceId], references: [id], onDelete: Cascade)
   sourcePost Post? @relation(fields: [sourcePostId], references: [id], onDelete: SetNull)
   sourceReply Reply? @relation(fields: [sourceReplyId], references: [id], onDelete: SetNull)
   revisions ArtifactRevision[]
+  contributors ArtifactContributor[]
+  corrections ArtifactReport[]
   sources Source[]
   @@index([spaceId, status, updatedAt])
 }
@@ -247,17 +252,45 @@ model ArtifactRevision {
   title String
   body String
   revisionNumber Int
+  changeSummary String?
   createdAt DateTime @default(now())
   artifact Artifact @relation(fields: [artifactId], references: [id], onDelete: Cascade)
   editor User @relation(fields: [editorId], references: [id], onDelete: Cascade)
   @@unique([artifactId, revisionNumber])
 }
 
+
+model ArtifactContributor {
+  artifactId String
+  userId String
+  role String @default("CONTRIBUTOR")
+  createdAt DateTime @default(now())
+  artifact Artifact @relation(fields: [artifactId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@id([artifactId, userId])
+  @@index([userId, createdAt])
+}
+
+model ArtifactReport {
+  id String @id @default(cuid())
+  artifactId String
+  reporterId String
+  reason String
+  details String?
+  status ReportStatus @default(OPEN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  artifact Artifact @relation(fields: [artifactId], references: [id], onDelete: Cascade)
+  reporter User @relation("ArtifactReporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  @@index([artifactId, status, createdAt])
+  @@index([reporterId, createdAt])
+}
 model Source {
   id String @id @default(cuid())
   artifactId String
   url String
   title String?
+  citation String?
   addedAt DateTime @default(now())
   artifact Artifact @relation(fields: [artifactId], references: [id], onDelete: Cascade)
   @@index([artifactId])
