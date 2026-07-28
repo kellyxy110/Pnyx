@@ -1,2 +1,6 @@
-import Link from "next/link"; import { auth } from "@/auth"; import { KnowledgeBrowser } from "@/components/knowledge-browser"; import { KnowledgeEditor } from "@/components/knowledge-editor";
-export default async function KnowledgePage(){const session=await auth();return <main className="shell space-y-8"><header className="flex flex-wrap items-center justify-between gap-4"><div><Link href="/feed" className="wordmark">PNYX</Link><p className="eyebrow mt-8">The knowledge layer</p><h1 className="text-4xl font-semibold text-[var(--navy)]">Knowledge that outlives the thread.</h1></div><nav className="flex gap-3"><Link href="/feed" className="button-outline">Discussions</Link><Link href="/notifications" className="button-outline">Notifications</Link></nav></header>{session&&<KnowledgeEditor/>}<KnowledgeBrowser/></main>}
+import { auth } from "@/auth";
+import { ProductNav } from "@/components/product-nav";
+import { KnowledgeBrowser } from "@/components/knowledge-browser";
+import { KnowledgeEditor } from "@/components/knowledge-editor";
+
+export default async function KnowledgePage(){const session=await auth();return <main className="app-shell"><ProductNav/><section className="surface-hero"><p className="eyebrow">Knowledge library</p><h1>Ideas that outlive the thread.</h1><p>Read guides, answers, research notes, benchmarks, and case studies with their sources, contributors, and revision history intact.</p></section>{session&&<section className="surface-section"><KnowledgeEditor/></section>}<section className="surface-section"><KnowledgeBrowser/></section></main>}
