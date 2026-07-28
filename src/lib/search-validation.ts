@@ -1,0 +1,2 @@
+import { z } from "zod";
+export const searchQuerySchema = z.object({ q: z.string().trim().min(2).max(120), type: z.enum(["all", "posts", "replies", "artifacts", "spaces", "people"]).default("all"), page: z.coerce.number().int().min(1).max(100).default(1) });
