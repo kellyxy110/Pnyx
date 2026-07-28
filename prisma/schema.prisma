@@ -62,6 +62,7 @@ model User {
   profileVisibility Visibility @default(PUBLIC)
   role UserRole @default(MEMBER)
   aiEnabled Boolean @default(true)
+  suspendedUntil DateTime?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   spaces SpaceMember[]
@@ -73,6 +74,8 @@ model User {
   artifactContributions ArtifactContributor[]
   artifactReports ArtifactReport[] @relation("ArtifactReporter")
   reports Report[] @relation("Reporter")
+  moderationAppeals ModerationAppeal[] @relation("Appellant")
+  reviewedAppeals ModerationAppeal[] @relation("Reviewer")
   auditEvents AuditEvent[]
   follows UserFollow[] @relation("Following")
   followers UserFollow[] @relation("Followers")
@@ -285,6 +288,7 @@ model ArtifactReport {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   artifact Artifact @relation(fields: [artifactId], references: [id], onDelete: Cascade)
+  appeals ModerationAppeal[]
   reporter User @relation("ArtifactReporter", fields: [reporterId], references: [id], onDelete: Cascade)
   @@index([artifactId, status, createdAt])
   @@index([reporterId, createdAt])
@@ -310,6 +314,7 @@ model Report {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   reporter User @relation("Reporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  appeals ModerationAppeal[]
   post Post? @relation(fields: [postId], references: [id], onDelete: Cascade)
   @@index([status, createdAt])
 }
@@ -357,6 +362,24 @@ model AiFeedback {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@unique([aiOutputId, userId])
   @@index([userId, createdAt])
+}
+model ModerationAppeal {
+  id String @id @default(cuid())
+  appellantId String
+  reportId String?
+  artifactReportId String?
+  reason String
+  status String @default("OPEN")
+  reviewerId String?
+  resolution String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  appellant User @relation("Appellant", fields: [appellantId], references: [id], onDelete: Cascade)
+  reviewer User? @relation("Reviewer", fields: [reviewerId], references: [id], onDelete: SetNull)
+  report Report? @relation(fields: [reportId], references: [id], onDelete: Cascade)
+  artifactReport ArtifactReport? @relation(fields: [artifactReportId], references: [id], onDelete: Cascade)
+  @@index([status, createdAt])
+  @@index([appellantId, createdAt])
 }
 model AuditEvent {
   id String @id @default(cuid())

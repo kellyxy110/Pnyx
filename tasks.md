@@ -62,12 +62,12 @@ This is the initial implementation backlog. Work from top to bottom unless a dep
 
 ## Milestone 6 — Beta readiness
 
-- [ ] Build moderation queue, moderator actions, audit log, appeals, and escalation paths.
-- [ ] Add spam prevention, rate limits, suspicious-activity review, and abuse monitoring.
+- [x] Build moderation queue, moderator actions, audit log, appeals, and escalation paths.
+- [x] Add spam prevention, rate limits, suspicious-activity review, and abuse monitoring.
 - [ ] Run accessibility audit and keyboard/screen-reader usability pass.
 - [ ] Run responsive/mobile audit across core flows.
 - [ ] Add load, failure recovery, backup/restore, deletion propagation, and security tests.
-- [ ] Instrument success metrics from `prd.md` and document metric definitions.
+- [x] Instrument success metrics from `prd.md` and document metric definitions.
 - [ ] Recruit a small set of learners, engineers, researchers, maintainers, and moderators for closed beta.
 - [ ] Review beta evidence and decide whether to expand, narrow, or revise scope.
 
