@@ -15,7 +15,7 @@
 - Tests passed: 7 files, 14 tests.
 - ESLint passed with no errors.
 - TypeScript passed.
-- Production build passed.\n- Production smoke checks passed: health 200, Explore 200, unauthenticated moderation queue 403, unauthenticated appeals 401.
+- Production build passed.\n- Production smoke checks passed: health 200, Explore 200, unauthenticated moderation queue 403, unauthenticated appeals 401.\n- Tracked-source secret scan passed; Prisma migration status is up to date.\n- Dependency audit identified four high/moderate nested `postcss`/`sharp` findings; the unsafe forced downgrade was not applied.
 
 ## Sign-off status
 
