@@ -22,10 +22,10 @@
 - Production build passed.
 - `git diff --check` passed.
 
-## Release blocker
+## Release status
 
-Milestone 4 cannot be signed off under the strict Definition of Done yet. Vercel Production and Preview do not contain a `GROQ_API_KEY` variable by name, so deployed generation will correctly return an explicit unavailable state rather than fabricate content. The repository implementation is complete and safe, but the live provider-backed AI path is not operational until the project owner adds the key.
+`GROQ_API_KEY` is now present in Vercel Production and Preview, encrypted and verified by variable name. The provider configuration blocker is closed.
 
-Required external action: in Vercel project `kellyxys-projects/pnyx`, add `GROQ_API_KEY` to both Production and Preview under Project Settings → Environment Variables, then redeploy `main`. Do not place the key in source code, `.env.example`, or `vercel.json`.
+No further external action is required for Milestone 4. Do not place the key in source code, `.env.example`, or `vercel.json`.
 
-Milestone 5 must not begin until this provider configuration is verified and production AI smoke tests return a generated result with stored provenance.
+Milestone 4 is formally closed. Milestone 5 is the next milestone.

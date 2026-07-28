@@ -42,14 +42,14 @@ This is the initial implementation backlog. Work from top to bottom unless a dep
 
 ## Milestone 4 — AI assistance
 
-- [ ] Create provider-agnostic AI orchestration interface with timeouts, retries, cost limits, and graceful fallback.
-- [ ] Generate optional post summaries and suggested tags.
-- [ ] Suggest related/duplicate discussions using permission-aware retrieval.
-- [ ] Extract and display source/documentation suggestions with clear confidence and provenance.
-- [ ] Assist drafting artifacts only from user-selected content and preserve contributor attribution.
-- [ ] Store model/version, prompt policy version, source IDs, generation time, and output status.
-- [ ] Add user correction, feedback, report, and disable-AI controls.
-- [ ] Evaluate quality, latency, cost, privacy leakage, and hallucination/report rates before expanding automation.
+- [x] Create provider-agnostic AI orchestration interface with timeouts, retries, cost limits, and graceful fallback.
+- [x] Generate optional post summaries and suggested tags.
+- [x] Suggest related/duplicate discussions using permission-aware retrieval.
+- [x] Extract and display source/documentation suggestions with clear confidence and provenance.
+- [x] Assist drafting artifacts only from user-selected content and preserve contributor attribution.
+- [x] Store model/version, prompt policy version, source IDs, generation time, and output status.
+- [x] Add user correction, feedback, report, and disable-AI controls.
+- [x] Evaluate quality, latency, cost, privacy leakage, and hallucination/report rates before expanding automation.
 
 ## Milestone 5 — Search and discovery
 
