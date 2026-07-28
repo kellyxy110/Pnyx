@@ -61,6 +61,7 @@ model User {
   emailVerifiedAt DateTime?
   profileVisibility Visibility @default(PUBLIC)
   role UserRole @default(MEMBER)
+  aiEnabled Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   spaces SpaceMember[]
@@ -83,6 +84,8 @@ model User {
   blocksGiven UserBlock[] @relation("BlocksGiven")
   blocksReceived UserBlock[] @relation("BlocksReceived")
   mutedSpaces SpaceMute[]
+  aiOutputsRequested AiOutput[]
+  aiFeedback AiFeedback[]
 }
 
 model Space {
@@ -241,6 +244,7 @@ model Artifact {
   revisions ArtifactRevision[]
   contributors ArtifactContributor[]
   corrections ArtifactReport[]
+  aiOutputs AiOutput[]
   sources Source[]
   @@index([spaceId, status, updatedAt])
 }
@@ -313,6 +317,8 @@ model Report {
 model AiOutput {
   id String @id @default(cuid())
   postId String?
+  artifactId String?
+  requestedById String?
   kind String
   provider String
   model String
@@ -322,7 +328,12 @@ model AiOutput {
   status String
   createdAt DateTime @default(now())
   post Post? @relation(fields: [postId], references: [id], onDelete: Cascade)
+  artifact Artifact? @relation(fields: [artifactId], references: [id], onDelete: Cascade)
+  requestedBy User? @relation(fields: [requestedById], references: [id], onDelete: SetNull)
+  feedback AiFeedback[]
   @@index([postId, kind])
+  @@index([artifactId, kind])
+  @@index([requestedById, createdAt])
 }
 
 model UserFollow {
@@ -334,6 +345,19 @@ model UserFollow {
   @@id([followerId, followingId])
 }
 
+
+model AiFeedback {
+  id String @id @default(cuid())
+  aiOutputId String
+  userId String
+  type String
+  details String?
+  createdAt DateTime @default(now())
+  aiOutput AiOutput @relation(fields: [aiOutputId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([aiOutputId, userId])
+  @@index([userId, createdAt])
+}
 model AuditEvent {
   id String @id @default(cuid())
   actorId String?
