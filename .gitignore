@@ -8,5 +8,10 @@ coverage
 *.log
 prisma/dev.db
 prisma/dev.db-journal
-
 .vercel
+
+# Operating system and editor files
+.DS_Store
+Thumbs.db
+.vscode
+.idea
