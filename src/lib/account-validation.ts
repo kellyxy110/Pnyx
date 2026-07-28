@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const registrationSchema = z.object({
   email: z.string().trim().toLowerCase().email(),
-  username: z.string().trim().min(3).max(30).regex(/^[a-z0-9_]+$/, "Use lowercase letters, numbers, and underscores."),
+  username: z.string().trim().min(3).max(30).regex(/^[a-z0-9_-]+$/, "Use lowercase letters, numbers, hyphens, and underscores."),
   displayName: z.string().trim().min(2).max(80),
   password: z.string().min(12).max(128),
 });

@@ -1,16 +1,21 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
+import Google from "next-auth/providers/google";
+import GitHub from "next-auth/providers/github";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 
+const oauthProviders = [];
+if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) oauthProviders.push(Google({ clientId: process.env.GOOGLE_CLIENT_ID, clientSecret: process.env.GOOGLE_CLIENT_SECRET }));
+if (process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET) oauthProviders.push(GitHub({ clientId: process.env.GITHUB_CLIENT_ID, clientSecret: process.env.GITHUB_CLIENT_SECRET }));
 const credentialsSchema = z.object({ email: z.string().email(), password: z.string().min(12).max(128) });
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   secret: process.env.AUTH_SECRET,
   trustHost: true,
   session: { strategy: "jwt", maxAge: 60 * 60 * 24 * 30 },
-  providers: [Credentials({
+  providers: [...oauthProviders, Credentials({
     credentials: { email: {}, password: {} },
     async authorize(raw) {
       const parsed = credentialsSchema.safeParse(raw);

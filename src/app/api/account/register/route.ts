@@ -7,10 +7,10 @@ import { sendAccountMail } from "@/lib/mail";
 
 export async function POST(request: Request) {
   const parsed = registrationSchema.safeParse(await request.json().catch(() => null));
-  if (!parsed.success) return NextResponse.json({ error: "Check the account details and try again." }, { status: 400 });
+  if (!parsed.success) return NextResponse.json({ error: "Please correct the highlighted fields.", fieldErrors: parsed.error.flatten().fieldErrors }, { status: 400 });
   const input = parsed.data;
   const existing = await prisma.user.findFirst({ where: { OR: [{ email: input.email }, { username: input.username }] }, select: { email: true, username: true } });
-  if (existing) return NextResponse.json({ error: existing.email === input.email ? "That email is already registered." : "That username is already in use." }, { status: 409 });
+  if (existing) return NextResponse.json({ error: existing.email === input.email ? "That email is already registered." : "Username is already taken." }, { status: 409 });
   const user = await prisma.user.create({ data: { email: input.email, username: input.username, displayName: input.displayName, passwordHash: await bcrypt.hash(input.password, 12) } });
   const token = createToken();
   await prisma.emailVerificationToken.create({ data: { tokenHash: token.hash, userId: user.id, expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000) } });
