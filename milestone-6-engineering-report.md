@@ -20,3 +20,6 @@
 ## Sign-off status
 
 Milestone 6 is not yet formally complete under the strict Definition of Done. Manual WCAG 2.2 AA and responsive-device audits, load/failure-recovery/backup-restore/security evidence, closed-beta recruitment, and beta evidence review require external staging/device/participant work. Milestone 6 remains open; no later milestone has started.
+## Cross-milestone authentication update
+
+The accepted authentication redesign is complete in commit 82d748b. Email/password remains the supported production path. Google/GitHub OAuth credentials and manual Lighthouse/screen-reader QA remain pending release configuration and manual testing tasks.

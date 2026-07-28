@@ -82,6 +82,13 @@ This is the initial implementation backlog. Work from top to bottom unless a dep
 - [ ] Multilingual translation and advanced accessibility assistance.
 - [ ] Native mobile applications, enterprise communities, and marketplace.
 
+## Cross-milestone release work
+
+- [x] Redesign the premium email/password authentication experience, including responsive UX, inline validation, accessibility foundations, assets, and tests.
+- [ ] Configure Google OAuth credentials in Vercel Production and Preview.
+- [ ] Configure GitHub OAuth credentials in Vercel Production and Preview.
+- [ ] Run manual Lighthouse accessibility QA.
+- [ ] Run manual screen-reader QA.
 ## Release gates
 
 Before public launch, Pnyx must demonstrate a reliable question-to-useful-answer flow, safe and permission-aware discovery, understandable AI provenance, usable moderation, accessible core flows, recoverable data, and evidence that users return for knowledge—not only notifications.
