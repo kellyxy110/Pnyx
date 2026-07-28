@@ -4,22 +4,22 @@ This is the initial implementation backlog. Work from top to bottom unless a dep
 
 ## Milestone 0 — Product and technical foundation
 
-- [ ] Create repository structure and choose the initial web application stack.
-- [ ] Define environment configuration, secrets handling, code quality checks, and CI.
-- [ ] Establish domain modules: identity, profiles, Spaces, content, knowledge, search, AI, moderation, notifications, and analytics.
-- [ ] Define database entities and migration strategy for users, Spaces, posts, replies, artifacts, sources, revisions, reports, and permissions.
-- [ ] Define public/private/restricted visibility and authorization rules.
-- [ ] Write initial community guidelines, AI disclosure policy, content policy, and appeal policy.
-- [ ] Create design tokens, typography scale, spacing scale, semantic colors, and accessible component conventions.
-- [ ] Add error tracking, structured logging, audit events, health checks, and privacy-safe analytics.
+- [x] Create repository structure and choose the initial web application stack.
+- [x] Define environment configuration, secrets handling, code quality checks, and CI.
+- [x] Establish domain modules: identity, profiles, Spaces, content, knowledge, search, AI, moderation, notifications, and analytics.
+- [x] Define database entities and migration strategy for users, Spaces, posts, replies, artifacts, sources, revisions, reports, and permissions.
+- [x] Define public/private/restricted visibility and authorization rules.
+- [x] Write initial community guidelines, AI disclosure policy, content policy, and appeal policy.
+- [x] Create design tokens, typography scale, spacing scale, semantic colors, and accessible component conventions.
+- [x] Add error tracking, structured logging, audit events, health checks, and privacy-safe analytics.
 
 ## Milestone 1 — Identity and Spaces
 
-- [ ] Implement registration, authentication, recovery, session management, and account deletion.
-- [ ] Implement profile creation/editing, avatar handling, links, expertise categories, and privacy controls.
-- [ ] Implement Space creation/seeding, browsing, following, joining, leaving, rules, moderators, and featured resources.
-- [ ] Seed initial Spaces and subtopics across AI, Programming, Web, Mobile, Cloud, Data, Cybersecurity, Design, Business, Education, and Hardware.
-- [ ] Add permission tests for user, Space member, moderator, and administrator roles.
+- [x] Implement registration, authentication, recovery, session management, and account deletion.
+- [x] Implement profile creation/editing, avatar handling, links, expertise categories, and privacy controls.
+- [x] Implement Space creation/seeding, browsing, following, joining, leaving, rules, moderators, and featured resources.
+- [x] Seed initial Spaces and subtopics across AI, Programming, Web, Mobile, Cloud, Data, Cybersecurity, Design, Business, Education, and Hardware.
+- [x] Add permission tests for user, Space member, moderator, and administrator roles.
 
 ## Milestone 2 — Discussion loop
 

@@ -1,0 +1,16 @@
+"use client";
+
+import { FormEvent, useState } from "react";
+import Link from "next/link";
+
+export function ForgotPasswordForm() {
+  const [message, setMessage] = useState(""); const [error, setError] = useState(""); const [busy, setBusy] = useState(false);
+  async function submit(event: FormEvent<HTMLFormElement>) { event.preventDefault(); setBusy(true); setError(""); setMessage(""); const email = new FormData(event.currentTarget).get("email"); const response = await fetch("/api/account/forgot-password", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) }); const data = await response.json(); if (!response.ok) setError(data.error ?? "Recovery is not available."); else setMessage(data.message); setBusy(false); }
+  return <form onSubmit={submit} className="mx-auto grid w-full max-w-md gap-5"><label className="grid gap-2 text-sm font-semibold text-[#0B1F3A]">Account email<input name="email" type="email" autoComplete="email" required className="rounded-xl border border-slate-300 bg-white px-4 py-3 font-normal outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-blue-100" /></label>{error && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-800">{error}</p>}{message && <p role="status" className="rounded-xl bg-teal-50 p-3 text-sm text-teal-900">{message}</p>}<button disabled={busy} className="rounded-full bg-[#0B1F3A] px-5 py-3 font-bold text-white hover:bg-[#2563EB] disabled:opacity-60">{busy ? "Sending…" : "Send recovery email"}</button><p className="text-center text-sm text-slate-600"><Link className="font-bold text-[#2563EB]" href="/sign-in">Back to sign in</Link></p></form>;
+}
+
+export function ResetPasswordForm({ token }: { token: string }) {
+  const [message, setMessage] = useState(""); const [error, setError] = useState(""); const [busy, setBusy] = useState(false);
+  async function submit(event: FormEvent<HTMLFormElement>) { event.preventDefault(); setBusy(true); setError(""); const password = new FormData(event.currentTarget).get("password"); const response = await fetch("/api/account/reset-password", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token, password }) }); const data = await response.json(); if (!response.ok) setError(data.error ?? "Password could not be reset."); else setMessage(data.message); setBusy(false); }
+  return <form onSubmit={submit} className="mx-auto grid w-full max-w-md gap-5"><label className="grid gap-2 text-sm font-semibold text-[#0B1F3A]">New password <span className="font-normal text-slate-500">12 characters minimum</span><input name="password" type="password" minLength={12} required autoComplete="new-password" className="rounded-xl border border-slate-300 bg-white px-4 py-3 font-normal outline-none focus:border-[#2563EB] focus:ring-2 focus:ring-blue-100" /></label>{error && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-800">{error}</p>}{message && <p role="status" className="rounded-xl bg-teal-50 p-3 text-sm text-teal-900">{message}</p>}<button disabled={busy} className="rounded-full bg-[#0B1F3A] px-5 py-3 font-bold text-white hover:bg-[#2563EB] disabled:opacity-60">{busy ? "Updating…" : "Update password"}</button></form>;
+}

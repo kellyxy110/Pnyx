@@ -54,10 +54,17 @@ model User {
   displayName String
   bio String?
   avatarUrl String?
+  timezone String?
+  expertise Json?
+  links Json?
+  passwordHash String?
+  emailVerifiedAt DateTime?
+  profileVisibility Visibility @default(PUBLIC)
   role UserRole @default(MEMBER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   spaces SpaceMember[]
+  spaceFollows SpaceFollow[]
   posts Post[]
   replies Reply[]
   artifacts Artifact[]
@@ -66,6 +73,8 @@ model User {
   auditEvents AuditEvent[]
   follows UserFollow[] @relation("Following")
   followers UserFollow[] @relation("Followers")
+  passwordResetTokens PasswordResetToken[]
+  emailVerificationTokens EmailVerificationToken[]
 }
 
 model Space {
@@ -74,10 +83,13 @@ model Space {
   name String
   description String
   rules String?
+  tags String[] @default([])
+  isFeatured Boolean @default(false)
   isPublic Boolean @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   members SpaceMember[]
+  followers SpaceFollow[]
   posts Post[]
   artifacts Artifact[]
 }
@@ -91,6 +103,16 @@ model SpaceMember {
   space Space @relation(fields: [spaceId], references: [id], onDelete: Cascade)
   @@id([userId, spaceId])
   @@index([spaceId, joinedAt])
+}
+
+model SpaceFollow {
+  userId String
+  spaceId String
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  space Space @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  @@id([userId, spaceId])
+  @@index([spaceId, createdAt])
 }
 
 model Post {
@@ -239,4 +261,24 @@ model AnalyticsEvent {
   createdAt DateTime @default(now())
   @@index([name, createdAt])
   @@index([anonymousId, createdAt])
+}
+
+model PasswordResetToken {
+  tokenHash String @id
+  userId String
+  expiresAt DateTime
+  usedAt DateTime?
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, expiresAt])
+}
+
+model EmailVerificationToken {
+  tokenHash String @id
+  userId String
+  expiresAt DateTime
+  usedAt DateTime?
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, expiresAt])
 }

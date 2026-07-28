@@ -1,0 +1,4 @@
+import Link from "next/link";
+import { ResetPasswordForm } from "@/components/recovery-forms";
+
+export default async function ResetPasswordPage({ searchParams }: { searchParams: Promise<{ token?: string }> }) { const { token } = await searchParams; return <main className="min-h-screen bg-[#F8FAFC] px-5 py-12 sm:py-20"><div className="mx-auto max-w-3xl"><Link href="/" className="font-bold tracking-[.22em] text-[#0B1F3A]">PNYX</Link><section className="mt-20"><p className="mb-4 text-xs font-extrabold uppercase tracking-[.16em] text-[#2563EB]">Account recovery</p><h1 className="mb-5 text-5xl font-bold tracking-[-.06em] text-[#0B1F3A] sm:text-7xl">Set a new password.</h1>{token ? <ResetPasswordForm token={token} /> : <p role="alert" className="rounded-2xl bg-red-50 p-5 text-red-800">This reset link is missing its token.</p>}</section></div></main>; }
