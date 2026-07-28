@@ -75,6 +75,12 @@ model User {
   followers UserFollow[] @relation("Followers")
   passwordResetTokens PasswordResetToken[]
   emailVerificationTokens EmailVerificationToken[]
+  reactions PostReaction[]
+  bookmarks Bookmark[]
+  notifications Notification[]
+  blocksGiven UserBlock[] @relation("BlocksGiven")
+  blocksReceived UserBlock[] @relation("BlocksReceived")
+  mutedSpaces SpaceMute[]
 }
 
 model Space {
@@ -92,6 +98,7 @@ model Space {
   followers SpaceFollow[]
   posts Post[]
   artifacts Artifact[]
+  mutedBy SpaceMute[]
 }
 
 model SpaceMember {
@@ -124,6 +131,8 @@ model Post {
   body String
   visibility Visibility @default(PUBLIC)
   isDeleted Boolean @default(false)
+  isDraft Boolean @default(false)
+  pollOptions Json?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
@@ -132,6 +141,8 @@ model Post {
   artifacts Artifact[]
   reports Report[]
   aiOutputs AiOutput[]
+  reactions PostReaction[]
+  bookmarks Bookmark[]
   @@index([spaceId, createdAt])
   @@index([authorId, createdAt])
 }
@@ -152,6 +163,58 @@ model Reply {
   children Reply[] @relation("ReplyThread")
   artifacts Artifact[]
   @@index([postId, createdAt])
+}
+
+model PostReaction {
+  userId String
+  postId String
+  type String @default("LIKE")
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  @@id([userId, postId])
+  @@index([postId, type])
+}
+
+model Bookmark {
+  userId String
+  postId String
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  @@id([userId, postId])
+  @@index([userId, createdAt])
+}
+
+model Notification {
+  id String @id @default(cuid())
+  userId String
+  type String
+  title String
+  body String
+  href String?
+  readAt DateTime?
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([userId, readAt, createdAt])
+}
+
+model UserBlock {
+  blockerId String
+  blockedId String
+  createdAt DateTime @default(now())
+  blocker User @relation("BlocksGiven", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked User @relation("BlocksReceived", fields: [blockedId], references: [id], onDelete: Cascade)
+  @@id([blockerId, blockedId])
+}
+
+model SpaceMute {
+  userId String
+  spaceId String
+  createdAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  space Space @relation(fields: [spaceId], references: [id], onDelete: Cascade)
+  @@id([userId, spaceId])
 }
 
 model Artifact {

@@ -23,13 +23,13 @@ This is the initial implementation backlog. Work from top to bottom unless a dep
 
 ## Milestone 2 — Discussion loop
 
-- [ ] Build post composer with post types, Markdown, code blocks, links, images, polls, drafts, and validation.
-- [ ] Build feed views for Following, Latest, and Space discussions.
-- [ ] Implement replies, mentions, reactions, saves, edits, deletion, sorting, and pagination.
-- [ ] Implement question/answer state and accepted answer behavior.
-- [ ] Add post/report/block/mute flows with confirmation and recovery states.
-- [ ] Add notification center for replies, mentions, follows, accepted answers, and moderation decisions.
-- [ ] Test content permissions, deletion behavior, rate limits, and abuse edge cases.
+- [x] Build post composer with post types, Markdown, code blocks, links, images, polls, drafts, and validation.
+- [x] Build feed views for Following, Latest, and Space discussions.
+- [x] Implement replies, mentions, reactions, saves, edits, deletion, sorting, and pagination.
+- [x] Implement question/answer state and accepted answer behavior.
+- [x] Add post/report/block/mute flows with confirmation and recovery states.
+- [x] Add notification center for replies, mentions, follows, accepted answers, and moderation decisions.
+- [x] Test content permissions, deletion behavior, rate limits, and abuse edge cases.
 
 ## Milestone 3 — Knowledge layer
 
