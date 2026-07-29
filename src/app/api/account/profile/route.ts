@@ -24,7 +24,9 @@ export async function PATCH(request: Request) {
   const session = await auth();
   if (!session?.user?.id) return NextResponse.json({ error: "Sign in required." }, { status: 401 });
   const parsed = profileSchema.safeParse(await request.json().catch(() => null));
-  if (!parsed.success) return NextResponse.json({ error: "Check the profile details and try again." }, { status: 400 });
+  if (!parsed.success) return NextResponse.json({ error: "Check the profile details and try again.", fieldErrors: parsed.error.flatten().fieldErrors }, { status: 400 });
+  const existing = parsed.data.username ? await prisma.user.findFirst({ where: { username: parsed.data.username, NOT: { id: session.user.id } }, select: { id: true } }) : null;
+  if (existing) return NextResponse.json({ error: "That username is already taken.", fieldErrors: { username: ["That username is already taken."] } }, { status: 409 });
   const user = await prisma.user.update({ where: { id: session.user.id }, data: parsed.data, select: { id: true, username: true, displayName: true, avatarUrl: true, bannerKey: true, bio: true, headline: true, location: true, websiteUrl: true, githubUrl: true, linkedinUrl: true, timezone: true, expertise: true, skills: true, interests: true, links: true, profileVisibility: true } });
   return NextResponse.json(user);
 }

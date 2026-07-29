@@ -8,6 +8,7 @@ export const registrationSchema = z.object({
 });
 
 export const profileSchema = z.object({
+  username: z.string().trim().toLowerCase().min(3).max(30).regex(/^[a-z0-9_-]+$/, "Use 3–30 lowercase letters, numbers, hyphens, or underscores.").optional(),
   displayName: z.string().trim().min(2).max(80),
   headline: z.string().trim().max(120).nullable(),
   location: z.string().trim().max(100).nullable(),

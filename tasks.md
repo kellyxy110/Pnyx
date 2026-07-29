@@ -101,7 +101,8 @@ Before public launch, Pnyx must demonstrate a reliable question-to-useful-answer
 - [x] Complete profile identity, editable bio/headline/skills/interests/social links, privacy-aware public profiles, and persisted activity surfaces.
 - [ ] Configure and production-verify Cloudflare R2 avatar/banner media uploads; controls remain feature-gated until then.
 - [ ] Complete follower/following actions, lists, and feed impact (separate following-system module).
-- [x] Complete authenticated community feed, composer, persisted drafts, autosave, preview, and publishing.`r`n- [ ] Complete discussion-detail editing, threaded replies, sharing, reporting, and ownership controls.
+- [x] Complete authenticated community feed, composer, persisted drafts, autosave, preview, and publishing.
+- [ ] Complete discussion-detail editing, threaded replies, sharing, reporting, and ownership controls.
 - [x] Complete user following and feed impact.
 - [ ] Complete Space detail, membership, members, moderators, rules, and pinned content.
 - [ ] Complete Knowledge reading/index surfaces with sources, citations, related content, and revisions.
