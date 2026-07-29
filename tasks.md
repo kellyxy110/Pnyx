@@ -98,7 +98,9 @@ Before public launch, Pnyx must demonstrate a reliable question-to-useful-answer
 
 - [x] Add global session-aware navigation, user menu, avatar fallback, notification count, profile link, notifications link, and sign-out.
 - [x] Build the shared responsive three-column application shell.
-- [ ] Complete profile identity, activity, followers/following, and real avatar/banner storage. (Identity fields, media service, migration, and feature-gated controls implemented; production R2 configuration and end-to-end media verification remain.)
+- [x] Complete profile identity, editable bio/headline/skills/interests/social links, privacy-aware public profiles, and persisted activity surfaces.
+- [ ] Configure and production-verify Cloudflare R2 avatar/banner media uploads; controls remain feature-gated until then.
+- [ ] Complete follower/following actions, lists, and feed impact (separate following-system module).
 - [ ] Complete authenticated community feed, composer, drafts, publishing, and discussion actions.
 - [ ] Complete user following and feed impact.
 - [ ] Complete Space detail, membership, members, moderators, rules, and pinned content.

@@ -49,6 +49,22 @@ Production evidence:
 - Responsive production audit: 28/28 checks passed across mobile, tablet, desktop, and wide desktop.
 - TypeScript: PASS; unit tests: 22/22 PASS; Vercel production build: PASS.
 
+## Module 3 result — profile identity and activity
+
+Implemented and deployed:
+
+- Persisted profile headline, location, website, GitHub, LinkedIn, skills, interests, and visibility fields through migration `20260729123000_profile_completion`.
+- Profile editor with real validation, activity counts, joined Spaces, discussions, knowledge contributions, bookmarks, and drafts.
+- Privacy-aware public profiles at `/people/[username]`; follower-only visibility requires a persisted follower relationship and private profiles are not exposed.
+- Cloudflare R2-compatible storage abstraction with server-side image validation, WebP normalization, replacement/deletion cleanup, and hidden upload controls until R2 configuration is present.
+
+Production evidence:
+
+- Deployment `dpl_AreSS2pMw4CpQenmvK4JZLeyUdE3`: READY and aliased to the production URL.
+- Prisma migration deploy: 9 migrations found, no pending migrations.
+- TypeScript: PASS; unit tests: 23/23 PASS; Vercel production build: PASS.
+- Media configuration endpoint currently returns `enabled: false`, so production does not expose inactive upload controls.
+
 ## Remaining 6A modules
 
 1. Profile completion
