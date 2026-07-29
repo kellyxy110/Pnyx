@@ -93,3 +93,28 @@ This is the initial implementation backlog. Work from top to bottom unless a dep
 ## Release gates
 
 Before public launch, Pnyx must demonstrate a reliable question-to-useful-answer flow, safe and permission-aware discovery, understandable AI provenance, usable moderation, accessible core flows, recoverable data, and evidence that users return for knowledge—not only notifications.
+
+## Milestone 6A — Core product completion (active)
+
+- [x] Add global session-aware navigation, user menu, avatar fallback, notification count, profile link, notifications link, and sign-out.
+- [ ] Build the shared responsive three-column application shell.
+- [ ] Complete profile identity, activity, followers/following, and real avatar/banner storage.
+- [ ] Complete authenticated community feed, composer, drafts, publishing, and discussion actions.
+- [ ] Complete user following and feed impact.
+- [ ] Complete Space detail, membership, members, moderators, rules, and pinned content.
+- [ ] Complete Knowledge reading/index surfaces with sources, citations, related content, and revisions.
+- [ ] Complete Explore discovery, trending, filters, recommendations, and pagination.
+- [ ] Complete truthful AI assistance surfaces backed by supported APIs only.
+- [ ] Add authenticated Playwright journey coverage and production evidence.
+
+## Milestone 6B — Resilience and security (paused until 6A closes)
+
+- [ ] Load and failure-recovery testing.
+- [ ] Backup/restore verification.
+- [ ] Deletion propagation verification.
+- [ ] Security and abuse testing.
+
+## Milestone 6C — Closed beta readiness (paused until 6A closes)
+
+- [ ] Manual Lighthouse, screen-reader, and real-device QA.
+- [ ] Closed-beta recruitment, consent, feedback, and evidence review.
