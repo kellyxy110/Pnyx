@@ -1,19 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
-type Item = { id: string; title: string; body: string; href: string | null; readAt: string | null };
+type Item = { id: string; title: string; body: string; href: string | null; readAt: string | null; createdAt: string };
+function groupFor(date: string) { const age = Date.now() - new Date(date).getTime(); if (age < 24 * 60 * 60 * 1000) return "Today"; if (age < 7 * 24 * 60 * 60 * 1000) return "Earlier this week"; return "Older"; }
+function relative(date: string) { const minutes = Math.max(1, Math.round((Date.now() - new Date(date).getTime()) / 60000)); if (minutes < 60) return `${minutes}m ago`; const hours = Math.round(minutes / 60); if (hours < 24) return `${hours}h ago`; return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric" }).format(new Date(date)); }
 
 export function NotificationList({ initialItems }: { initialItems: Item[] }) {
-  const [items, setItems] = useState(initialItems);
-  const [message, setMessage] = useState("");
-  async function mark(id?: string) {
-    setMessage("");
-    const response = await fetch("/api/notifications", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(id ? { id } : { all: true }) });
-    if (!response.ok) { setMessage("Notifications could not be updated. Please try again."); return; }
-    setItems((current) => current.map((item) => id && item.id !== id ? item : { ...item, readAt: new Date().toISOString() }));
-  }
+  const [items, setItems] = useState(initialItems); const [message, setMessage] = useState(""); const [busy, setBusy] = useState<string | null>(null);
+  const groups = useMemo(() => ["Today", "Earlier this week", "Older"].map((label) => [label, items.filter((item) => groupFor(item.createdAt) === label)] as const).filter(([, list]) => list.length), [items]);
+  async function mark(id?: string) { setMessage(""); setBusy(id ?? "all"); const response = await fetch("/api/notifications", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(id ? { id } : { all: true }) }); if (!response.ok) setMessage("Notifications could not be updated. Please try again."); else setItems((current) => current.map((item) => id && item.id !== id ? item : { ...item, readAt: new Date().toISOString() })); setBusy(null); }
   const unread = items.filter((item) => !item.readAt).length;
-  return <div className="notification-list">{message && <p className="auth-error" role="alert">{message}</p>}{unread > 0 && <div className="flex justify-end"><button type="button" className="button-outline" onClick={() => void mark()}>Mark all as read</button></div>}{items.length ? items.map((item) => <article key={item.id} className={`panel notification-item ${item.readAt ? "" : "unread"}`}><div><p className="font-semibold">{item.title}</p><p className="mt-1 text-[var(--muted)]">{item.body}</p>{item.href && <Link className="mt-2 inline-block text-[var(--blue)]" href={item.href}>Open discussion →</Link>}</div>{!item.readAt && <button type="button" className="notification-mark" onClick={() => void mark(item.id)}>Mark read</button>}</article>) : <p className="panel">You’re all caught up. New replies, mentions, follows, and moderation updates will appear here.</p>}</div>;
+  return <div className="notification-list">{message && <p className="auth-error" role="alert">{message}</p>}{unread > 0 && <div className="notification-toolbar"><p className="help">{unread} unread {unread === 1 ? "update" : "updates"}</p><button type="button" className="button-outline" disabled={busy !== null} onClick={() => void mark()}>Mark all as read</button></div>}{items.length ? groups.map(([label, list]) => <section key={label} className="notification-group" aria-labelledby={`notification-${label.replace(/\s/g, "-")}`}><h2 id={`notification-${label.replace(/\s/g, "-")}`}>{label}</h2>{list.map((item) => <article key={item.id} className={`panel notification-item ${item.readAt ? "" : "unread"}`}><div><p className="font-semibold">{item.title}</p><p className="mt-1 text-[var(--muted)]">{item.body}</p>{item.href && <Link className="mt-2 inline-block text-[var(--blue)]" href={item.href} onClick={() => { if (!item.readAt) void mark(item.id); }}>Open update →</Link>}</div><div className="notification-actions"><time dateTime={item.createdAt}>{relative(item.createdAt)}</time>{!item.readAt && <button type="button" className="notification-mark" disabled={busy !== null} onClick={() => void mark(item.id)}>Mark read</button>}</div></article>)}</section>) : <div className="panel notification-empty"><h2>You’re all caught up.</h2><p>New replies, mentions, follows, and moderation updates will appear here.</p><Link className="text-link" href="/feed">Explore discussions →</Link></div>}</div>;
 }
