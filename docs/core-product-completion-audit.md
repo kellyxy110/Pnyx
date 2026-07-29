@@ -65,6 +65,21 @@ Production evidence:
 - TypeScript: PASS; unit tests: 23/23 PASS; Vercel production build: PASS.
 - Media configuration endpoint currently returns `enabled: false`, so production does not expose inactive upload controls.
 
+## Module 4 result — following system
+
+Implemented and deployed:
+
+- Idempotent, authenticated follow/unfollow API with self-follow prevention, suspension guard, notification creation, and authorization checks.
+- Optimistic follow button with rollback on error and real follower count response.
+- Authenticated follower/following lists on the profile page.
+- Existing Following feed now reads persisted `UserFollow` relationships, so follow actions change feed membership.
+
+Production evidence:
+
+- Deployment `dpl_6yRSFRb3bS5goACWtrK1pjeeAbQn`: READY and aliased to production.
+- Unauthenticated network API: HTTP 401; follow route does not accept GET and remains write-method restricted; health: HTTP 200.
+- TypeScript: PASS; unit tests: 23/23 PASS; Vercel production build: PASS.
+
 ## Remaining 6A modules
 
 1. Profile completion

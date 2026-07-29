@@ -102,7 +102,7 @@ Before public launch, Pnyx must demonstrate a reliable question-to-useful-answer
 - [ ] Configure and production-verify Cloudflare R2 avatar/banner media uploads; controls remain feature-gated until then.
 - [ ] Complete follower/following actions, lists, and feed impact (separate following-system module).
 - [ ] Complete authenticated community feed, composer, drafts, publishing, and discussion actions.
-- [ ] Complete user following and feed impact.
+- [x] Complete user following and feed impact.
 - [ ] Complete Space detail, membership, members, moderators, rules, and pinned content.
 - [ ] Complete Knowledge reading/index surfaces with sources, citations, related content, and revisions.
 - [ ] Complete Explore discovery, trending, filters, recommendations, and pagination.
