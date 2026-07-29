@@ -6,6 +6,11 @@ import { pageSchema, postSchema } from "@/lib/discussion-validation";
 
 export async function GET(request: Request) {
   const url = new URL(request.url); const page = pageSchema.parse(url.searchParams.get("page") ?? 1); const limit = 12; const feed = url.searchParams.get("feed") ?? "latest"; const spaceSlug = url.searchParams.get("space"); const session = await auth();
+  if (url.searchParams.get("drafts") === "true") {
+    if (!session?.user?.id) return NextResponse.json({ error: "Sign in required." }, { status: 401 });
+    const drafts = await prisma.post.findMany({ where: { authorId: session.user.id, isDeleted: false, isDraft: true }, select: { id: true, title: true, body: true, type: true, visibility: true, updatedAt: true, space: { select: { slug: true, name: true } } }, orderBy: { updatedAt: "desc" }, take: 20 });
+    return NextResponse.json({ drafts });
+  }
   const blocked = session?.user?.id ? await prisma.userBlock.findMany({ where: { blockerId: session.user.id }, select: { blockedId: true } }) : [];
   const muted = session?.user?.id ? await prisma.spaceMute.findMany({ where: { userId: session.user.id }, select: { spaceId: true } }) : [];
   const following = feed === "following" && session?.user?.id ? await prisma.userFollow.findMany({ where: { followerId: session.user.id }, select: { followingId: true } }) : [];
