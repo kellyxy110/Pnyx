@@ -7,6 +7,7 @@ for (const route of routes) {
   test(`${route} is accessible and does not overflow`, async ({ page }) => {
     const response = await page.goto(route, { waitUntil: "domcontentloaded" });
     expect(response?.status()).toBeLessThan(500);
+    await page.waitForTimeout(500);
     await expect(page.locator("main")).toBeVisible();
 
     const results = await new AxeBuilder({ page }).analyze();
@@ -34,4 +35,3 @@ test("sign-up form supports keyboard focus and reduced motion", async ({ page })
   expect(motion.reduced).toBe(true);
   expect(motion.transition).toBe("0s");
 });
-
