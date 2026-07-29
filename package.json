@@ -14,7 +14,8 @@
     "db:validate": "prisma validate",
     "db:seed": "tsx prisma/seed.ts",
     "vercel-build": "prisma migrate deploy && prisma generate && next build",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "audit:responsive": "node scripts/audit-responsive.mjs"
   },
   "dependencies": {
     "@prisma/client": "^6.13.0",

@@ -1,19 +1,28 @@
-# Performance and Lighthouse report
+# Performance and responsive report
+
+Updated: 2026-07-29
+Production audited: https://pnyx-psi.vercel.app
+
+## Responsive evidence
+
+Command: `npm run audit:responsive`
+
+- Viewports: mobile 390×844, tablet 768×1024, desktop 1440×900, wide desktop 1920×1080.
+- Routes: `/`, `/sign-in`, `/sign-up`, `/spaces`, `/explore`, `/knowledge`, `/ai`.
+- Checks: HTTP status, main landmark, document overflow, and viewport width.
+- Result: 28/28 passed; 0 failures.
 
 ## Build evidence
 
-The latest Vercel production build completed successfully for Next.js and Prisma and generated the core routes. The build output included authentication, feed, Spaces, Explore, Knowledge, AI, moderation, profile, notifications, and API routes.
+The latest Vercel production build completed successfully for Next.js and Prisma and generated the core routes.
 
-## Pending automation
+## Still open
 
-- Lighthouse CI for home, sign-in, sign-up, feed, Spaces, Explore, Knowledge, AI, and moderation.
-- Mobile, tablet, laptop, and wide desktop screenshots.
-- Overflow, layout-shift, tap-target, focus, and text-resize checks.
-
-No Lighthouse score is claimed until a browser runner produces a report.
+- Lighthouse CI scores and Core Web Vitals.
+- Authenticated flow visual regression and real-device review.
+- Bundle analysis and route-level performance budgets.
 
 ## Classification
 
-Production build: COMPLETE.  
-Lighthouse and responsive browser evidence: READY FOR HUMAN VERIFICATION / OPEN AUTOMATION.
-
+Responsive public-route automation: COMPLETE.
+Lighthouse and real-device review: READY FOR HUMAN VERIFICATION.

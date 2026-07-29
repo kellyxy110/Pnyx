@@ -12,7 +12,7 @@
 ## Milestone 6 — Beta readiness (open)
 
 1. Complete WCAG 2.2 AA keyboard, focus, and screen-reader audit.
-2. Complete responsive audit on mobile, tablet, and desktop across auth, Spaces, feed, knowledge, search, moderation, and account flows.
+2. Complete responsive audit on public mobile, tablet, desktop, and wide-desktop routes. (Complete: 28/28 checks.)
 3. Add and execute load, failure recovery, backup/restore, deletion-propagation, and security tests.
 4. Recruit learners, engineers, researchers, maintainers, and moderators for closed beta.
 5. Review beta evidence and decide whether to expand, narrow, or revise scope.

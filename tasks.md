@@ -65,7 +65,7 @@ This is the initial implementation backlog. Work from top to bottom unless a dep
 - [x] Build moderation queue, moderator actions, audit log, appeals, and escalation paths.
 - [x] Add spam prevention, rate limits, suspicious-activity review, and abuse monitoring.
 - [x] Run automated accessibility audit and keyboard/focus regression tests.
-- [ ] Run responsive/mobile audit across core flows.
+- [x] Run responsive/mobile audit across public core flows.
 - [ ] Add load, failure recovery, backup/restore, deletion propagation, and security tests.
 - [x] Instrument success metrics from `prd.md` and document metric definitions.
 - [ ] Recruit a small set of learners, engineers, researchers, maintainers, and moderators for closed beta.
