@@ -95,3 +95,20 @@ Production evidence:
 ## Explicitly paused
 
 Milestone 6B resilience/security and Milestone 6C closed-beta work are paused until 6A core product journeys are complete.
+
+## Module 5 result — persisted composer workflow
+
+Implemented and deployed:
+
+- Authenticated composer creates real persisted drafts and safely recovers them after navigation or refresh.
+- Debounced autosave updates the existing draft rather than creating duplicate records.
+- Manual draft saving, draft selection, Markdown preview, validation, and publication are backed by the post APIs.
+- Publishing an existing draft changes its persisted state and navigates to its real discussion route.
+
+Production evidence:
+
+- Deployment `dpl_8W4unJcBSsqGpjy2pfkjbvdYP8xg`: READY and aliased to `https://pnyx-psi.vercel.app`.
+- Public feed: HTTP 200; latest-post API: HTTP 200; protected draft list: HTTP 401 when unauthenticated.
+- TypeScript: PASS; unit tests: 23/23 PASS; Vercel production build: PASS.
+
+Authenticated draft creation and recovery requires a controlled signed-in browser account and remains part of the end-to-end Playwright evidence backlog.
