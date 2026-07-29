@@ -20,6 +20,6 @@ The application records privacy-safe provider errors and gives users a neutral r
 
 ## Current release status
 
-Milestones 0–5 are implemented. Milestone 6 remains open until its accessibility, responsive, resilience/security, closed-beta, and evidence gates are complete. OAuth credentials and manual Lighthouse/screen-reader checks remain release tasks. See [tasks.md](tasks.md) and [definition-of-done.md](definition-of-done.md).
+Milestones 0–5 are implemented. Milestone 6 remains open until its responsive, resilience/security, closed-beta, and manual evidence gates are complete. Automated accessibility and targeted responsive checks are complete; manual screen-reader, Lighthouse, and real-device review remain open. OAuth credentials and manual Lighthouse/screen-reader checks remain release tasks. See [tasks.md](tasks.md) and [definition-of-done.md](definition-of-done.md).
 
 The canonical production URL is `https://pnyx-psi.vercel.app`. The ownership of `pnyx.vercel.app` is tracked separately as infrastructure backlog.

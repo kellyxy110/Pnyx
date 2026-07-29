@@ -64,7 +64,7 @@ This is the initial implementation backlog. Work from top to bottom unless a dep
 
 - [x] Build moderation queue, moderator actions, audit log, appeals, and escalation paths.
 - [x] Add spam prevention, rate limits, suspicious-activity review, and abuse monitoring.
-- [ ] Run accessibility audit and keyboard/screen-reader usability pass.
+- [x] Run automated accessibility audit and keyboard/focus regression tests.
 - [ ] Run responsive/mobile audit across core flows.
 - [ ] Add load, failure recovery, backup/restore, deletion propagation, and security tests.
 - [x] Instrument success metrics from `prd.md` and document metric definitions.
@@ -89,6 +89,7 @@ This is the initial implementation backlog. Work from top to bottom unless a dep
 - [ ] Configure GitHub OAuth credentials in Vercel Production and Preview.
 - [ ] Run manual Lighthouse accessibility QA.
 - [ ] Run manual screen-reader QA.
+- [ ] Complete manual screen-reader usability pass.
 ## Release gates
 
 Before public launch, Pnyx must demonstrate a reliable question-to-useful-answer flow, safe and permission-aware discovery, understandable AI provenance, usable moderation, accessible core flows, recoverable data, and evidence that users return for knowledge—not only notifications.
