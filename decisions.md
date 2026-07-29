@@ -4,7 +4,7 @@ This file records decisions that should remain stable unless there is explicit e
 
 ## D-001 — Product identity is Pnyx
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-07-27
 
 Pnyx is the standalone product name. “Nexis Commons” and related names are rejected as product names for this project.
@@ -13,7 +13,7 @@ Pnyx is the standalone product name. “Nexis Commons” and related names are r
 
 ## D-002 — Pnyx is a knowledge network, not a conventional social feed
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-07-27
 
 The product is organized around knowledge outcomes. Social interaction is valuable, but the primary compounding loop is:
@@ -24,7 +24,7 @@ The product is organized around knowledge outcomes. Social interaction is valuab
 
 ## D-003 — AI is an operating layer, not the product’s sole identity
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-07-27
 
 AI may summarize, tag, detect duplicates, connect sources, translate, recommend, and assist moderation. It must remain distinguishable from human-authored and verified material.
@@ -33,7 +33,7 @@ AI may summarize, tag, detect duplicates, connect sources, translate, recommend,
 
 ## D-004 — Spaces are the primary community primitive
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-07-27
 
 Pnyx uses Spaces for topic communities. A Space can contain posts, discussions, knowledge artifacts, events, and learning resources.
@@ -42,7 +42,7 @@ Pnyx uses Spaces for topic communities. A Space can contain posts, discussions, 
 
 ## D-005 — Start with a modular monolith
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-07-27
 
 The first production architecture should be a modular monolith with explicit domain boundaries for identity, content, Spaces, knowledge, search, moderation, notifications, and AI orchestration.
@@ -51,7 +51,7 @@ The first production architecture should be a modular monolith with explicit dom
 
 ## D-006 — Trust is earned through evidence, not popularity alone
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-07-27
 
 Pnyx will not make a single karma score the main measure of expertise. Reputation is category-specific and based on useful answers, accepted contributions, reviews, citations, and sustained quality.
@@ -60,7 +60,7 @@ Pnyx will not make a single karma score the main measure of expertise. Reputatio
 
 ## D-007 — MVP scope prioritizes the knowledge loop
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-07-27
 
 The MVP includes identity, Spaces, posts/discussions, basic profiles, search, AI-assisted summaries/tags/duplicate suggestions, moderation, and conversion of discussions into editable knowledge artifacts.
@@ -69,7 +69,7 @@ Jobs, marketplace, full courses, live video, advanced organization tooling, and 
 
 ## D-008 — Privacy and provenance are first-class data properties
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-07-27
 
 Visibility, authorship, source references, edits, AI generation metadata, and verification status must be modeled rather than inferred from presentation.
@@ -78,7 +78,7 @@ Visibility, authorship, source references, edits, AI generation metadata, and ve
 
 ## D-009 — Media storage uses a provider abstraction with Cloudflare R2 as the initial provider
 
-**Status:** Accepted  
+**Status:** Accepted
 **Date:** 2026-07-29
 
 Pnyx stores media objects outside PostgreSQL. The application persists object keys and non-sensitive metadata only; public URLs are derived server-side. The initial provider is Cloudflare R2 through its S3-compatible API, behind `src/lib/storage.ts`.
