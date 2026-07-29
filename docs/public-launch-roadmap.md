@@ -6,7 +6,7 @@ Repository: https://github.com/kellyxy110/Pnyx
 
 ## Current status
 
-Pnyx is in Milestone 6 — Beta readiness. Milestones 0–5 are implemented. Automated accessibility foundations and responsive public-route checks are complete. Milestone 6 remains open because resilience/security evidence, backup/restore verification, deletion propagation, manual release QA, and closed-beta participation are not fully evidenced.
+Pnyx is in Milestone 6A — Core Product Completion. Milestones 0–5 are implemented. Authenticated navigation and the shared responsive shell are production-deployed. Milestone 6A remains open because resilience/security evidence, backup/restore verification, deletion propagation, manual release QA, and closed-beta participation are not fully evidenced.
 
 ## Delivery roadmap
 
@@ -34,7 +34,13 @@ Provider abstraction, summaries, tags, related discussions, source suggestions, 
 
 Keyword search, filters, explanations, permission-aware exclusions, ranking evaluation, and relevance-monitoring foundations. Semantic retrieval remains gated by baseline metrics.
 
-### Phase 6 — Beta readiness — IN PROGRESS
+### Phase 6A — Core Product Completion — IN PROGRESS
+
+1. Authenticated application state — COMPLETE.
+2. Shared responsive three-column application shell — COMPLETE; production responsive audit 28/28.
+3. Profile, community, following, Spaces, Knowledge, Explore, truthful AI, and authenticated journey coverage — OPEN.
+
+### Phase 6B/6C — PAUSED
 
 1. Automated WCAG/static/axe checks — COMPLETE.
 2. Keyboard focus and reduced-motion regression checks — COMPLETE.

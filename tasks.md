@@ -97,7 +97,7 @@ Before public launch, Pnyx must demonstrate a reliable question-to-useful-answer
 ## Milestone 6A — Core product completion (active)
 
 - [x] Add global session-aware navigation, user menu, avatar fallback, notification count, profile link, notifications link, and sign-out.
-- [ ] Build the shared responsive three-column application shell.
+- [x] Build the shared responsive three-column application shell.
 - [ ] Complete profile identity, activity, followers/following, and real avatar/banner storage.
 - [ ] Complete authenticated community feed, composer, drafts, publishing, and discussion actions.
 - [ ] Complete user following and feed impact.
