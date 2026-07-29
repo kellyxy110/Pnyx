@@ -18,3 +18,7 @@ Thumbs.db
 .env*.local
 *.tsbuildinfo
 
+
+# Browser QA output
+artifacts
+test-results
