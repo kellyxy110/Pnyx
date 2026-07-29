@@ -54,8 +54,19 @@ model User {
   displayName String
   bio String?
   avatarUrl String?
+  avatarKey String?
+  avatarMetadata Json?
+  bannerKey String?
+  bannerMetadata Json?
+  headline String?
+  location String?
+  websiteUrl String?
+  githubUrl String?
+  linkedinUrl String?
   timezone String?
   expertise Json?
+  skills Json?
+  interests Json?
   links Json?
   passwordHash String?
   emailVerifiedAt DateTime?

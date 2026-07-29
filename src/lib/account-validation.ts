@@ -9,10 +9,17 @@ export const registrationSchema = z.object({
 
 export const profileSchema = z.object({
   displayName: z.string().trim().min(2).max(80),
+  headline: z.string().trim().max(120).nullable(),
+  location: z.string().trim().max(100).nullable(),
+  websiteUrl: z.string().url().nullable(),
+  githubUrl: z.string().url().nullable(),
+  linkedinUrl: z.string().url().nullable(),
   avatarUrl: z.string().url().nullable(),
   bio: z.string().trim().max(500).nullable(),
   timezone: z.string().trim().max(80).nullable(),
   expertise: z.array(z.string().trim().min(1).max(40)).max(20),
+  skills: z.array(z.string().trim().min(1).max(40)).max(30),
+  interests: z.array(z.string().trim().min(1).max(40)).max(20),
   links: z.array(z.string().url()).max(8),
   profileVisibility: z.enum(["PUBLIC", "FOLLOWERS_ONLY", "PRIVATE"]),
 });

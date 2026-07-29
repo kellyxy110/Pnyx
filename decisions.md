@@ -75,3 +75,12 @@ Jobs, marketplace, full courses, live video, advanced organization tooling, and 
 Visibility, authorship, source references, edits, AI generation metadata, and verification status must be modeled rather than inferred from presentation.
 
 **Consequence:** Private and restricted material must be excluded from public search, recommendations, training/evaluation datasets, and AI context unless authorized.
+
+## D-009 — Media storage uses a provider abstraction with Cloudflare R2 as the initial provider
+
+**Status:** Accepted  
+**Date:** 2026-07-29
+
+Pnyx stores media objects outside PostgreSQL. The application persists object keys and non-sensitive metadata only; public URLs are derived server-side. The initial provider is Cloudflare R2 through its S3-compatible API, behind `src/lib/storage.ts`.
+
+**Consequence:** Profile, Space, discussion, and knowledge media can reuse one upload/delete contract. Upload controls stay disabled until the R2 endpoint, credentials, bucket, and public base URL are configured in the target environment.

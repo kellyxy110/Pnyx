@@ -18,6 +18,8 @@
     "audit:responsive": "node scripts/audit-responsive.mjs"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1097.0",
+    "@aws-sdk/s3-request-presigner": "^3.1097.0",
     "@prisma/client": "^6.13.0",
     "bcryptjs": "^3.0.3",
     "next": "^15.4.5",
@@ -25,6 +27,7 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "resend": "^6.18.0",
+    "sharp": "^0.35.3",
     "zod": "^4.0.10"
   },
   "devDependencies": {
