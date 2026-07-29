@@ -1,2 +1,14 @@
-import { auth } from "@/auth"; import Link from "next/link"; import { prisma } from "@/lib/prisma";
-export default async function Notifications(){const s=await auth();if(!s?.user?.id)return <main className="shell"><div className="panel"><h1 className="text-2xl font-semibold">Notifications</h1><p className="mt-2">Sign in to view your notifications.</p><Link className="button-primary mt-4 inline-flex" href="/sign-in?callbackUrl=/notifications">Sign in</Link></div></main>;const items=await prisma.notification.findMany({where:{userId:s.user.id},orderBy:{createdAt:"desc"},take:40});return <main className="shell space-y-5"><Link href="/feed" className="text-[var(--blue)]">← Feed</Link><h1 className="text-3xl font-semibold text-[var(--navy)]">Notifications</h1>{items.length?items.map(n=><article key={n.id} className={n.readAt?"panel opacity-70":"panel"}><p className="font-semibold">{n.title}</p><p className="mt-1 text-[var(--muted)]">{n.body}</p>{n.href&&<Link className="mt-2 inline-block text-[var(--blue)]" href={n.href}>Open discussion →</Link>}</article>):<p className="panel">You’re all caught up.</p>}</main>}
+import { auth } from "@/auth";
+import Link from "next/link";
+import { prisma } from "@/lib/prisma";
+import { ProductNav } from "@/components/product-nav";
+import { NotificationList } from "@/components/notification-list";
+
+export const dynamic = "force-dynamic";
+
+export default async function Notifications() {
+  const session = await auth();
+  if (!session?.user?.id) return <main className="app-shell"><ProductNav/><section className="surface-section"><div className="panel"><h1 className="text-2xl font-semibold">Your notifications</h1><p className="mt-2">Sign in to keep track of replies, mentions, follows, and moderation updates.</p><Link className="button-primary mt-4 inline-flex" href="/sign-in?callbackUrl=/notifications">Sign in</Link></div></section></main>;
+  const items = await prisma.notification.findMany({ where: { userId: session.user.id }, orderBy: { createdAt: "desc" }, take: 40, select: { id: true, title: true, body: true, href: true, readAt: true } });
+  return <main id="main-content" tabIndex={-1} className="app-shell"><ProductNav/><section className="notifications-shell"><header className="surface-hero compact"><p className="eyebrow">Inbox</p><h1>Stay close to the commons.</h1><p>Follow useful threads, respond to mentions, and keep moderation decisions visible without chasing them through your feed.</p></header><div className="notification-toolbar mb-5"><h2 className="text-2xl font-semibold text-[var(--navy)]">Recent updates</h2></div><NotificationList initialItems={items.map((item) => ({ ...item, readAt: item.readAt?.toISOString() ?? null }))}/></section></main>;
+}
