@@ -5,6 +5,7 @@ import GitHub from "next-auth/providers/github";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
+import { ensureOAuthUser } from "@/lib/oauth-account";
 
 const oauthProviders = [];
 if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) oauthProviders.push(Google({ clientId: process.env.GOOGLE_CLIENT_ID, clientSecret: process.env.GOOGLE_CLIENT_SECRET }));
@@ -22,11 +23,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (!parsed.success) return null;
       const user = await prisma.user.findUnique({ where: { email: parsed.data.email.toLowerCase() } });
       if (!user?.passwordHash || !user.emailVerifiedAt) return null;
+      if (user.suspendedUntil && user.suspendedUntil > new Date()) return null;
       if (!(await bcrypt.compare(parsed.data.password, user.passwordHash))) return null;
       return { id: user.id, email: user.email, name: user.displayName };
     },
   })],
   callbacks: {
+    async signIn({ user, account }) {
+      if (account?.type !== "oauth") return true;
+      return Boolean(await ensureOAuthUser(user, { provider: account.provider, providerAccountId: account.providerAccountId }));
+    },
     async jwt({ token, user }) {
       if (user) token.userId = user.id;
       return token;

@@ -4,8 +4,10 @@ import { prisma } from "@/lib/prisma";
 import { registrationSchema } from "@/lib/account-validation";
 import { createToken } from "@/lib/tokens";
 import { sendAccountMail } from "@/lib/mail";
+import { isEmailSignupEnabled } from "@/lib/auth-feature-flags";
 
 export async function POST(request: Request) {
+  if (!isEmailSignupEnabled()) return NextResponse.json({ error: "Email registration is temporarily limited during the closed beta. Continue with Google or GitHub instead." }, { status: 403 });
   const parsed = registrationSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Please correct the highlighted fields.", fieldErrors: parsed.error.flatten().fieldErrors }, { status: 400 });
   const input = parsed.data;
