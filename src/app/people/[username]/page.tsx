@@ -1,0 +1,23 @@
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { auth } from "@/auth";
+import { ProductNav } from "@/components/product-nav";
+import { prisma } from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
+
+export default async function PublicProfilePage({ params }: { params: Promise<{ username: string }> }) {
+  const { username } = await params;
+  const session = await auth();
+  const user = await prisma.user.findUnique({ where: { username }, select: { id: true, username: true, displayName: true, avatarUrl: true, headline: true, bio: true, location: true, websiteUrl: true, githubUrl: true, linkedinUrl: true, expertise: true, skills: true, interests: true, profileVisibility: true, _count: { select: { posts: true, replies: true, artifacts: true, follows: true, followers: true, spaces: true } }, spaces: { include: { space: { select: { name: true, slug: true } } }, take: 8 }, posts: { where: { isDeleted: false, isDraft: false }, select: { id: true, title: true }, orderBy: { createdAt: "desc" }, take: 8 }, artifacts: { where: { status: { not: "DRAFT" } }, select: { id: true, title: true, status: true }, orderBy: { updatedAt: "desc" }, take: 8 } } });
+  if (!user) notFound();
+  const isOwner = session?.user?.id === user.id;
+  const isFollower = session?.user?.id ? await prisma.userFollow.findUnique({ where: { followerId_followingId: { followerId: session.user.id, followingId: user.id } }, select: { followerId: true } }) : null;
+  if (user.profileVisibility === "PRIVATE" && !isOwner) notFound();
+  if (user.profileVisibility === "FOLLOWERS_ONLY" && !isOwner && !isFollower) notFound();
+  const initials = user.displayName.split(/\s+/).map((part) => part[0]).join("").slice(0, 2).toUpperCase();
+  const links = [user.websiteUrl && ["Website", user.websiteUrl], user.githubUrl && ["GitHub", user.githubUrl], user.linkedinUrl && ["LinkedIn", user.linkedinUrl]].filter(Boolean) as [string, string][];
+  const tags = [...(Array.isArray(user.expertise) ? user.expertise : []), ...(Array.isArray(user.skills) ? user.skills : []), ...(Array.isArray(user.interests) ? user.interests : [])].slice(0, 15);
+  return <main id="main-content" tabIndex={-1} className="app-shell"><ProductNav/><section className="public-profile"><header className="public-profile-header"><div className="public-profile-banner" />{user.avatarUrl ? <Image src={user.avatarUrl} alt="" width={112} height={112} className="public-profile-avatar" /> : <span className="public-profile-avatar profile-avatar-fallback" aria-hidden="true">{initials}</span>}<p className="eyebrow">@{user.username}</p><h1>{user.displayName}</h1><p className="public-profile-headline">{user.headline || "Technology community member"}</p>{user.location && <p className="public-profile-location">{user.location}</p>}{user.bio && <p className="public-profile-bio">{user.bio}</p>}<dl className="profile-counts"><div><dt>Followers</dt><dd>{user._count.followers}</dd></div><div><dt>Following</dt><dd>{user._count.follows}</dd></div><div><dt>Discussions</dt><dd>{user._count.posts}</dd></div><div><dt>Knowledge</dt><dd>{user._count.artifacts}</dd></div></dl></header><div className="public-profile-grid"><section><h2>Focus areas</h2><div className="profile-tags">{tags.length ? tags.map((tag) => <span key={String(tag)}>{String(tag)}</span>) : <p>No focus areas shared yet.</p>}</div>{links.length > 0 && <div className="public-profile-links">{links.map(([label, href]) => <a key={label} href={href} target="_blank" rel="noreferrer">{label} ↗</a>)}</div>}</section><section><h2>Recent discussions</h2>{user.posts.length ? <ul className="public-profile-list">{user.posts.map((post) => <li key={post.id}><Link href={`/posts/${post.id}`}>{post.title}</Link></li>)}</ul> : <p>No public discussions yet.</p>}</section><section><h2>Knowledge contributions</h2>{user.artifacts.length ? <ul className="public-profile-list">{user.artifacts.map((artifact) => <li key={artifact.id}><Link href={`/knowledge/${artifact.id}`}>{artifact.title}</Link><small>{artifact.status.replace(/_/g, " ")}</small></li>)}</ul> : <p>No published knowledge yet.</p>}</section><section><h2>Spaces</h2>{user.spaces.length ? <ul className="public-profile-list">{user.spaces.map(({ space }) => <li key={space.slug}><Link href={`/spaces/${space.slug}`}>{space.name}</Link></li>)}</ul> : <p>No Spaces joined yet.</p>}</section></div></section></main>;
+}
