@@ -34,11 +34,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return Boolean(await ensureOAuthUser(user, { provider: account.provider, providerAccountId: account.providerAccountId }));
     },
     async jwt({ token, user }) {
-      if (user) token.userId = user.id;
+      const email = typeof user?.email === "string" ? user.email : typeof token.email === "string" ? token.email : null;
+      if (email) {
+        const localUser = await prisma.user.findUnique({ where: { email: email.trim().toLowerCase() }, select: { id: true, suspendedUntil: true } });
+        if (localUser?.suspendedUntil && localUser.suspendedUntil > new Date()) delete token.userId;
+        else if (localUser) token.userId = localUser.id;
+        else if (user?.id) token.userId = user.id;
+      } else if (user?.id) token.userId = user.id;
       return token;
     },
     async session({ session, token }) {
-      if (session.user && token.userId) session.user.id = token.userId;
+      if (session.user && typeof token.userId === "string") session.user.id = token.userId;
       return session;
     },
   },
