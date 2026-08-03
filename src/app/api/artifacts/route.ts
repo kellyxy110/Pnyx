@@ -1,15 +1,16 @@
 import { NextResponse } from "next/server";
+import { ArtifactStatus } from "@prisma/client";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
 import { recordKnowledgeMetric } from "@/lib/knowledge";
 import { artifactSchema } from "@/lib/knowledge-validation";
 
-const publishedStatuses = ["PUBLISHED", "COMMUNITY_REVIEWED", "VERIFIED"] as const;
+const publishedStatuses: ArtifactStatus[] = ["PUBLISHED", "COMMUNITY_REVIEWED", "VERIFIED"];
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const status = url.searchParams.get("status"); const space = url.searchParams.get("space")?.trim(); const type = url.searchParams.get("type")?.trim(); const query = url.searchParams.get("q")?.trim();
   const page = Math.max(1, Math.min(100, Number(url.searchParams.get("page") ?? 1) || 1)); const limit = 12;
-  const where = { ...(status && publishedStatuses.includes(status as (typeof publishedStatuses)[number]) ? { status: status as (typeof publishedStatuses)[number] } : { status: { in: publishedStatuses } }), ...(space ? { space: { slug: space } } : {}), ...(type ? { type: type as never } : {}), ...(query ? { OR: [{ title: { contains: query, mode: "insensitive" as const } }, { summary: { contains: query, mode: "insensitive" as const } }, { body: { contains: query, mode: "insensitive" as const } }] } : {}) };
+  const where = { ...(status && publishedStatuses.includes(status as ArtifactStatus) ? { status: status as ArtifactStatus } : { status: { in: publishedStatuses } }), ...(space ? { space: { slug: space } } : {}), ...(type ? { type: type as never } : {}), ...(query ? { OR: [{ title: { contains: query, mode: "insensitive" as const } }, { summary: { contains: query, mode: "insensitive" as const } }, { body: { contains: query, mode: "insensitive" as const } }] } : {}) };
   const artifacts = await prisma.artifact.findMany({ where, include: { author: { select: { displayName: true, username: true, avatarUrl: true } }, space: { select: { name: true, slug: true } }, _count: { select: { revisions: true, sources: true, contributors: true } } }, orderBy: { updatedAt: "desc" }, skip: (page - 1) * limit, take: limit + 1 });
   const hasMore = artifacts.length > limit; return NextResponse.json({ artifacts: artifacts.slice(0, limit), page, hasMore });
 }
