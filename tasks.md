@@ -106,7 +106,7 @@ Before public launch, Pnyx must demonstrate a reliable question-to-useful-answer
 - [x] Repair Composer Space loading to match the live Spaces API, with explicit loading, empty, error, and publish-validation states.
 - [x] Complete discussion-detail editing, threaded replies, sharing, reporting (including replies), and ownership controls.
 - [x] Complete user following and feed impact.
-- [ ] Complete Space detail, membership, members, moderators, rules, and pinned content.
+- [x] Complete Space detail, membership, members, moderators, rules, feeds, and moderator-managed pinned content.
 - [ ] Complete Knowledge reading/index surfaces with sources, citations, related content, and revisions.
 - [ ] Complete Explore discovery, trending, filters, recommendations, and pagination.
 - [ ] Complete truthful AI assistance surfaces backed by supported APIs only.

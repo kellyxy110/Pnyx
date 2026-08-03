@@ -152,6 +152,7 @@ model Post {
   visibility Visibility @default(PUBLIC)
   isDeleted Boolean @default(false)
   isDraft Boolean @default(false)
+  isPinned Boolean @default(false)
   pollOptions Json?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -164,6 +165,7 @@ model Post {
   reactions PostReaction[]
   bookmarks Bookmark[]
   @@index([spaceId, createdAt])
+  @@index([spaceId, isPinned, createdAt])
   @@index([authorId, createdAt])
 }
 
