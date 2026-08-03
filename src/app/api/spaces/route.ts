@@ -4,10 +4,11 @@ import { prisma } from "@/lib/prisma";
 import { spaceSchema } from "@/lib/account-validation";
 
 export async function GET() {
-  const spaces = await prisma.space.findMany({ where: { isPublic: true }, orderBy: [{ isFeatured: "desc" }, { name: "asc" }], select: { id: true, slug: true, name: true, description: true, rules: true, tags: true, isFeatured: true, _count: { select: { members: true, followers: true } } } });
-  return NextResponse.json(spaces);
+  const session = await auth();
+  const viewerId = session?.user?.id ?? "__anonymous__";
+  const spaces = await prisma.space.findMany({ where: { isPublic: true }, orderBy: [{ isFeatured: "desc" }, { name: "asc" }], select: { id: true, slug: true, name: true, description: true, rules: true, tags: true, isFeatured: true, members: { where: { userId: viewerId }, select: { isModerator: true } }, followers: { where: { userId: viewerId }, select: { userId: true } }, _count: { select: { members: true, followers: true } } } });
+  return NextResponse.json(spaces.map(({ members, followers, ...space }) => ({ ...space, viewer: { joined: members.length > 0, following: followers.length > 0, isModerator: members[0]?.isModerator ?? false } })));
 }
-
 export async function POST(request: Request) {
   const session = await auth();
   if (!session?.user?.id) return NextResponse.json({ error: "Sign in required." }, { status: 401 });
