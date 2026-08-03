@@ -22,15 +22,32 @@ export function ProfileEditor() {
   const avatarInput = useRef<HTMLInputElement>(null);
   const bannerInput = useRef<HTMLInputElement>(null);
 
+  const [reloadKey, setReloadKey] = useState(0);
   useEffect(() => {
-    Promise.all([fetch("/api/account/profile"), fetch("/api/account/profile/media")])
-      .then(async ([profileResponse, mediaResponse]) => {
-        if (!profileResponse.ok) throw new Error("PROFILE_LOAD_FAILED");
-        setProfile(await profileResponse.json());
-        if (mediaResponse.ok) setStorageEnabled(Boolean((await mediaResponse.json()).enabled));
-      })
-      .catch(() => setError("Your profile could not be loaded. Refresh the page to try again."));
-  }, []);
+    let active = true;
+    async function loadProfile() {
+      setError("");
+      try {
+        const profileResponse = await fetch("/api/account/profile", { cache: "no-store" });
+        const profileData = await profileResponse.json().catch(() => null);
+        if (!profileResponse.ok) {
+          if (profileResponse.status === 401) throw new Error("SESSION_EXPIRED");
+          throw new Error(profileData?.error ?? "PROFILE_LOAD_FAILED");
+        }
+        if (!active) return;
+        setProfile(profileData);
+        const mediaResponse = await fetch("/api/account/profile/media", { cache: "no-store" });
+        const mediaData = await mediaResponse.json().catch(() => null);
+        if (active && mediaResponse.ok) setStorageEnabled(Boolean(mediaData?.enabled));
+      } catch (loadError) {
+        if (!active) return;
+        if (loadError instanceof Error && loadError.message === "SESSION_EXPIRED") setError("Your session has expired. Sign in again to continue editing your profile.");
+        else setError(loadError instanceof Error && loadError.message !== "PROFILE_LOAD_FAILED" ? loadError.message : "Your profile could not be loaded. Try again in a moment.");
+      }
+    }
+    void loadProfile();
+    return () => { active = false; };
+  }, [reloadKey]);
 
   async function save(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -67,7 +84,7 @@ export function ProfileEditor() {
     setUploading(null);
   }
 
-  if (error && !profile) return <p role="alert" className="rounded-2xl bg-red-50 p-5 text-red-800">{error}</p>;
+  if (error && !profile) return <section role="alert" className="rounded-2xl border border-red-200 bg-red-50 p-5 text-red-900"><p>{error}</p><div className="mt-4 flex gap-3"><button type="button" className="button-outline" onClick={() => setReloadKey((key) => key + 1)}>Try again</button>{error.includes("session") && <a className="button-primary" href="/sign-in?returnTo=/profile">Sign in</a>}</div></section>;
   if (!profile) return <p role="status" className="text-slate-600">Loading your profile…</p>;
   const initials = profile.displayName.split(/\s+/).map((word) => word[0]).join("").slice(0, 2).toUpperCase();
   return <div className="profile-editor">

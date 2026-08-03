@@ -4,20 +4,29 @@ import { prisma } from "@/lib/prisma";
 import { profileSchema } from "@/lib/account-validation";
 import { publicUrlForKey } from "@/lib/storage";
 
+function logProfileError(action: "load" | "save", userId: string, error: unknown) {
+  console.error("[profile] request failed", { action, userId, error: error instanceof Error ? error.message : "unknown" });
+}
+
 export async function GET() {
   const session = await auth();
   if (!session?.user?.id) return NextResponse.json({ error: "Sign in required." }, { status: 401 });
-  const user = await prisma.user.findUnique({ where: { id: session.user.id }, select: { id: true, email: true, username: true, displayName: true, avatarUrl: true, bannerKey: true, bio: true, headline: true, location: true, websiteUrl: true, githubUrl: true, linkedinUrl: true, timezone: true, expertise: true, skills: true, interests: true, links: true, profileVisibility: true, emailVerifiedAt: true, _count: { select: { posts: true, replies: true, artifacts: true, bookmarks: true, follows: true, followers: true, spaces: true } } } });
-  if (!user) return NextResponse.json({ error: "Account not found." }, { status: 404 });
-  const [spaces, posts, replies, artifacts, bookmarks, drafts] = await Promise.all([
-    prisma.spaceMember.findMany({ where: { userId: user.id }, include: { space: { select: { name: true, slug: true } } }, orderBy: { joinedAt: "desc" }, take: 8 }),
-    prisma.post.findMany({ where: { authorId: user.id, isDeleted: false, isDraft: false }, select: { id: true, title: true, createdAt: true }, orderBy: { createdAt: "desc" }, take: 6 }),
-    prisma.reply.findMany({ where: { authorId: user.id, isDeleted: false }, select: { id: true, body: true, createdAt: true, post: { select: { id: true, title: true } } }, orderBy: { createdAt: "desc" }, take: 6 }),
-    prisma.artifact.findMany({ where: { authorId: user.id }, select: { id: true, title: true, status: true, updatedAt: true }, orderBy: { updatedAt: "desc" }, take: 6 }),
-    prisma.bookmark.findMany({ where: { userId: user.id }, select: { post: { select: { id: true, title: true } }, createdAt: true }, orderBy: { createdAt: "desc" }, take: 6 }),
-    prisma.post.findMany({ where: { authorId: user.id, isDeleted: false, isDraft: true }, select: { id: true, title: true, updatedAt: true }, orderBy: { updatedAt: "desc" }, take: 6 }),
-  ]);
-  return NextResponse.json({ ...user, bannerUrl: publicUrlForKey(user.bannerKey), counts: user._count, activity: { spaces: spaces.map(({ space }) => space), posts, replies, artifacts, bookmarks, drafts } });
+  try {
+    const user = await prisma.user.findUnique({ where: { id: session.user.id }, select: { id: true, email: true, username: true, displayName: true, avatarUrl: true, bannerKey: true, bio: true, headline: true, location: true, websiteUrl: true, githubUrl: true, linkedinUrl: true, timezone: true, expertise: true, skills: true, interests: true, links: true, profileVisibility: true, emailVerifiedAt: true, _count: { select: { posts: true, replies: true, artifacts: true, bookmarks: true, follows: true, followers: true, spaces: true } } } });
+    if (!user) return NextResponse.json({ error: "Account not found. Please sign out and sign in again." }, { status: 404 });
+    const [spaces, posts, replies, artifacts, bookmarks, drafts] = await Promise.all([
+      prisma.spaceMember.findMany({ where: { userId: user.id }, include: { space: { select: { name: true, slug: true } } }, orderBy: { joinedAt: "desc" }, take: 8 }),
+      prisma.post.findMany({ where: { authorId: user.id, isDeleted: false, isDraft: false }, select: { id: true, title: true, createdAt: true }, orderBy: { createdAt: "desc" }, take: 6 }),
+      prisma.reply.findMany({ where: { authorId: user.id, isDeleted: false }, select: { id: true, body: true, createdAt: true, post: { select: { id: true, title: true } } }, orderBy: { createdAt: "desc" }, take: 6 }),
+      prisma.artifact.findMany({ where: { authorId: user.id }, select: { id: true, title: true, status: true, updatedAt: true }, orderBy: { updatedAt: "desc" }, take: 6 }),
+      prisma.bookmark.findMany({ where: { userId: user.id }, select: { post: { select: { id: true, title: true } }, createdAt: true }, orderBy: { createdAt: "desc" }, take: 6 }),
+      prisma.post.findMany({ where: { authorId: user.id, isDeleted: false, isDraft: true }, select: { id: true, title: true, updatedAt: true }, orderBy: { updatedAt: "desc" }, take: 6 }),
+    ]);
+    return NextResponse.json({ ...user, bannerUrl: publicUrlForKey(user.bannerKey), counts: user._count, activity: { spaces: spaces.map(({ space }) => space), posts, replies, artifacts, bookmarks, drafts } });
+  } catch (error) {
+    logProfileError("load", session.user.id, error);
+    return NextResponse.json({ error: "Your profile is temporarily unavailable. Please try again." }, { status: 503 });
+  }
 }
 
 export async function PATCH(request: Request) {
@@ -25,8 +34,13 @@ export async function PATCH(request: Request) {
   if (!session?.user?.id) return NextResponse.json({ error: "Sign in required." }, { status: 401 });
   const parsed = profileSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Check the profile details and try again.", fieldErrors: parsed.error.flatten().fieldErrors }, { status: 400 });
-  const existing = parsed.data.username ? await prisma.user.findFirst({ where: { username: parsed.data.username, NOT: { id: session.user.id } }, select: { id: true } }) : null;
-  if (existing) return NextResponse.json({ error: "That username is already taken.", fieldErrors: { username: ["That username is already taken."] } }, { status: 409 });
-  const user = await prisma.user.update({ where: { id: session.user.id }, data: parsed.data, select: { id: true, username: true, displayName: true, avatarUrl: true, bannerKey: true, bio: true, headline: true, location: true, websiteUrl: true, githubUrl: true, linkedinUrl: true, timezone: true, expertise: true, skills: true, interests: true, links: true, profileVisibility: true } });
-  return NextResponse.json(user);
+  try {
+    const existing = parsed.data.username ? await prisma.user.findFirst({ where: { username: parsed.data.username, NOT: { id: session.user.id } }, select: { id: true } }) : null;
+    if (existing) return NextResponse.json({ error: "That username is already taken.", fieldErrors: { username: ["That username is already taken."] } }, { status: 409 });
+    const user = await prisma.user.update({ where: { id: session.user.id }, data: parsed.data, select: { id: true, username: true, displayName: true, avatarUrl: true, bannerKey: true, bio: true, headline: true, location: true, websiteUrl: true, githubUrl: true, linkedinUrl: true, timezone: true, expertise: true, skills: true, interests: true, links: true, profileVisibility: true } });
+    return NextResponse.json(user);
+  } catch (error) {
+    logProfileError("save", session.user.id, error);
+    return NextResponse.json({ error: "Your profile could not be saved right now. Please try again." }, { status: 503 });
+  }
 }
