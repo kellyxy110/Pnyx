@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ProductNav } from "@/components/product-nav";\nimport { AiPreferences } from "@/components/ai-preferences";
+import { ProductNav } from "@/components/product-nav";
+import { AiPreferences } from "@/components/ai-preferences";
 
 const capabilities = [
   ["Understand", "Summarize a public discussion and preserve the source context."],
