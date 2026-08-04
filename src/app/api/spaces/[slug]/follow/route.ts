@@ -9,7 +9,8 @@ export async function POST(_request: Request, context: { params: Promise<{ slug:
   const space = await prisma.space.findUnique({ where: { slug }, select: { id: true } });
   if (!space) return NextResponse.json({ error: "Space not found." }, { status: 404 });
   await prisma.spaceFollow.upsert({ where: { userId_spaceId: { userId: session.user.id, spaceId: space.id } }, update: {}, create: { userId: session.user.id, spaceId: space.id } });
-  return NextResponse.json({ following: true });
+  const followers = await prisma.spaceFollow.count({ where: { spaceId: space.id } });
+  return NextResponse.json({ following: true, followers });
 }
 
 export async function DELETE(_request: Request, context: { params: Promise<{ slug: string }> }) {
@@ -19,5 +20,6 @@ export async function DELETE(_request: Request, context: { params: Promise<{ slu
   const space = await prisma.space.findUnique({ where: { slug }, select: { id: true } });
   if (!space) return NextResponse.json({ error: "Space not found." }, { status: 404 });
   await prisma.spaceFollow.deleteMany({ where: { userId: session.user.id, spaceId: space.id } });
-  return NextResponse.json({ following: false });
+  const followers = await prisma.spaceFollow.count({ where: { spaceId: space.id } });
+  return NextResponse.json({ following: false, followers });
 }

@@ -1,4 +1,26 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-export function SpaceMembership({ slug, initialJoined, initialMembers }: { slug: string; initialJoined: boolean; initialMembers: number }) { const router = useRouter(); const [joined, setJoined] = useState(initialJoined); const [members, setMembers] = useState(initialMembers); const [busy, setBusy] = useState(false); const [error, setError] = useState(""); async function change() { setBusy(true); setError(""); const wasJoined = joined; setJoined(!wasJoined); setMembers((count) => Math.max(0, count + (wasJoined ? -1 : 1))); const response = await fetch(`/api/spaces/${slug}/membership`, { method: wasJoined ? "DELETE" : "POST" }); if (response.status === 401) { router.push(`/sign-in?returnTo=/spaces/${slug}`); return; } if (!response.ok) { setJoined(wasJoined); setMembers((count) => Math.max(0, count + (wasJoined ? 1 : -1))); setError("Your membership could not be updated. Please try again."); } else router.refresh(); setBusy(false); } return <div className="space-membership"><button className={joined ? "button-outline" : "button-primary"} type="button" onClick={() => void change()} disabled={busy}>{busy ? "Saving…" : joined ? "Leave Space" : "Join Space"}</button><span>{members} members</span>{error && <p role="alert">{error}</p>}</div>; }
+import { useToggleAction } from "@/lib/use-toggle-action";
+
+export function SpaceMembership({ slug, initialJoined, initialMembers }: { slug: string; initialJoined: boolean; initialMembers: number }) {
+  const { active: joined, count: members, busy, error, toggle } = useToggleAction({
+    url: `/api/spaces/${slug}/membership`,
+    initialActive: initialJoined,
+    initialCount: initialMembers,
+    parseResponse: (json) => {
+      const data = json as { joined: boolean; members: number };
+      return { active: data.joined, count: data.members };
+    },
+    signInReturnTo: `/spaces/${slug}`,
+    errorMessage: "Your membership could not be updated. Please try again.",
+  });
+
+  return (
+    <div className="space-membership">
+      <button className={joined ? "button-outline" : "button-primary"} type="button" onClick={() => toggle()} disabled={busy}>
+        {busy ? "Saving…" : joined ? "Leave Space" : "Join Space"}
+      </button>
+      <span>{members} members</span>
+      {error && <p role="alert">{error}</p>}
+    </div>
+  );
+}
