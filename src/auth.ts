@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { ensureOAuthUser } from "@/lib/oauth-account";
+import { resolveTokenUserId } from "@/lib/auth-session";
 
 const oauthProviders = [];
 if (process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET) oauthProviders.push(Google({ clientId: process.env.GOOGLE_CLIENT_ID, clientSecret: process.env.GOOGLE_CLIENT_SECRET }));
@@ -34,14 +35,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return Boolean(await ensureOAuthUser(user, { provider: account.provider, providerAccountId: account.providerAccountId }));
     },
     async jwt({ token, user }) {
-      const email = typeof user?.email === "string" ? user.email : typeof token.email === "string" ? token.email : null;
-      if (email) {
-        const localUser = await prisma.user.findUnique({ where: { email: email.trim().toLowerCase() }, select: { id: true, suspendedUntil: true } });
-        if (localUser?.suspendedUntil && localUser.suspendedUntil > new Date()) delete token.userId;
-        else if (localUser) token.userId = localUser.id;
-        else if (user?.id) token.userId = user.id;
-      } else if (user?.id) token.userId = user.id;
-      return token;
+      return resolveTokenUserId(token, user);
     },
     async session({ session, token }) {
       if (session.user && typeof token.userId === "string") session.user.id = token.userId;
