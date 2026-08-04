@@ -9,10 +9,11 @@
 - Account deletion with cascading identity/content relations.
 - Safe structured logging and tracked-source secret scan.
 - Production build, typecheck, lint, and unit-test evidence in milestone reports.
+- Automated production security-header audit (`npm run audit:security-headers`) verifies HSTS, framing, MIME sniffing, referrer, and permissions policies.
 
 ## Findings
 
-- `npm audit --omit=dev --audit-level=high` previously reported four nested postcss/sharp findings. `npm audit fix --force` is unsafe because it proposes a breaking Next.js downgrade.
+- `npm audit --omit=dev --audit-level=high` reports three nested postcss/sharp findings. `npm audit fix --force` is unsafe because it proposes a breaking Next.js downgrade.
 - Browser-level XSS, CSRF, IDOR, upload, brute-force, and moderation-bypass testing remains unexecuted.
 - OAuth live testing is blocked until provider credentials exist.
 
