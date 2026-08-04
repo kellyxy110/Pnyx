@@ -107,7 +107,7 @@ Before public launch, Pnyx must demonstrate a reliable question-to-useful-answer
 - [x] Complete discussion-detail editing, threaded replies, sharing, reporting (including replies), and ownership controls.
 - [x] Complete user following and feed impact.
 - [x] Complete Space detail, membership, members, moderators, rules, feeds, and moderator-managed pinned content.
-- [ ] Complete Knowledge reading/index surfaces with sources, citations, related content, and revisions.
+- [x] Complete Knowledge reading/index surfaces with sources, citations, related content, and revisions.
 - [ ] Complete Explore discovery, trending, filters, recommendations, and pagination.
 - [x] Complete truthful AI assistance surfaces backed by supported APIs only.
 - [ ] Add authenticated Playwright journey coverage and production evidence.
