@@ -42,11 +42,11 @@ export default function HomePage() {
 
     <section className="landing-how" id="how-it-works" aria-labelledby="how-title">
       <div className="landing-section-intro"><p className="eyebrow">More than a feed</p><h2 id="how-title">A better place for the work behind the work.</h2><p>Pnyx keeps the human part of technology visible: the questions, explanations, sources, experiments, and people that make progress possible.</p></div>
-      <div className="landing-flow" role="list">
-        <article role="listitem"><span>01</span><h3>Start a conversation</h3><p>Ask a focused question, share an idea, or publish what you are learning.</p></article>
-        <article role="listitem"><span>02</span><h3>Find people and Spaces</h3><p>Follow contributors and join communities where the right context already exists.</p></article>
-        <article role="listitem"><span>03</span><h3>Keep what matters</h3><p>Carry the strongest thinking forward as readable, attributed knowledge.</p></article>
-      </div>
+      <ol className="landing-flow">
+        <li><span>01</span><h3>Start a conversation</h3><p>Ask a focused question, share an idea, or publish what you are learning.</p></li>
+        <li><span>02</span><h3>Find people and Spaces</h3><p>Follow contributors and join communities where the right context already exists.</p></li>
+        <li><span>03</span><h3>Keep what matters</h3><p>Carry the strongest thinking forward as readable, attributed knowledge.</p></li>
+      </ol>
     </section>
 
     <section className="landing-pathways" id="pathways" aria-labelledby="pathways-title">
@@ -64,7 +64,7 @@ export default function HomePage() {
         <section className="landing-footer-intro"><Brand footer /><p className="landing-footer-statement">One Community. Infinite Knowledge.</p><p>A technology knowledge network where conversations become lasting, discoverable knowledge.</p></section>
         <section><h2>Explore</h2><nav aria-label="Explore Pnyx"><Link href="/feed">Community</Link><Link href="/spaces">Spaces</Link><Link href="/knowledge">Knowledge</Link><Link href="/explore">Explore</Link><Link href="/explore">Search</Link></nav></section>
         <section><h2>Community</h2><nav aria-label="Community policies"><a href="https://github.com/kellyxy110/Pnyx/blob/main/docs/community-guidelines.md" target="_blank" rel="noreferrer">Guidelines</a><a href="https://github.com/kellyxy110/Pnyx/blob/main/docs/content-policy.md" target="_blank" rel="noreferrer">Trust &amp; Safety</a><a href="https://github.com/kellyxy110/Pnyx/blob/main/docs/accessibility-report.md" target="_blank" rel="noreferrer">Accessibility</a><span title="Pending legal review" aria-disabled="true">Privacy · pending</span><span title="Pending legal review" aria-disabled="true">Terms · pending</span></nav></section>
-        <section className="landing-footer-ecosystem"><h2>Ecosystem</h2><a href="https://sitenexis.vercel.app" target="_blank" rel="noreferrer"><strong>Powered by SiteNexis</strong><span>AI visibility &amp; machine intelligence infrastructure</span><small>sitenexis.vercel.app ↗</small></a><a href="https://nexishub.vercel.app" target="_blank" rel="noreferrer"><strong>A NexisHub product</strong><span>Building intelligent digital products for people, communities and businesses.</span><small>nexishub.vercel.app ↗</small></a></section>
+        <section className="landing-footer-ecosystem"><h2>Ecosystem</h2><a href="https://sitenexis.vercel.app" target="_blank" rel="noreferrer"><strong>Powered by SiteNexis</strong><span>AI visibility &amp; machine intelligence infrastructure</span></a><a href="https://nexishub.vercel.app" target="_blank" rel="noreferrer"><strong>A NexisHub product</strong><span>Building intelligent digital products for people, communities and businesses.</span></a></section>
       </div>
       <div className="landing-footer-bottom"><span>© 2026 Pnyx. All rights reserved.</span><span>Built by NexisHub · Powered by SiteNexis</span></div>
     </footer>
