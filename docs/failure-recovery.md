@@ -8,6 +8,7 @@
 - Initial registration removes the newly created account when verification delivery fails.
 - Resend-verification removes the newly created token after delivery failure and uses neutral messaging.
 - Health returns degraded status when PostgreSQL is unavailable without returning database details.
+- Mocked health probes cover both healthy and database-failure responses without injecting faults into production.
 - AI assistance has timeout, retry, unavailable, and failure states and does not auto-publish verified content.
 
 ## Pending tests
