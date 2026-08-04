@@ -20,4 +20,4 @@
 
 ## Current dependency finding
 
-`npm audit --omit=dev --audit-level=high` reports four vulnerabilities in the framework dependency chain involving nested `postcss` and `sharp`. The suggested `npm audit fix --force` would install a breaking Next.js downgrade, so it was not applied automatically. Remediation requires a deliberate framework/dependency upgrade and compatibility verification.
+`npm audit --omit=dev --audit-level=high` reports three high-severity vulnerabilities in the framework dependency chain involving nested `postcss` and `sharp`. The suggested `npm audit fix --force` would install a breaking Next.js downgrade, so it was not applied automatically. Remediation requires a deliberate framework/dependency upgrade and compatibility verification.
