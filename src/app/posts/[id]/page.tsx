@@ -19,5 +19,5 @@ export default async function PostPage({ params }: { params: Promise<{ id: strin
     },
   });
   if (!post) notFound();
-  return <><ProductNav /><PostDetail viewerId={viewerId} post={post} /></>;
+  return <main id="main-content" tabIndex={-1} className="app-shell"><ProductNav /><PostDetail viewerId={viewerId} post={post} /></main>;
 }
