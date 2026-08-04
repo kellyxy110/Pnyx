@@ -1,10 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useToggleAction } from "@/lib/use-toggle-action";
 
 type Space = { id: string; slug: string; name: string; description: string; tags: string[]; isFeatured: boolean; viewer?: { joined: boolean; following: boolean; isModerator: boolean }; _count: { members: number; followers: number } };
+type Tab = "featured" | "following" | "joined" | "all";
+
+const TABS: Array<{ key: Tab; label: string }> = [
+  { key: "featured", label: "Featured" },
+  { key: "following", label: "Following" },
+  { key: "joined", label: "Joined" },
+  { key: "all", label: "All Spaces" },
+];
 
 function SpaceBrowserCard({ space }: { space: Space }) {
   const follow = useToggleAction({
@@ -55,11 +63,50 @@ function SpaceBrowserCard({ space }: { space: Space }) {
 
 export function SpaceBrowser() {
   const [spaces, setSpaces] = useState<Space[]>([]);
-  const [error, setError] = useState("");
+  const [state, setState] = useState<"loading" | "ready" | "error">("loading");
+  const [query, setQuery] = useState("");
+  const [tab, setTab] = useState<Tab>("all");
+
   useEffect(() => {
-    fetch("/api/spaces").then(async (response) => { if (!response.ok) throw new Error(); setSpaces(await response.json()); }).catch(() => setError("Spaces could not be loaded right now."));
+    fetch("/api/spaces").then(async (response) => {
+      if (!response.ok) throw new Error();
+      setSpaces(await response.json());
+      setState("ready");
+    }).catch(() => setState("error"));
   }, []);
-  if (error) return <p role="alert" className="rounded-2xl bg-red-50 p-5 text-red-800">{error}</p>;
-  if (!spaces.length) return <p className="rounded-2xl border border-slate-200 bg-white p-8 text-slate-600">No public Spaces are available yet.</p>;
-  return <div className="grid gap-4 md:grid-cols-2">{spaces.map((space) => <SpaceBrowserCard key={space.id} space={space} />)}</div>;
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return spaces.filter((space) => {
+      if (tab === "featured" && !space.isFeatured) return false;
+      if (tab === "following" && !space.viewer?.following) return false;
+      if (tab === "joined" && !space.viewer?.joined) return false;
+      if (!q) return true;
+      return `${space.name} ${space.description} ${space.tags.join(" ")}`.toLowerCase().includes(q);
+    });
+  }, [spaces, tab, query]);
+
+  if (state === "error") return <p role="alert" className="rounded-2xl bg-red-50 p-5 text-red-800">Spaces could not be loaded right now.</p>;
+
+  return (
+    <div className="grid gap-5">
+      <label className="block">
+        <span className="sr-only">Search Spaces</span>
+        <input type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search Spaces" className="w-full rounded-full border border-slate-300 px-4 py-2.5 text-sm text-[#0B1F3A] outline-none focus:border-[#2563EB]" />
+      </label>
+      <div role="tablist" aria-label="Space filters" className="flex flex-wrap gap-2">
+        {TABS.map((t) => <button key={t.key} type="button" role="tab" aria-selected={tab === t.key} onClick={() => setTab(t.key)} className={tab === t.key ? "button-primary" : "button-outline"}>{t.label}</button>)}
+      </div>
+      {state === "loading" && <div className="grid gap-4 md:grid-cols-2" aria-label="Loading Spaces"><div className="h-52 animate-pulse rounded-2xl bg-slate-100" /><div className="h-52 animate-pulse rounded-2xl bg-slate-100" /></div>}
+      {state === "ready" && spaces.length === 0 && <p className="rounded-2xl border border-slate-200 bg-white p-8 text-slate-600">No public Spaces are available yet.</p>}
+      {state === "ready" && spaces.length > 0 && filtered.length === 0 && (
+        <div className="rounded-2xl border border-slate-200 bg-white p-8 text-slate-600">
+          <h3 className="text-lg font-semibold text-[#0B1F3A]">No Spaces found</h3>
+          <p className="mt-1">{tab === "all" ? "Try a different search term." : `You haven't ${tab === "joined" ? "joined" : "followed"} any Spaces that match yet.`}</p>
+          {(query || tab !== "all") && <button type="button" className="button-outline mt-4" onClick={() => { setQuery(""); setTab("all"); }}>Clear filters</button>}
+        </div>
+      )}
+      {filtered.length > 0 && <div className="grid gap-4 md:grid-cols-2">{filtered.map((space) => <SpaceBrowserCard key={space.id} space={space} />)}</div>}
+    </div>
+  );
 }
