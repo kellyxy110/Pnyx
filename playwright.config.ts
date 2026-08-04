@@ -1,6 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const executablePath = process.env.PLAYWRIGHT_EXECUTABLE_PATH;
+const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "https://pnyx-psi.vercel.app";
 
 export default defineConfig({
   testDir: "./tests/e2e",
@@ -9,7 +10,7 @@ export default defineConfig({
   fullyParallel: true,
   reporter: [["list"], ["html", { outputFolder: "artifacts/playwright-report", open: "never" }]],
   use: {
-    baseURL: "https://pnyx-psi.vercel.app",
+    baseURL,
     browserName: "chromium",
     launchOptions: executablePath ? { executablePath } : undefined,
     trace: "retain-on-failure",
