@@ -14,7 +14,7 @@
 
 ## Findings
 
-- `npm audit --omit=dev --audit-level=high` reports three nested postcss/sharp findings. `npm audit fix --force` is unsafe because it proposes a breaking Next.js downgrade.
+- `npm audit --omit=dev --audit-level=high` reports zero vulnerabilities after pinned PostCSS and Sharp overrides.
 - Browser-level XSS, CSRF, IDOR, upload, brute-force, and moderation-bypass testing remains unexecuted.
 - OAuth live testing is blocked until provider credentials exist.
 
