@@ -59,6 +59,14 @@ export default function HomePage() {
       <div className="landing-cta-actions"><Link className="button button-primary" href="/sign-up">Join Pnyx</Link><Link className="text-link" href="/sign-in">I already have an account</Link></div>
     </section>
 
-    <footer><Brand footer /><span>Where technology conversations become organised knowledge.</span></footer>
+    <footer className="landing-footer" aria-label="Pnyx footer">
+      <div className="landing-footer-grid">
+        <section className="landing-footer-intro"><Brand footer /><p className="landing-footer-statement">One Community. Infinite Knowledge.</p><p>A technology knowledge network where conversations become lasting, discoverable knowledge.</p></section>
+        <section><h2>Explore</h2><nav aria-label="Explore Pnyx"><Link href="/feed">Community</Link><Link href="/spaces">Spaces</Link><Link href="/knowledge">Knowledge</Link><Link href="/explore">Explore</Link><Link href="/explore">Search</Link></nav></section>
+        <section><h2>Community</h2><nav aria-label="Community policies"><a href="https://github.com/kellyxy110/Pnyx/blob/main/docs/community-guidelines.md" target="_blank" rel="noreferrer">Guidelines</a><a href="https://github.com/kellyxy110/Pnyx/blob/main/docs/content-policy.md" target="_blank" rel="noreferrer">Trust &amp; Safety</a><a href="https://github.com/kellyxy110/Pnyx/blob/main/docs/accessibility-report.md" target="_blank" rel="noreferrer">Accessibility</a><span title="Pending legal review" aria-disabled="true">Privacy · pending</span><span title="Pending legal review" aria-disabled="true">Terms · pending</span></nav></section>
+        <section className="landing-footer-ecosystem"><h2>Ecosystem</h2><a href="https://sitenexis.vercel.app" target="_blank" rel="noreferrer"><strong>Powered by SiteNexis</strong><span>AI visibility &amp; machine intelligence infrastructure</span><small>sitenexis.vercel.app ↗</small></a><a href="https://nexishub.vercel.app" target="_blank" rel="noreferrer"><strong>A NexisHub product</strong><span>Building intelligent digital products for people, communities and businesses.</span><small>nexishub.vercel.app ↗</small></a></section>
+      </div>
+      <div className="landing-footer-bottom"><span>© 2026 Pnyx. All rights reserved.</span><span>Built by NexisHub · Powered by SiteNexis</span></div>
+    </footer>
   </main>;
 }
