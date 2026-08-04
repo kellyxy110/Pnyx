@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type Post = { id: string; title: string; body: string; type: string; createdAt: string; author: { displayName: string; username: string }; space: { name: string; slug: string }; viewer: { reacted: boolean; bookmarked: boolean }; _count: { replies: number; reactions: number; bookmarks: number } };
 
@@ -13,15 +13,15 @@ export function Feed() {
   const [state, setState] = useState<"loading" | "ready" | "empty" | "error">("loading");
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState<string | null>(null);
-  async function load(next = 1) {
+  const load = useCallback(async (next = 1) => {
     setState("loading"); setMessage("");
     const response = await fetch(`/api/posts?feed=${feed}&page=${next}`);
     const result = await response.json().catch(() => null);
     if (!response.ok) { setState("error"); setMessage(result?.error ?? "Discussions could not be loaded. Please try again."); return; }
     const items = result.posts as Post[];
     setPosts((current) => next === 1 ? items : [...current, ...items]); setPage(next); setMore(Boolean(result.hasMore)); setState(items.length ? "ready" : "empty");
-  }
-  useEffect(() => { void load(1); }, [feed]);
+  }, [feed]);
+  useEffect(() => { void load(1); }, [load]);
   async function toggle(post: Post, kind: "reaction" | "bookmark") {
     const active = kind === "reaction" ? post.viewer.reacted : post.viewer.bookmarked;
     const key = `${kind}:${post.id}`; setBusy(key); setMessage("");

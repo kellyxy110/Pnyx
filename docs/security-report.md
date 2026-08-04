@@ -6,6 +6,7 @@
 - Server-side Zod validation for account, discussion, knowledge, and search inputs.
 - Authenticated moderation and appeal gates.
 - Database-backed post, reply, report, and appeal rate limits.
+- Deterministic tests for post, reply, report, and appeal limits, including rate-limit audit-event recording.
 - Account deletion with cascading identity/content relations.
 - Safe structured logging and tracked-source secret scan.
 - Production build, typecheck, lint, and unit-test evidence in milestone reports.
