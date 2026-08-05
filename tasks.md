@@ -18,7 +18,7 @@ This is the initial implementation backlog. Work from top to bottom unless a dep
 - [x] Implement registration, authentication, recovery, session management, and account deletion.
 - [x] Implement profile creation/editing, avatar handling, links, expertise categories, and privacy controls.
 - [x] Implement Space creation/seeding, browsing, following, joining, leaving, rules, moderators, and featured resources.
-- [x] Seed initial Spaces and subtopics across AI, Programming, Web, Mobile, Cloud, Data, Cybersecurity, Design, Business, Education, and Hardware.
+- [x] Seed initial Spaces and subtopics across AI, Programming, Web3, Mobile, Cloud, Data, Cybersecurity, Design, Business, Education, Hardware, and Cryptocurrency.
 - [x] Add permission tests for user, Space member, moderator, and administrator roles.
 
 ## Milestone 2 — Discussion loop

@@ -84,3 +84,25 @@ Visibility, authorship, source references, edits, AI generation metadata, and ve
 Pnyx stores media objects outside PostgreSQL. The application persists object keys and non-sensitive metadata only; public URLs are derived server-side. The initial provider is Cloudflare R2 through its S3-compatible API, behind `src/lib/storage.ts`.
 
 **Consequence:** Profile, Space, discussion, and knowledge media can reuse one upload/delete contract. Upload controls stay disabled until the R2 endpoint, credentials, bucket, and public base URL are configured in the target environment.
+
+## D-010 — Toggle counts (Join, Follow) are always server-authoritative
+
+**Status:** Accepted
+**Date:** 2026-08-05
+
+Membership and follow mutation endpoints return the real post-mutation count from the database (`prisma.*.count()`), and the client never computes a displayed count by incrementing/decrementing local state.
+
+**Why:** Three independent hand-rolled client implementations were each doing local `+1`/`-1` arithmetic against display counts. The database layer was already idempotent (composite primary keys, `upsert`), but the client-side arithmetic drifted from the true count under retries, races, and shared busy-state bugs across cards in a list.
+
+**Consequence:** New toggle-style interactions should use the shared `useToggleAction` hook (`src/lib/use-toggle-action.ts`) rather than reimplementing optimistic count math.
+
+## D-011 — Every routed page renders inside the shared `.app-shell` grid
+
+**Status:** Accepted
+**Date:** 2026-08-05
+
+No page may define its own top-level layout wrapper in place of the shared `.app-shell` CSS Grid container.
+
+**Why:** The discussion-detail page rendered its own `<main className="shell">` — not a real CSS class — instead of `.app-shell`, which silently broke sidebar positioning and bottom-nav-safe padding only on that route.
+
+**Consequence:** New pages must wrap content in `.app-shell` from the start; layout regressions of this kind are a review checklist item, not just a one-off bug fix.

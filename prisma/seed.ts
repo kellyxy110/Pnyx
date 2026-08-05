@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 const spaces = [
-  ["artificial-intelligence", "Artificial Intelligence"], ["programming", "Programming"], ["web", "Web"], ["mobile", "Mobile"], ["cloud", "Cloud"], ["data", "Data"], ["cybersecurity", "Cybersecurity"], ["design", "Design"], ["business", "Business"], ["education", "Education"], ["hardware", "Hardware"],
+  ["artificial-intelligence", "Artificial Intelligence"], ["programming", "Programming"], ["web", "Web3"], ["mobile", "Mobile"], ["cloud", "Cloud"], ["data", "Data"], ["cybersecurity", "Cybersecurity"], ["design", "Design"], ["business", "Business"], ["education", "Education"], ["hardware", "Hardware"], ["cryptocurrency", "Cryptocurrency"],
 ] as const;
 
 async function main() {
