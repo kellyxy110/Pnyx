@@ -23,9 +23,10 @@ export async function generateAi(kind: AiKind, context: string): Promise<AiResul
   const provider = apiKey ? "groq" : "unconfigured";
   if (!apiKey) return { provider, model: MODEL, policyVersion: POLICY_VERSION, status: "UNAVAILABLE", text: null, sourceIds: [], latencyMs: Date.now() - started, error: "AI provider is not configured." };
   if (context.length > MAX_INPUT) return { provider, model: MODEL, policyVersion: POLICY_VERSION, status: "FAILED", text: null, sourceIds: [], latencyMs: Date.now() - started, error: "Selected context exceeds the AI input limit." };
+  const timeoutMs = Number(process.env.PNYX_AI_TIMEOUT_MS ?? 12000);
   const body = { model: MODEL, temperature: 0.2, max_tokens: kind === "ARTIFACT_DRAFT" ? 1200 : 500, messages: [{ role: "system", content: "You are a careful assistant for Pnyx. Follow source boundaries. Never present generated text as verified or human-authored." }, { role: "user", content: promptFor(kind, context) }] };
   for (let attempt = 0; attempt < 2; attempt += 1) {
-    const controller = new AbortController(); const timer = setTimeout(() => controller.abort(), 12000);
+    const controller = new AbortController(); const timer = setTimeout(() => controller.abort(), timeoutMs);
     try { const response = await fetch("https://api.groq.com/openai/v1/chat/completions", { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` }, body: JSON.stringify(body), signal: controller.signal }); if (!response.ok) throw new Error(`provider_${response.status}`); const parsed = responseSchema.safeParse(await response.json()); if (!parsed.success) throw new Error("invalid_provider_response"); return { provider, model: MODEL, policyVersion: POLICY_VERSION, status: "COMPLETED", text: parsed.data.choices[0].message.content, sourceIds: [], latencyMs: Date.now() - started }; } catch (error) { if (attempt === 1) return { provider, model: MODEL, policyVersion: POLICY_VERSION, status: "FAILED", text: null, sourceIds: [], latencyMs: Date.now() - started, error: error instanceof Error ? error.message : "AI request failed." }; } finally { clearTimeout(timer); }
   }
   return { provider, model: MODEL, policyVersion: POLICY_VERSION, status: "FAILED", text: null, sourceIds: [], latencyMs: Date.now() - started, error: "AI request failed." };

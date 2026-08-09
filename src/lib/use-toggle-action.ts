@@ -7,7 +7,7 @@ export interface ToggleActionResult {
   count: number;
   busy: boolean;
   error: string;
-  toggle: () => void;
+  toggle: () => Promise<{ active: boolean; count: number } | null>;
 }
 
 interface UseToggleActionOptions {
@@ -34,8 +34,8 @@ export function useToggleAction({ url, initialActive, initialCount, parseRespons
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
-  async function toggle() {
-    if (busy) return;
+  async function toggle(): Promise<{ active: boolean; count: number } | null> {
+    if (busy) return null;
     setBusy(true);
     setError("");
     const method = active ? "DELETE" : "POST";
@@ -43,19 +43,21 @@ export function useToggleAction({ url, initialActive, initialCount, parseRespons
       const response = await fetch(url, { method });
       if (response.status === 401) {
         router.push(`/sign-in?returnTo=${encodeURIComponent(signInReturnTo)}`);
-        return;
+        return null;
       }
       if (!response.ok) {
         const body = await response.json().catch(() => null) as { error?: string } | null;
         setError(body?.error ?? errorMessage);
-        return;
+        return null;
       }
       const parsed = parseResponse(await response.json());
       setActive(parsed.active);
       setCount(parsed.count);
       router.refresh();
+      return parsed;
     } catch {
       setError(errorMessage);
+      return null;
     } finally {
       setBusy(false);
     }

@@ -6,7 +6,7 @@ vi.mock("resend", () => ({ Resend: vi.fn(() => ({ emails: { send: sendMock } }))
 import { classifyResendFailure, sendAccountMail } from "./mail";
 
 describe("Resend delivery handling", () => {
-  afterEach(() => { sendMock.mockReset(); vi.restoreAllMocks(); });
+  afterEach(() => { sendMock.mockReset(); vi.restoreAllMocks(); delete process.env.RESEND_API_KEY; delete process.env.EMAIL_FROM; });
 
   it("classifies resend.dev recipient restrictions", () => {
     expect(classifyResendFailure("restricted_to_testing", "You can only send to your own email with onboarding@resend.dev", 403)).toBe("RESEND_TESTING_RECIPIENT_RESTRICTION");

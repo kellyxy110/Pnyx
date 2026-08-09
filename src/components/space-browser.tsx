@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useToggleAction } from "@/lib/use-toggle-action";
 
@@ -15,6 +16,7 @@ const TABS: Array<{ key: Tab; label: string }> = [
 ];
 
 function SpaceBrowserCard({ space }: { space: Space }) {
+  const router = useRouter();
   const follow = useToggleAction({
     url: `/api/spaces/${space.slug}/follow`,
     initialActive: space.viewer?.following ?? false,
@@ -38,6 +40,12 @@ function SpaceBrowserCard({ space }: { space: Space }) {
     errorMessage: "Could not update this membership. Please try again.",
   });
 
+  async function changeMembership() {
+    if (membership.active) { await membership.toggle(); return; }
+    const result = await membership.toggle();
+    if (result?.active) router.push(`/spaces/${space.slug}`);
+  }
+
   return (
     <article className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
       <div className="mb-5 flex items-start justify-between gap-4">
@@ -53,7 +61,7 @@ function SpaceBrowserCard({ space }: { space: Space }) {
         <span>{membership.count} members · {follow.count} followers</span>
         <div className="flex gap-2">
           <button disabled={follow.busy} onClick={() => follow.toggle()} className="rounded-full border border-slate-300 px-3 py-2 font-bold text-[#0B1F3A] hover:border-[#2563EB] hover:text-[#2563EB]">{follow.busy ? "Saving…" : follow.active ? "Following" : "Follow"}</button>
-          <button disabled={membership.busy} onClick={() => membership.toggle()} className="rounded-full bg-[#0B1F3A] px-3 py-2 font-bold text-white hover:bg-[#2563EB]">{membership.busy ? "Saving…" : membership.active ? "Leave" : "Join"}</button>
+          <button disabled={membership.busy} onClick={() => void changeMembership()} className="rounded-full bg-[#0B1F3A] px-3 py-2 font-bold text-white hover:bg-[#2563EB]">{membership.busy ? "Saving…" : membership.active ? "Leave" : "Join"}</button>
         </div>
       </div>
       {(follow.error || membership.error) && <p role="alert" className="mt-3 text-sm text-red-700">{follow.error || membership.error}</p>}
