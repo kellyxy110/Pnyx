@@ -117,3 +117,23 @@ The initial Space taxonomy uses `Web3` rather than `Web`, and includes `Cryptocu
 **Why:** The community taxonomy should reflect the intended technology domains and make blockchain/cryptocurrency discussions discoverable without conflating them with general web development.
 
 **Consequence:** The taxonomy is updated through Prisma seed data and the forward-only migration `20260809120000_web3_cryptocurrency_spaces`; future Space references should use the `web` and `cryptocurrency` slugs.
+
+## D-013 — Space-originated discussions retain context
+
+**Status:** Accepted  
+**Date:** 2026-08-09
+
+Starting a discussion from a Space opens the shared composer with that Space selected, clearly tells the author where the post will be published, and returns the author to the originating Space after publishing.
+
+**Why:** A shared Community composer is useful for implementation reuse, but silently changing context makes Space participation feel broken and increases the risk of publishing into the wrong community.
+
+**Consequence:** Space links may pass a Space slug and same-origin return path to `/feed`; the composer validates the return path before navigation and the existing server-side Space validation remains authoritative.
+
+## D-014 — Motion is progressive enhancement
+
+**Status:** Accepted  
+**Date:** 2026-08-09
+
+Pnyx uses smooth scrolling and restrained page-entry motion only when the user has not requested reduced motion. Reduced-motion users receive the same content and navigation without animation.
+
+**Why:** Motion should provide orientation and continuity without creating an accessibility or vestibular-motion barrier.

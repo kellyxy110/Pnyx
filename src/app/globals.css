@@ -161,6 +161,23 @@ footer { color:var(--muted); display:flex; font-size:.8rem; justify-content:spac
 @media(max-width:600px){.landing-topbar{gap:1rem}.landing-nav-actions .button{padding:.65rem .85rem}.landing-signin{padding:.65rem .25rem}.landing-hero{padding-top:2.75rem}.landing-hero h1{font-size:clamp(3rem,14vw,4.4rem)}.landing-visual{min-height:0}.landing-visual-card{max-width:190px;padding:.6rem .7rem}.landing-visual-card-top{right:-.5rem}.landing-visual-card-bottom{bottom:5%;left:-.5rem}.landing-trust{align-items:flex-start;flex-direction:column;gap:.7rem}.landing-how{gap:2.5rem;padding:5rem 0}.landing-pathway-grid{grid-template-columns:1fr;margin-top:2rem}.landing-pathway-card{min-height:210px}.landing-pathway-card h3{margin-top:2rem}.landing-cta-actions{align-items:flex-start;flex-direction:column}.landing-cta{margin-top:4rem}}
 @media(prefers-reduced-motion:reduce){.landing-flow li{transition:none}}
 
+@media (prefers-reduced-motion: no-preference) {
+  .surface-hero,
+  .surface-section,
+  .community-layout,
+  .space-detail-grid {
+    animation: pnyx-page-enter 420ms ease-out both;
+  }
+}
+
+@keyframes pnyx-page-enter {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.composer { scroll-margin-top: 5rem; }
+.composer-context { background: color-mix(in srgb, var(--blue) 10%, transparent); border: 1px solid color-mix(in srgb, var(--blue) 28%, transparent); border-radius: .75rem; color: var(--navy); margin-top: 1rem; padding: .75rem 1rem; }
+
 /* Shared bottom-sheet drawer (native <dialog>) */
 .app-drawer{background:var(--surface);border:0;border-radius:1.25rem 1.25rem 0 0;bottom:0;box-shadow:0 -12px 40px rgba(11,31,58,.22);left:0;margin:0;max-height:85vh;max-width:none;padding:0;position:fixed;right:0;top:auto;width:100%}
 .app-drawer::backdrop{background:rgba(11,31,58,.45)}

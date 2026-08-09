@@ -110,6 +110,8 @@ Before public launch, Pnyx must demonstrate a reliable question-to-useful-answer
 - [x] Complete Knowledge reading/index surfaces with sources, citations, related content, and revisions.
 - [x] Complete Explore discovery, trending, filters, recommendations, and pagination.
 - [x] Complete truthful AI assistance surfaces backed by supported APIs only.
+- [x] Preserve Space context when starting a discussion: preselect the originating Space, explain the posting destination, and return to that Space after publishing.
+- [x] Add shared smooth scrolling and restrained page-entry motion with reduced-motion support.
 - [ ] Add authenticated Playwright journey coverage and production evidence.
 
 ## Milestone 6B — Resilience and security (paused until 6A closes)
