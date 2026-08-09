@@ -106,3 +106,14 @@ No page may define its own top-level layout wrapper in place of the shared `.app
 **Why:** The discussion-detail page rendered its own `<main className="shell">` — not a real CSS class — instead of `.app-shell`, which silently broke sidebar positioning and bottom-nav-safe padding only on that route.
 
 **Consequence:** New pages must wrap content in `.app-shell` from the start; layout regressions of this kind are a review checklist item, not just a one-off bug fix.
+
+## D-012 — Web is named Web3 and Cryptocurrency is a first-class Space
+
+**Status:** Accepted
+**Date:** 2026-08-09
+
+The initial Space taxonomy uses `Web3` rather than `Web`, and includes `Cryptocurrency` as a separate public Space.
+
+**Why:** The community taxonomy should reflect the intended technology domains and make blockchain/cryptocurrency discussions discoverable without conflating them with general web development.
+
+**Consequence:** The taxonomy is updated through Prisma seed data and the forward-only migration `20260809120000_web3_cryptocurrency_spaces`; future Space references should use the `web` and `cryptocurrency` slugs.
