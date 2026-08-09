@@ -11,4 +11,8 @@ Authenticated browser tests use a dedicated non-production Pnyx environment and 
 
 Run `npx playwright test tests/e2e/authenticated-journeys.spec.ts` only after the target has isolated data and the test account has been provisioned. Without all four values, the suite is skipped with an explicit reason.
 
-Current coverage is intentionally non-mutating: sign-in, persisted profile loading, session menu, and composer availability. Multi-user create/reply/follow/join flows require an isolated database with deterministic fixtures and cleanup; they must not run against production user data.
+The suite covers sign-in, persisted profile loading, session-menu state, scoped composer context, profile persistence, Space membership rollback, and optional avatar upload/removal. Mutating tests require an isolated database with deterministic fixtures and cleanup; they must not run against production user data.
+
+Set `E2E_STORAGE_ENABLED=true` only when the isolated target has a dedicated R2 bucket and the test account's uploaded objects can be cleaned up. The upload journey uses `public/images/pnyx-community-collage.png` as a controlled fixture.
+
+The full multi-user discussion, reply, follow, notification, and search journeys remain a separate fixture-backed expansion. They require two isolated test accounts and cleanup hooks; no production account is used as a substitute.

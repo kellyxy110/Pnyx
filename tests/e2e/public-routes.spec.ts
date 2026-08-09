@@ -22,11 +22,19 @@ test("sign-up form supports keyboard focus and reduced motion", async ({ page })
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/sign-up", { waitUntil: "domcontentloaded" });
 
-  const firstField = page.getByLabel("Display name");
-  await firstField.focus();
-  await expect(firstField).toBeFocused();
-  await page.keyboard.press("Tab");
-  await expect(page.getByLabel("Username")).toBeFocused();
+  const config = await page.request.get("/api/auth/config");
+  const emailSignupEnabled = (await config.json()).emailSignupEnabled === true;
+  if (emailSignupEnabled) {
+    const firstField = page.getByLabel("Display name");
+    await firstField.focus();
+    await expect(firstField).toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(page.getByLabel("Username")).toBeFocused();
+  } else {
+    const providerButton = page.getByRole("button", { name: /Google|GitHub/ }).first();
+    await providerButton.focus();
+    await expect(providerButton).toBeFocused();
+  }
 
   const motion = await page.evaluate(() => {
     const style = getComputedStyle(document.documentElement);

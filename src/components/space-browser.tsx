@@ -105,7 +105,7 @@ export function SpaceBrowser() {
       <div role="tablist" aria-label="Space filters" className="flex flex-wrap gap-2">
         {TABS.map((t) => <button key={t.key} type="button" role="tab" aria-selected={tab === t.key} onClick={() => setTab(t.key)} className={tab === t.key ? "button-primary" : "button-outline"}>{t.label}</button>)}
       </div>
-      {state === "loading" && <div className="grid gap-4 md:grid-cols-2" aria-label="Loading Spaces"><div className="h-52 animate-pulse rounded-2xl bg-slate-100" /><div className="h-52 animate-pulse rounded-2xl bg-slate-100" /></div>}
+      {state === "loading" && <div className="grid gap-4 md:grid-cols-2" role="status" aria-label="Loading Spaces"><div className="h-52 animate-pulse rounded-2xl bg-slate-100" /><div className="h-52 animate-pulse rounded-2xl bg-slate-100" /></div>}
       {state === "ready" && spaces.length === 0 && <p className="rounded-2xl border border-slate-200 bg-white p-8 text-slate-600">No public Spaces are available yet.</p>}
       {state === "ready" && spaces.length > 0 && filtered.length === 0 && (
         <div className="rounded-2xl border border-slate-200 bg-white p-8 text-slate-600">

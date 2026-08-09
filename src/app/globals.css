@@ -177,6 +177,11 @@ footer { color:var(--muted); display:flex; font-size:.8rem; justify-content:spac
 
 .composer { scroll-margin-top: 5rem; }
 .composer-context { background: color-mix(in srgb, var(--blue) 10%, transparent); border: 1px solid color-mix(in srgb, var(--blue) 28%, transparent); border-radius: .75rem; color: var(--navy); margin-top: 1rem; padding: .75rem 1rem; }
+.auth-panel .auth-kicker { color: #056b57; }
+.auth-panel .auth-form-header p:last-child { color: #526176; }
+.auth-panel .auth-form-note { color: #234a7b; }
+.auth-panel .social-button:disabled { background: #f1f5f9; color: #526176; opacity: 1; }
+.auth-panel .social-button.muted { color: #526176; opacity: 1; }
 
 /* Shared bottom-sheet drawer (native <dialog>) */
 .app-drawer{background:var(--surface);border:0;border-radius:1.25rem 1.25rem 0 0;bottom:0;box-shadow:0 -12px 40px rgba(11,31,58,.22);left:0;margin:0;max-height:85vh;max-width:none;padding:0;position:fixed;right:0;top:auto;width:100%}

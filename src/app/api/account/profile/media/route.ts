@@ -4,7 +4,7 @@ import { Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
-import { deleteObject, isStorageConfigured, putImage } from "@/lib/storage";
+import { deleteObject, isStorageConfigured, publicUrlForKey, putImage } from "@/lib/storage";
 
 const limits = { avatar: { maxBytes: 5 * 1024 * 1024, width: 512, height: 512, minWidth: 128, minHeight: 128 }, banner: { maxBytes: 10 * 1024 * 1024, width: 1600, height: 500, minWidth: 600, minHeight: 160 } } as const;
 type Kind = keyof typeof limits;
@@ -31,9 +31,15 @@ export async function POST(request: Request) {
     const stored = await putImage({ key, body: converted.data, contentType: "image/webp", bytes: converted.info.size, width: converted.info.width, height: converted.info.height });
     const existing = await prisma.user.findUnique({ where: { id: session.user.id }, select: { avatarKey: true, bannerKey: true } });
     const mediaMetadata = { contentType: stored.contentType, bytes: stored.bytes, width: stored.width, height: stored.height };
-    const updated = await prisma.user.update({ where: { id: session.user.id }, data: kind === "avatar" ? { avatarKey: stored.key, avatarUrl: stored.url, avatarMetadata: mediaMetadata } : { bannerKey: stored.key, bannerMetadata: mediaMetadata }, select: { avatarUrl: true, avatarKey: true, bannerKey: true } });
+    let updated;
+    try {
+      updated = await prisma.user.update({ where: { id: session.user.id }, data: kind === "avatar" ? { avatarKey: stored.key, avatarUrl: stored.url, avatarMetadata: mediaMetadata } : { bannerKey: stored.key, bannerMetadata: mediaMetadata }, select: { avatarUrl: true, avatarKey: true, bannerKey: true } });
+    } catch (error) {
+      await deleteObject(stored.key).catch((cleanupError) => console.error("[storage] failed to clean up unlinked upload", { kind, error: cleanupError instanceof Error ? cleanupError.message : "unknown" }));
+      throw error;
+    }
     await deleteObject(kind === "avatar" ? existing?.avatarKey : existing?.bannerKey).catch((error) => console.error("[storage] orphan cleanup failed", { kind, error: error instanceof Error ? error.message : "unknown" }));
-    return NextResponse.json(updated);
+    return NextResponse.json({ ...updated, bannerUrl: publicUrlForKey(updated.bannerKey) });
   } catch (error) {
     console.error("[storage] profile media upload failed", { kind, error: error instanceof Error ? error.message : "unknown" });
     return NextResponse.json({ error: "We could not save that image. Please try again." }, { status: 503 });

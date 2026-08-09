@@ -112,7 +112,7 @@ Before public launch, Pnyx must demonstrate a reliable question-to-useful-answer
 - [x] Complete truthful AI assistance surfaces backed by supported APIs only.
 - [x] Preserve Space context when starting a discussion: preselect the originating Space, explain the posting destination, and return to that Space after publishing.
 - [x] Add shared smooth scrolling and restrained page-entry motion with reduced-motion support.
-- [ ] Add authenticated Playwright journey coverage and production evidence.
+- [ ] Run the isolated authenticated Playwright journeys and record production-adjacent evidence; the guarded journey definitions now cover profile persistence, Space membership, scoped composer context, and optional media upload.
 
 ## Milestone 6B — Resilience and security (paused until 6A closes)
 
