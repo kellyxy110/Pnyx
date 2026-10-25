@@ -21,8 +21,9 @@ async function command(args: string[]) {
   });
 }
 
-let server: ChildProcess | undefined;
-try {
+async function main() {
+ let server: ChildProcess | undefined;
+ try {
   await command(["prisma", "migrate", "deploy"]);
   await command(["prisma", "migrate", "status"]);
   await command(["prisma", "migrate", "diff", "--from-schema-datasource", "prisma/schema.foundation.prisma", "--to-schema-datamodel", "prisma/schema.foundation.prisma", "--exit-code"]);
@@ -38,4 +39,10 @@ try {
   }
   if (!ready) throw new Error("Local verification server did not become ready.");
   await command(["playwright", "test", "--config", "playwright.postgres.config.ts"]);
-} finally { server?.kill("SIGTERM"); }
+ } finally { server?.kill("SIGTERM"); }
+}
+
+void main().catch(error => {
+  console.error(error instanceof Error ? error.message : "Native PostgreSQL verification failed.");
+  process.exitCode = 1;
+});

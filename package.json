@@ -15,7 +15,7 @@
     "db:seed": "tsx prisma/seed.ts",
     "vercel-build": "prisma migrate deploy && prisma generate && next build",
     "test:e2e": "playwright test",
-    "verify:postgres": "tsx scripts/verify-postgres.ts",
+    "verify:postgres": "node --import tsx scripts/verify-postgres.ts",
     "audit:responsive": "node scripts/audit-responsive.mjs",
     "audit:security-config": "node scripts/audit-security-config.mjs",
     "audit:security-headers": "node scripts/audit-security-headers.mjs",
