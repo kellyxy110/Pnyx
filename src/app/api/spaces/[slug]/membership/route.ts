@@ -23,6 +23,9 @@ export async function DELETE(_request: Request, context: { params: Promise<{ slu
   const space = await prisma.space.findUnique({ where: { slug }, select: { id: true } });
   if (!space) return NextResponse.json({ error: "Space not found." }, { status: 404 });
   await prisma.spaceMember.deleteMany({ where: { userId: session.user.id, spaceId: space.id, isModerator: false } });
-  const members = await prisma.spaceMember.count({ where: { spaceId: space.id } });
-  return NextResponse.json({ joined: false, members });
+  const [membership, members] = await prisma.$transaction([
+    prisma.spaceMember.findUnique({ where: { userId_spaceId: { userId: session.user.id, spaceId: space.id } }, select: { userId: true } }),
+    prisma.spaceMember.count({ where: { spaceId: space.id } }),
+  ]);
+  return NextResponse.json({ joined: Boolean(membership), members });
 }

@@ -6,7 +6,8 @@ const routes = ["/", "/sign-in", "/sign-up", "/explore", "/spaces", "/knowledge"
 for (const route of routes) {
   test(`${route} is accessible and does not overflow`, async ({ page }) => {
     const response = await page.goto(route, { waitUntil: "domcontentloaded" });
-    expect(response?.status()).toBeLessThan(500);
+    expect(response?.status()).toBeGreaterThanOrEqual(200);
+    expect(response?.status()).toBeLessThan(400);
     await page.waitForTimeout(500);
     await expect(page.locator("main")).toBeVisible();
 

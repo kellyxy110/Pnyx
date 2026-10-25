@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 const email = process.env.E2E_EMAIL;
 const password = process.env.E2E_PASSWORD;
-const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "https://pnyx-psi.vercel.app";
+const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:3000";
 const canonicalProduction = "https://pnyx-psi.vercel.app";
 const canRun = process.env.E2E_ALLOW_AUTHENTICATED === "true" && Boolean(email && password) && baseURL.replace(/\/$/, "") !== canonicalProduction;
 const storageCanRun = canRun && process.env.E2E_STORAGE_ENABLED === "true";
@@ -10,7 +10,7 @@ const storageCanRun = canRun && process.env.E2E_STORAGE_ENABLED === "true";
 async function signIn(page: import("@playwright/test").Page) {
   await page.goto("/sign-in", { waitUntil: "domcontentloaded" });
   await page.getByLabel("Email").fill(email!);
-  await page.getByLabel("Password").fill(password!);
+  await page.getByLabel("Password", { exact: true }).fill(password!);
   await page.getByRole("button", { name: "Sign in to Pnyx" }).click();
   await expect(page).toHaveURL(/\/profile/, { timeout: 15_000 });
 }
@@ -20,9 +20,10 @@ test.describe("controlled authenticated journeys", () => {
 
   test("signs in, loads the persisted profile, and exposes the session menu", async ({ page }) => {
     await signIn(page);
-    await expect(page.getByRole("heading", { name: "Make your perspective findable." })).toBeVisible();
-    await expect(page.getByRole("button", { name: /@/ })).toBeVisible();
-    await page.getByRole("button", { name: /@/ }).click();
+    await expect(page.getByRole("heading", { name: "Your technology identity, in one place." })).toBeVisible();
+    const accountMenu = page.locator('button[aria-haspopup="menu"]');
+    await expect(accountMenu).toBeVisible();
+    await accountMenu.click();
     await expect(page.getByRole("menuitem", { name: "View profile" })).toBeVisible();
     await expect(page.getByRole("menuitem", { name: "Sign out" })).toBeVisible();
   });
@@ -57,11 +58,16 @@ test.describe("controlled authenticated journeys", () => {
   test("joins and leaves a Space with a persisted membership action", async ({ page }) => {
     await signIn(page);
     await page.goto("/spaces/web", { waitUntil: "domcontentloaded" });
-    const membership = page.getByRole("button", { name: /^(Join|Leave)$/ }).first();
+    const membership = page.getByRole("button", { name: /^(Join|Leave) Space$/ }).first();
     const initialLabel = await membership.innerText();
+    const changedLabel = initialLabel === "Join Space" ? "Leave Space" : "Join Space";
     await membership.click();
-    await expect(membership).toHaveText(initialLabel === "Join" ? "Leave" : "Join");
+    await expect(membership).toHaveText(changedLabel);
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await expect(membership).toHaveText(changedLabel);
     await membership.click();
+    await expect(membership).toHaveText(initialLabel);
+    await page.reload({ waitUntil: "domcontentloaded" });
     await expect(membership).toHaveText(initialLabel);
   });
 

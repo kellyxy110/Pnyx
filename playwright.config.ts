@@ -1,7 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
 const executablePath = process.env.PLAYWRIGHT_EXECUTABLE_PATH;
-const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "https://pnyx-psi.vercel.app";
+const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:3000";
 
 export default defineConfig({
   testDir: "./tests/e2e",

@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 const { sendMock } = vi.hoisted(() => ({ sendMock: vi.fn() }));
-vi.mock("resend", () => ({ Resend: vi.fn(() => ({ emails: { send: sendMock } })) }));
+vi.mock("resend", () => ({ Resend: vi.fn(function () { return { emails: { send: sendMock } }; }) }));
 
 import { classifyResendFailure, sendAccountMail } from "./mail";
 

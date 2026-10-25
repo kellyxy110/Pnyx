@@ -1,0 +1,85 @@
+{
+  "date": "2026-10-25",
+  "repository": "kellyxy110/Pnyx",
+  "branch": "audit/pnyx-remediation-20261025",
+  "baseline": "f7305ab0a825f565bde16d7d41d46639b904fd35",
+  "runtime": {
+    "node": "v24.22.1",
+    "browser": "Chromium 153.0.8010.0",
+    "database": "PGlite 0.5.11 with @electric-sql/pglite-socket 0.2.14; isolated in-memory fixture"
+  },
+  "checks": {
+    "npm_ci": "passed; lifecycle scripts enabled",
+    "typescript": "passed",
+    "eslint": "passed; max-warnings=0",
+    "vitest": {
+      "files_passed": 16,
+      "tests_passed": 64,
+      "failed": 0
+    },
+    "build": "passed; 38 generated pages",
+    "prisma_schema": "valid",
+    "npm_audit": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "security_headers": {
+      "config_passed": 5,
+      "http_passed": 5,
+      "origin": "http://127.0.0.1:3000"
+    },
+    "playwright": {
+      "passed": 51,
+      "failed": 0,
+      "skipped": 3,
+      "skip_reason": "isolated R2 provider not configured",
+      "projects": [
+        "mobile",
+        "tablet",
+        "desktop"
+      ]
+    },
+    "responsive": {
+      "passed": 77,
+      "failed": 0,
+      "widths": [
+        320,
+        360,
+        375,
+        390,
+        412,
+        430,
+        768,
+        1024,
+        1280,
+        1440,
+        1920
+      ]
+    },
+    "archive_integrity": "10 of 10 passed",
+    "git_integrity": "passed",
+    "credential_scan": "no high-confidence matches in tracked files; not a full history audit"
+  },
+  "versions": {
+    "next": "15.5.28",
+    "sharp": "0.35.5",
+    "zod": "4.6.7",
+    "vitest": "4.1.12",
+    "prisma": "6.19.3",
+    "@prisma/client": "6.19.3",
+    "deepmerge-ts": "8.0.2"
+  },
+  "boundaries": {
+    "production_database_touched": false,
+    "migrations_run": false,
+    "merged": false,
+    "deployment_commands_run": false,
+    "native_postgresql_concurrency_verified": false,
+    "real_device_or_webkit_verified": false,
+    "branch_auto_deploy_enabled": false
+  }
+}

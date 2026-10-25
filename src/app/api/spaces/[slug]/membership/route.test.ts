@@ -1,18 +1,21 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { authMock, spaceFindUnique, memberUpsert, memberDeleteMany, memberCount } = vi.hoisted(() => ({
+const { authMock, spaceFindUnique, memberUpsert, memberDeleteMany, memberCount, memberFindUnique, transaction } = vi.hoisted(() => ({
   authMock: vi.fn(),
   spaceFindUnique: vi.fn(),
   memberUpsert: vi.fn(),
   memberDeleteMany: vi.fn(),
   memberCount: vi.fn(),
+  memberFindUnique: vi.fn(),
+  transaction: vi.fn(),
 }));
 
 vi.mock("@/auth", () => ({ auth: authMock }));
 vi.mock("@/lib/prisma", () => ({
   prisma: {
+    $transaction: transaction,
     space: { findUnique: spaceFindUnique },
-    spaceMember: { upsert: memberUpsert, deleteMany: memberDeleteMany, count: memberCount },
+    spaceMember: { upsert: memberUpsert, deleteMany: memberDeleteMany, count: memberCount, findUnique: memberFindUnique },
   },
 }));
 
@@ -28,6 +31,8 @@ describe("POST/DELETE /api/spaces/[slug]/membership", () => {
     spaceFindUnique.mockResolvedValue({ id: "space_1", isPublic: true });
     memberUpsert.mockResolvedValue({});
     memberDeleteMany.mockResolvedValue({ count: 1 });
+    memberFindUnique.mockResolvedValue(null);
+    transaction.mockImplementation((operations: Promise<unknown>[]) => Promise.all(operations));
   });
 
   it("rejects an unauthenticated join", async () => {
@@ -116,7 +121,9 @@ describe("POST/DELETE /api/spaces/[slug]/membership", () => {
 
   it("never removes a moderator's membership via Leave", async () => {
     memberCount.mockResolvedValue(6);
-    await DELETE(req, { params });
+    memberFindUnique.mockResolvedValue({ userId: "user_1" });
+    const response = await DELETE(req, { params });
+    expect(await response.json()).toEqual({ joined: true, members: 6 });
     expect(memberDeleteMany).toHaveBeenCalledWith(expect.objectContaining({ where: expect.objectContaining({ isModerator: false }) }));
   });
 });

@@ -22,7 +22,7 @@ export async function resolveTokenUserId(
     const localUser = await prisma.user.findUnique({ where: { email: email.trim().toLowerCase() }, select: { id: true, suspendedUntil: true } });
     if (localUser?.suspendedUntil && localUser.suspendedUntil > new Date()) delete token.userId;
     else if (localUser) token.userId = localUser.id;
-    else if (user?.id) token.userId = user.id;
+    else delete token.userId; // Account was confirmed absent by the database.
   } catch {
     if (!token.userId && user?.id) token.userId = user.id;
   }

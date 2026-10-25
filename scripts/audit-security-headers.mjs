@@ -1,4 +1,4 @@
-const baseUrl = (process.env.SECURITY_AUDIT_URL ?? "https://pnyx-psi.vercel.app").replace(/\/$/, "");
+const baseUrl = (process.env.SECURITY_AUDIT_URL ?? "http://127.0.0.1:3000").replace(/\/$/, "");
 const expected = {
   "x-content-type-options": "nosniff",
   "x-frame-options": "DENY",

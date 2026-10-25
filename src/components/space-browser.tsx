@@ -15,7 +15,7 @@ const TABS: Array<{ key: Tab; label: string }> = [
   { key: "all", label: "All Spaces" },
 ];
 
-function SpaceBrowserCard({ space }: { space: Space }) {
+function SpaceBrowserCard({ space, onChange }: { space: Space; onChange: (id: string, kind: "membership" | "follow", active: boolean, count: number) => void }) {
   const router = useRouter();
   const follow = useToggleAction({
     url: `/api/spaces/${space.slug}/follow`,
@@ -41,9 +41,15 @@ function SpaceBrowserCard({ space }: { space: Space }) {
   });
 
   async function changeMembership() {
-    if (membership.active) { await membership.toggle(); return; }
+    const wasJoined = membership.active;
     const result = await membership.toggle();
-    if (result?.active) router.push(`/spaces/${space.slug}`);
+    if (result) onChange(space.id, "membership", result.active, result.count);
+    if (!wasJoined && result?.active) router.push(`/spaces/${space.slug}`);
+  }
+
+  async function changeFollow() {
+    const result = await follow.toggle();
+    if (result) onChange(space.id, "follow", result.active, result.count);
   }
 
   return (
@@ -60,7 +66,7 @@ function SpaceBrowserCard({ space }: { space: Space }) {
       <div className="mt-6 flex items-center justify-between border-t border-slate-100 pt-4 text-sm text-slate-500">
         <span>{membership.count} members · {follow.count} followers</span>
         <div className="flex gap-2">
-          <button disabled={follow.busy} onClick={() => follow.toggle()} className="rounded-full border border-slate-300 px-3 py-2 font-bold text-[#0B1F3A] hover:border-[#2563EB] hover:text-[#2563EB]">{follow.busy ? "Saving…" : follow.active ? "Following" : "Follow"}</button>
+          <button disabled={follow.busy} onClick={() => void changeFollow()} className="rounded-full border border-slate-300 px-3 py-2 font-bold text-[#0B1F3A] hover:border-[#2563EB] hover:text-[#2563EB]">{follow.busy ? "Saving…" : follow.active ? "Following" : "Follow"}</button>
           <button disabled={membership.busy} onClick={() => void changeMembership()} className="rounded-full bg-[#0B1F3A] px-3 py-2 font-bold text-white hover:bg-[#2563EB]">{membership.busy ? "Saving…" : membership.active ? "Leave" : "Join"}</button>
         </div>
       </div>
@@ -74,6 +80,15 @@ export function SpaceBrowser() {
   const [state, setState] = useState<"loading" | "ready" | "error">("loading");
   const [query, setQuery] = useState("");
   const [tab, setTab] = useState<Tab>("all");
+
+  function updateSpace(id: string, kind: "membership" | "follow", active: boolean, count: number) {
+    setSpaces(current => current.map(space => {
+      if (space.id !== id) return space;
+      const viewer = { joined: false, following: false, isModerator: false, ...space.viewer };
+      if (kind === "membership") return { ...space, viewer: { ...viewer, joined: active }, _count: { ...space._count, members: count } };
+      return { ...space, viewer: { ...viewer, following: active }, _count: { ...space._count, followers: count } };
+    }));
+  }
 
   useEffect(() => {
     fetch("/api/spaces").then(async (response) => {
@@ -114,7 +129,7 @@ export function SpaceBrowser() {
           {(query || tab !== "all") && <button type="button" className="button-outline mt-4" onClick={() => { setQuery(""); setTab("all"); }}>Clear filters</button>}
         </div>
       )}
-      {filtered.length > 0 && <div className="grid gap-4 md:grid-cols-2">{filtered.map((space) => <SpaceBrowserCard key={space.id} space={space} />)}</div>}
+      {filtered.length > 0 && <div className="grid gap-4 md:grid-cols-2">{filtered.map((space) => <SpaceBrowserCard key={space.id} space={space} onChange={updateSpace} />)}</div>}
     </div>
   );
 }

@@ -1,1 +1,9 @@
-{"buildCommand":"npm run vercel-build"}
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "npm run vercel-build",
+  "git": {
+    "deploymentEnabled": {
+      "audit/pnyx-remediation-20261025": false
+    }
+  }
+}
