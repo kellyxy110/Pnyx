@@ -84,8 +84,11 @@ test("moderator Leave retains membership and returns joined=true", async () => {
 test("independent sessions for one user share a unique membership", async () => {
   const first = await session();
   const second = await session();
-  await assertResponses(await Promise.all(Array.from({ length: 20 }, (_, index) => (index % 2 ? first : second).post(endpoint))), true, 1);
-  expect(await db.spaceMember.count({ where: { spaceId } })).toBe(1);
+  for (let round = 0; round < 5; round++) {
+    await db.spaceMember.deleteMany({ where: { spaceId } });
+    await assertResponses(await Promise.all(Array.from({ length: 20 }, (_, index) => (index % 2 ? first : second).post(endpoint))), true, 1);
+    expect(await db.spaceMember.count({ where: { spaceId } })).toBe(1);
+  }
 });
 
 test("Join, Leave, and rejoin persist across fresh API reads", async () => {

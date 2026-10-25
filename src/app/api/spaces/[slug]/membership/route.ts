@@ -8,10 +8,10 @@ export async function POST(_request: Request, context: { params: Promise<{ slug:
   const { slug } = await context.params;
   const space = await prisma.space.findUnique({ where: { slug }, select: { id: true, isPublic: true } });
   if (!space?.isPublic) return NextResponse.json({ error: "Space not found." }, { status: 404 });
-  // Idempotent by construction: the composite (userId, spaceId) primary key
-  // makes this an atomic INSERT ... ON CONFLICT DO NOTHING under concurrent
-  // requests, so at most one membership row can ever exist per user/Space.
-  await prisma.spaceMember.upsert({ where: { userId_spaceId: { userId: session.user.id, spaceId: space.id } }, update: {}, create: { userId: session.user.id, spaceId: space.id } });
+  // An empty-update Prisma upsert can race between its read and insert.
+  // PostgreSQL handles conflicts in the insert itself with skipDuplicates,
+  // preserving existing membership (including moderator status).
+  await prisma.spaceMember.createMany({ data: { userId: session.user.id, spaceId: space.id }, skipDuplicates: true });
   const members = await prisma.spaceMember.count({ where: { spaceId: space.id } });
   return NextResponse.json({ joined: true, members });
 }

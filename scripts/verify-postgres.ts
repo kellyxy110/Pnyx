@@ -7,6 +7,8 @@ const env = {
   ...process.env,
   AUTH_SECRET: randomUUID() + randomUUID(),
   APP_URL: app.origin,
+  AUTH_URL: app.origin,
+  NEXTAUTH_URL: app.origin,
   PNYX_FIXTURE_PASSWORD: `Fixture-A1-${randomUUID()}`,
   EMAIL_SIGNUP_ENABLED: "false",
   GOOGLE_CLIENT_ID: "", GOOGLE_CLIENT_SECRET: "", GITHUB_CLIENT_ID: "", GITHUB_CLIENT_SECRET: "",

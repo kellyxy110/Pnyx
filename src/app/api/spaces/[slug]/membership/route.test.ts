@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-const { authMock, spaceFindUnique, memberUpsert, memberDeleteMany, memberCount, memberFindUnique, transaction } = vi.hoisted(() => ({
+const { authMock, spaceFindUnique, memberCreateMany, memberDeleteMany, memberCount, memberFindUnique, transaction } = vi.hoisted(() => ({
   authMock: vi.fn(),
   spaceFindUnique: vi.fn(),
-  memberUpsert: vi.fn(),
+  memberCreateMany: vi.fn(),
   memberDeleteMany: vi.fn(),
   memberCount: vi.fn(),
   memberFindUnique: vi.fn(),
@@ -15,7 +15,7 @@ vi.mock("@/lib/prisma", () => ({
   prisma: {
     $transaction: transaction,
     space: { findUnique: spaceFindUnique },
-    spaceMember: { upsert: memberUpsert, deleteMany: memberDeleteMany, count: memberCount, findUnique: memberFindUnique },
+    spaceMember: { createMany: memberCreateMany, deleteMany: memberDeleteMany, count: memberCount, findUnique: memberFindUnique },
   },
 }));
 
@@ -29,7 +29,7 @@ describe("POST/DELETE /api/spaces/[slug]/membership", () => {
     vi.clearAllMocks();
     authMock.mockResolvedValue({ user: { id: "user_1" } });
     spaceFindUnique.mockResolvedValue({ id: "space_1", isPublic: true });
-    memberUpsert.mockResolvedValue({});
+    memberCreateMany.mockResolvedValue({});
     memberDeleteMany.mockResolvedValue({ count: 1 });
     memberFindUnique.mockResolvedValue(null);
     transaction.mockImplementation((operations: Promise<unknown>[]) => Promise.all(operations));
@@ -39,14 +39,14 @@ describe("POST/DELETE /api/spaces/[slug]/membership", () => {
     authMock.mockResolvedValue(null);
     const response = await POST(req, { params });
     expect(response.status).toBe(401);
-    expect(memberUpsert).not.toHaveBeenCalled();
+    expect(memberCreateMany).not.toHaveBeenCalled();
   });
 
   it("rejects a nonexistent Space", async () => {
     spaceFindUnique.mockResolvedValue(null);
     const response = await POST(req, { params });
     expect(response.status).toBe(404);
-    expect(memberUpsert).not.toHaveBeenCalled();
+    expect(memberCreateMany).not.toHaveBeenCalled();
   });
 
   it("rejects joining a non-public Space", async () => {
@@ -61,23 +61,20 @@ describe("POST/DELETE /api/spaces/[slug]/membership", () => {
     const body = await response.json();
     expect(response.status).toBe(200);
     expect(body).toEqual({ joined: true, members: 6 });
-    expect(memberUpsert).toHaveBeenCalledWith({
-      where: { userId_spaceId: { userId: "user_1", spaceId: "space_1" } },
-      update: {},
-      create: { userId: "user_1", spaceId: "space_1" },
+    expect(memberCreateMany).toHaveBeenCalledWith({
+      data: { userId: "user_1", spaceId: "space_1" },
+      skipDuplicates: true,
     });
   });
 
-  it("repeated join is idempotent: upsert never creates a second row, and the reported count does not change on the second call", async () => {
+  it("repeated join requests use conflict-tolerant insertion and return the database count", async () => {
     memberCount.mockResolvedValue(6);
     await POST(req, { params });
     const second = await POST(req, { params });
     const body = await second.json();
-    // Both calls go through the same upsert (update: {} on conflict) — the
-    // real duplicate-prevention guarantee comes from the DB's composite
-    // primary key (userId, spaceId), verified separately via schema
-    // inspection since this is a mocked unit test.
-    expect(memberUpsert).toHaveBeenCalledTimes(2);
+    // Native PostgreSQL integration checks exercise the actual unique-key
+    // behavior; this unit test checks the route contract only.
+    expect(memberCreateMany).toHaveBeenCalledTimes(2);
     expect(body).toEqual({ joined: true, members: 6 });
   });
 
