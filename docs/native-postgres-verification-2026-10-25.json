@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-25",
+  "repository": "kellyxy110/Pnyx",
+  "branch": "audit/pnyx-remediation-20261025",
+  "tested_commit": "1abfd2bb7d6e6ef0fe599229e244a505a1cb960e",
+  "workflow_run_id": 40184865054,
+  "job_id": 121143415826,
+  "workflow_url": "https://github.com/kellyxy110/Pnyx/actions/runs/40184865054",
+  "database": "native PostgreSQL 16.15, disposable GitHub Actions service",
+  "checks": {
+    "npm_ci": "passed",
+    "dependency_advisories": 0,
+    "typescript": "passed",
+    "eslint": "passed; max-warnings=0",
+    "vitest": {
+      "files": 17,
+      "passed": 70,
+      "failed": 0
+    },
+    "migration_replay": {
+      "applied": 12,
+      "status": "up to date",
+      "schema_drift": false
+    },
+    "build": "passed",
+    "native_http_integration": {
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0,
+      "cross_session_join_rounds": 5,
+      "join_requests_per_round": 20
+    }
+  },
+  "defect": {
+    "trigger": "Two authenticated sessions concurrently Join the same Space for the same user.",
+    "before": "Prisma empty-update upsert can race, returning P2002 and HTTP 500.",
+    "after": "Conflict-tolerant createMany(skipDuplicates=true) preserves one membership row and returns HTTP 200."
+  },
+  "boundaries": {
+    "production_database_changed": false,
+    "production_migrations_run": false,
+    "merged": false,
+    "deployed": false,
+    "full_load_backup_restore_deletion_abuse_testing_complete": false,
+    "R2_verified": false,
+    "milestone_6A_closed": false
+  }
+}

@@ -112,7 +112,9 @@ Before public launch, Pnyx must demonstrate a reliable question-to-useful-answer
 - [x] Complete truthful AI assistance surfaces backed by supported APIs only.
 - [x] Preserve Space context when starting a discussion: preselect the originating Space, explain the posting destination, and return to that Space after publishing.
 - [x] Add shared smooth scrolling and restrained page-entry motion with reduced-motion support.
-- [ ] Run the isolated authenticated Playwright journeys and record production-adjacent evidence; the guarded journey definitions now cover profile persistence, Space membership, scoped composer context, and optional media upload.
+- [x] Run isolated authenticated browser journeys for profile persistence, Space membership, and scoped composer context; the remediation evidence records 51 passing browser checks and three skipped R2 cases.
+- [x] Verify critical native PostgreSQL paths: replay all 12 migrations, detect no schema drift, and pass nine real HTTP/session/concurrency scenarios. See `docs/native-postgres-verification-2026-10-25.md`.
+- [ ] Record production-adjacent browser acceptance, including enabled media flows; local API evidence does not replace this gate.
 
 ## Milestone 6B — Resilience and security (paused until 6A closes)
 

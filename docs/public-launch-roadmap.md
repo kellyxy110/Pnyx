@@ -1,12 +1,12 @@
 # Pnyx public launch roadmap
 
-Updated: 2026-07-29  
+Updated: 2026-10-25
 Production: https://pnyx-psi.vercel.app  
 Repository: https://github.com/kellyxy110/Pnyx
 
 ## Current status
 
-Pnyx is in Milestone 6A — Core Product Completion. Milestones 0–5 are implemented. Authenticated navigation and the shared responsive shell are production-deployed. Milestone 6A remains open because resilience/security evidence, backup/restore verification, deletion propagation, manual release QA, and closed-beta participation are not fully evidenced.
+Pnyx is in Milestone 6A — Core Product Completion. Milestones 0–5 are implemented. The remediation branch now has verified native PostgreSQL migration replay and nine critical HTTP/session/concurrency scenarios, alongside TypeScript/lint/build and 70 passing unit tests. This work has not been merged or deployed. R2 media verification and production-adjacent browser acceptance remain open within 6A; resilience/security, backup/restore, deletion propagation, manual release QA, and closed-beta evidence remain later gates. See the [native verification report](native-postgres-verification-2026-10-25.md).
 
 ## Delivery roadmap
 
@@ -37,14 +37,14 @@ Keyword search, filters, explanations, permission-aware exclusions, ranking eval
 ### Phase 6A — Core Product Completion — IN PROGRESS
 
 1. Authenticated application state — COMPLETE.
-2. Shared responsive three-column application shell — COMPLETE; production responsive audit 28/28.
-3. Profile, community, following, Spaces, Knowledge, Explore, truthful AI, and authenticated journey coverage — OPEN.
+2. Shared responsive three-column application shell — COMPLETE; latest local responsive audit 77/77.
+3. Isolated authenticated browser journeys and targeted native PostgreSQL verification — COMPLETE for their recorded scope. R2 media and production-adjacent browser acceptance — OPEN.
 
 ### Phase 6B/6C — PAUSED
 
 1. Automated WCAG/static/axe checks — COMPLETE.
 2. Keyboard focus and reduced-motion regression checks — COMPLETE.
-3. Responsive public-route matrix: 28/28 — COMPLETE.
+3. Responsive public-route matrix: 77/77 locally — COMPLETE; manual real-device evidence remains open.
 4. Failure-recovery, load, security, deletion-propagation, and backup/restore evidence — OPEN.
 5. Manual Lighthouse, screen-reader, real-device QA — OPEN.
 6. Resend developer-recipient acceptance test — EXTERNAL/HUMAN.
@@ -63,7 +63,7 @@ Release candidate review, incident exercise, backup restore exercise, security s
 - Validate backup and restore procedures against an isolated database.
 - Run safe authenticated load tests against local or preview infrastructure.
 - Add Lighthouse CI and route performance budgets when a supported browser runner/CI environment is available.
-- Complete dependency remediation without downgrading Next.js or weakening security.
+- Maintain the remediated dependency baseline; the native verification CI run reports zero known vulnerabilities.
 
 ## Human or external backlog
 

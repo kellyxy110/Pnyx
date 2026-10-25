@@ -4,7 +4,7 @@
 
 Phase 1–10 remediation is committed at `0c64c3d` on `audit/pnyx-remediation-20261025`. Verified local evidence: TypeScript/lint/build pass, 64 unit tests, 51 browser checks, 77 responsive combinations, and zero known dependency advisories. Three R2 tests remain skipped. These results supersede the older public-route counts below without claiming production acceptance.
 
-The next gate is [native PostgreSQL verification](native-postgres-verification-2026-10-25.md): migration replay, schema drift, concurrent membership actions, moderator protection, and real session revocation. Its result is pending GitHub Actions execution. R2 and the remaining Milestone 6A acceptance items stay open; Milestones 6B/6C remain gated.
+[Native PostgreSQL verification](native-postgres-verification-2026-10-25.md) now passes: all 12 migrations replayed without schema drift, nine HTTP integration scenarios passed, and CI passed 70 unit tests plus TypeScript/lint/build. It exposed and verified a fix for a real two-session Join race that previously returned HTTP 500. The next gate is isolated R2 avatar/banner verification, followed by the remaining Milestone 6A acceptance evidence. Milestones 6B/6C remain gated.
 
 ## Completed milestones
 
@@ -18,7 +18,7 @@ The next gate is [native PostgreSQL verification](native-postgres-verification-2
 ## Milestone 6 — Beta readiness (open)
 
 1. Complete WCAG 2.2 AA keyboard, focus, and screen-reader audit.
-2. Complete responsive audit on public mobile, tablet, desktop, and wide-desktop routes. (Complete: 28/28 checks.)
+2. Complete responsive audit on public mobile, tablet, desktop, and wide-desktop routes. (Complete locally: 77/77 route/viewport combinations; real-device review remains open.)
 3. Add and execute load, failure recovery, backup/restore, deletion-propagation, and security tests.
 4. Recruit learners, engineers, researchers, maintainers, and moderators for closed beta.
 5. Review beta evidence and decide whether to expand, narrow, or revise scope.
