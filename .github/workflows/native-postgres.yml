@@ -1,0 +1,53 @@
+name: Native PostgreSQL verification
+
+on:
+  push:
+    branches: [audit/pnyx-remediation-20261025]
+    paths:
+      - .github/workflows/native-postgres.yml
+      - scripts/verify-postgres.ts
+      - tests/postgres/**
+      - playwright.postgres.config.ts
+      - src/**
+      - prisma/**
+      - package.json
+      - package-lock.json
+
+permissions:
+  contents: read
+
+jobs:
+  postgres:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: pnyx_fixture
+          POSTGRES_PASSWORD: disposable_ci_only
+          POSTGRES_DB: pnyx_verify_ci
+        ports: [5432:5432]
+        options: >-
+          --health-cmd "pg_isready -U pnyx_fixture -d pnyx_verify_ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://pnyx_fixture:disposable_ci_only@127.0.0.1:5432/pnyx_verify_ci?connection_limit=10
+      APP_URL: http://127.0.0.1:3000
+      PNYX_DISPOSABLE_POSTGRES: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run db:generate
+      - run: npm run typecheck
+      - run: npm run lint -- --max-warnings=0
+      - run: npm test
+      - run: npm run verify:postgres

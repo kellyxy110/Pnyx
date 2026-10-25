@@ -1,5 +1,11 @@
 # Pnyx roadmap and remaining work
 
+## Evidence update, 25 October 2026
+
+Phase 1–10 remediation is committed at `0c64c3d` on `audit/pnyx-remediation-20261025`. Verified local evidence: TypeScript/lint/build pass, 64 unit tests, 51 browser checks, 77 responsive combinations, and zero known dependency advisories. Three R2 tests remain skipped. These results supersede the older public-route counts below without claiming production acceptance.
+
+The next gate is [native PostgreSQL verification](native-postgres-verification-2026-10-25.md): migration replay, schema drift, concurrent membership actions, moderator protection, and real session revocation. Its result is pending GitHub Actions execution. R2 and the remaining Milestone 6A acceptance items stay open; Milestones 6B/6C remain gated.
+
 ## Completed milestones
 
 0. Foundation — Next.js, TypeScript, Prisma/PostgreSQL integration, validation, logging, health checks, analytics, and design system.
