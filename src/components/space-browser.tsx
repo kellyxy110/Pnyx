@@ -115,7 +115,7 @@ export function SpaceBrowser() {
     <div className="grid gap-5">
       <label className="block">
         <span className="sr-only">Search Spaces</span>
-        <input type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search Spaces" className="w-full rounded-full border border-slate-300 px-4 py-2.5 text-sm text-[#0B1F3A] outline-none focus:border-[#2563EB]" />
+        <input type="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search Spaces" className="pnyx-space-search" />
       </label>
       <div role="tablist" aria-label="Space filters" className="flex flex-wrap gap-2">
         {TABS.map((t) => <button key={t.key} type="button" role="tab" aria-selected={tab === t.key} onClick={() => setTab(t.key)} className={tab === t.key ? "button-primary" : "button-outline"}>{t.label}</button>)}

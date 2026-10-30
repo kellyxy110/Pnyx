@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-30",
+  "repository": "kellyxy110/Pnyx",
+  "branch": "audit/pnyx-remediation-20261025",
+  "baseCommit": "fee4046350a55532feec6bd408fd40185705cdf9",
+  "checks": {
+    "typecheck": "pass",
+    "eslint": "pass",
+    "vitest": {
+      "status": "pass",
+      "files": 17,
+      "tests": 70
+    },
+    "build": "pass",
+    "dependencyAudit": {
+      "status": "pass",
+      "advisories": 0
+    },
+    "securityConfig": "pass",
+    "securityHeaders": {
+      "status": "pass",
+      "checks": 5
+    },
+    "playwright": {
+      "status": "pass",
+      "stats": {
+        "startTime": "2026-10-30T17:01:32.404Z",
+        "duration": 90969.299,
+        "expected": 72,
+        "skipped": 3,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "passed": 72,
+      "skipped": 3,
+      "failed": 0,
+      "skipReason": "R2 requires isolated storage configuration",
+      "projects": [
+        "mobile",
+        "tablet",
+        "desktop"
+      ],
+      "boundaryWidths": [
+        320,
+        360,
+        760,
+        767,
+        1024,
+        1440
+      ],
+      "screenshots": false,
+      "trace": false
+    }
+  },
+  "environment": {
+    "app": "local Next.js production build",
+    "database": "isolated PGlite 0.5.11, all 12 migration SQL files, synthetic user and Space",
+    "browser": "Chromium 153 via @sparticuz/chromium 153.0.0",
+    "runtimeDependenciesChanged": false,
+    "productionAccess": false
+  },
+  "limits": [
+    "Cloud browser blocked local preview; screenshot-based visual design review not completed.",
+    "No live R2 checks.",
+    "Automated axe checks do not certify full accessibility compliance."
+  ],
+  "sourceSha256": {
+    "src/app/explore/page.tsx": "f28ffaf1efc3c35121f934555971281cd7c99061c9759cfef9eaec44e53943a6",
+    "src/app/globals.css": "6272720b2ab23990e3425a77dcd620805bb26022ce6194c4121a354d0c3569ad",
+    "src/components/search-browser.tsx": "18d3bdf8bbeb4d101160346edaf9d8e22d704afdfb9207198d9a81808fdc5e53",
+    "src/components/product-nav.tsx": "bdfc33d94038a7aa261c46b075d0c95f163c772e7d47dc3e478be50fa239a344",
+    "src/components/space-browser.tsx": "1d7169bb20f974f8b65a45b149dbdbc55b504c85c97640d285418f6045900298",
+    "src/components/auth-form.tsx": "7dc4ff84437c4b8f7121933d13fefe367a99c748fc2d505d57177bbd03bf947c",
+    "src/components/auth-shell.tsx": "d000d9c460dc4cc83f719bded918808740fcaa9d0a32195625addc7d46f898fd",
+    "src/components/beta-email-signup-notice.tsx": "f6e08b93b84a340729e8c0052071e4f5483f58ff0b67ad3025bdb54f636cdfd7",
+    "tests/e2e/search-experience.spec.ts": "57594c0202f5ed7eb48a73ee6cb79cf5291e5f1511ab9d0dbe5374fdab8431de",
+    "tests/e2e/public-routes.spec.ts": "2dbde91cb96228b5929584350afd6e77b20b37b4acd6d8729e0d0120e1868e26"
+  }
+}

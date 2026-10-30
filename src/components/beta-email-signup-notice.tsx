@@ -14,7 +14,7 @@ export function BetaEmailSignupNotice() {
   if (enabled !== false) return null;
   return <aside className="beta-auth-notice" aria-label="Closed beta signup notice">
     <strong>Closed beta registration</strong>
-    <p>Email signup is temporarily limited while Pnyx is in closed beta. Use Google or GitHub above to create your account.</p>
+    <p>Email signup is temporarily limited while Pnyx is in closed beta. Connected provider availability is shown below.</p>
     <Link href="/sign-in">Already have an account? Sign in</Link>
   </aside>;
 }

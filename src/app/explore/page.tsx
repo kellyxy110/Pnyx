@@ -1,5 +1,14 @@
+import { Suspense } from "react";
 import { ProductNav } from "@/components/product-nav";
 import { SearchBrowser } from "@/components/search-browser";
 import { ExploreDiscovery } from "@/components/explore-discovery";
 
-export default function ExplorePage(){return <main id="main-content" tabIndex={-1} className="app-shell"><ProductNav/><section className="surface-hero compact"><p className="eyebrow">Explore</p><h1>Find the signal in the noise.</h1><p>Search public discussions, replies, Spaces, people, and knowledge artifacts. Results explain what they are and where they belong.</p></section><ExploreDiscovery/><section className="surface-section"><SearchBrowser/></section></main>}
+export default async function ExplorePage({ searchParams }: { searchParams: Promise<{ q?: string | string[] }> }) {
+  const params = await searchParams;
+  const query = typeof params.q === "string" ? params.q.slice(0, 120) : "";
+  return <main id="main-content" tabIndex={-1} className="app-shell">
+    <ProductNav />
+    <SearchBrowser initialQuery={query} />
+    <Suspense fallback={<p className="help" role="status">Loading the commons…</p>}><ExploreDiscovery /></Suspense>
+  </main>;
+}

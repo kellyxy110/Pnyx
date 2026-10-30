@@ -32,9 +32,18 @@ test("sign-up form supports keyboard focus and reduced motion", async ({ page })
     await page.keyboard.press("Tab");
     await expect(page.getByLabel("Username")).toBeFocused();
   } else {
-    const providerButton = page.getByRole("button", { name: /Google|GitHub/ }).first();
-    await providerButton.focus();
-    await expect(providerButton).toBeFocused();
+    const providers = page.getByRole("button", { name: /Google|GitHub/ }).filter({ visible: true });
+    const enabled = page.locator(".social-button:not(:disabled)").filter({ hasText: /Google|GitHub/ });
+    if (await enabled.count()) {
+      await enabled.first().focus();
+      await expect(enabled.first()).toBeFocused();
+    } else {
+      // An isolated environment has no OAuth secrets: disabled providers cannot receive focus.
+      const signIn = page.locator(".auth-switch").getByRole("link", { name: "Sign in", exact: true });
+      await signIn.focus();
+      await expect(signIn).toBeFocused();
+      await expect(providers.first()).toBeDisabled();
+    }
   }
 
   const motion = await page.evaluate(() => {

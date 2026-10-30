@@ -6,6 +6,10 @@ Phase 1–10 remediation is committed at `0c64c3d` on `audit/pnyx-remediation-20
 
 [Native PostgreSQL verification](native-postgres-verification-2026-10-25.md) now passes: all 12 migrations replayed without schema drift, nine HTTP integration scenarios passed, and CI passed 70 unit tests plus TypeScript/lint/build. It exposed and verified a fix for a real two-session Join race that previously returned HTTP 500. The next gate is isolated R2 avatar/banner verification, followed by the remaining Milestone 6A acceptance evidence. Milestones 6B/6C remain gated.
 
+## UI/UX update, 30 October 2026
+
+The [search and writing-surface refresh](uiux-search-2026-10-30.md) moves search first on Explore, connects header queries, modernizes shared fields, improves filter disclosure/error recovery/pagination, restores missing component foundations, and removes invented auth activity counts. Automated verification is recorded with that report. Screenshot-based visual review and real-device/screen-reader QA remain open. The isolated R2 gate and remaining Milestone 6A work are still pending.
+
 ## Completed milestones
 
 0. Foundation — Next.js, TypeScript, Prisma/PostgreSQL integration, validation, logging, health checks, analytics, and design system.
