@@ -28,7 +28,17 @@
     "securityHeaders": 5
   },
   "privateSiteId": "appgprj_6ae4d362901081919ed0228b82fbacae",
-  "privateSitePublication": "prepared; status recorded after publication",
+  "privateSitePublication": {
+    "status": "succeeded",
+    "url": "https://pnyx-ui-review-20261030.sandylake256.chatgpt.site",
+    "projectId": "appgprj_6ae4d362901081919ed0228b82fbacae",
+    "deploymentId": "appgdep_6ae4d823eaec819188506f1a2bf36d44",
+    "versionId": "appgprj_6ae4d362901081919ed0228b82fbacae~appgver_7872cf0bc2848191b8d7bc14dce99812",
+    "sourceCommit": "6ba585936507cc0e05ad87066a461297bb25a3d1",
+    "access": "owner-only; one allowed user and no groups",
+    "hostedBrowserCheck": "ChatGPT sign-in gate observed; private content visually verified through supported Sites preview",
+    "pnyxProductionDeployment": false
+  },
   "productionChanged": false,
   "sourceSha256": {
     "src/app/feed/page.tsx": "ccfc26d540f4539b52e484880ff95be85cc0815c4b725d69b016f70a57d0a8b2",
@@ -36,5 +46,12 @@
     "src/app/globals.css": "fe2df262014520328b251c67438e994ae4cb716fc6fa55e075570cec66cec56d",
     "src/components/session-nav.tsx": "5e8d441f7c2e24307499e94a37b593762bc859a11233d55687ec1c87c50b4d7d",
     "tests/e2e/authenticated-journeys.spec.ts": "8cf0fa3f1c26b69b1c997c82c9e892e399f5370e3b0db8f1fdfdd1fb0a73ab93"
+  },
+  "verifiedCodeCommit": "c028e7529d1f1250b47d73ff9cd3711c81c48852",
+  "nativePostgresCI": {
+    "runId": 41101205391,
+    "status": "queued",
+    "url": "https://github.com/kellyxy110/Pnyx/actions/runs/41101205391",
+    "headSha": "c028e7529d1f1250b47d73ff9cd3711c81c48852"
   }
 }

@@ -38,3 +38,12 @@ The review uses copied SearchBrowser, ProfileEditor, PostComposer, navigation an
 The full UI checks use the existing disposable PGlite fixture runner; native PostgreSQL verification remains a separate CI job. Screen-reader evaluation, physical mobile devices, live R2, search relevance, and production-backend acceptance are not claimed by this visual review.
 
 No Pnyx merge, deployment, database migration, dependency change or unrelated edit was performed. Only the separately authorized private review Site may be published.
+
+
+## Private review publication
+
+[Open the owner-only Pnyx UI Review](https://pnyx-ui-review-20261030.sandylake256.chatgpt.site). Select **Review notes** for the screenshot walkthrough. Publication succeeded for source commit 6ba585936507cc0e05ad87066a461297bb25a3d1; deployment appgdep_6ae4d823eaec819188506f1a2bf36d44. The access policy has one allowed owner and zero groups. The hosted browser reached the expected ChatGPT sign-in gate; the private content was reviewed through the supported Sites preview service. No sign-in bypass or broader sharing was created.
+
+Verified Pnyx code commit: c028e7529d1f1250b47d73ff9cd3711c81c48852. Its [additional native PostgreSQL CI run](https://github.com/kellyxy110/Pnyx/actions/runs/41101205391) was still queued when this publication record was saved. Local verification results above are complete; this record does not claim that queued run passed.
+
+The earlier no-deployment constraint remains in force for Pnyx. The user authorized only this separate owner-only fixture preview. Isolated R2 verification and the remaining Milestone 6A gates remain open.
