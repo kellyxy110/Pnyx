@@ -50,6 +50,20 @@
       ],
       "screenshots": false,
       "trace": false
+    },
+    "nativePostgresCI": {
+      "status": "pass",
+      "runId": 41095644039,
+      "jobId": 124200542677,
+      "url": "https://github.com/kellyxy110/Pnyx/actions/runs/41095644039",
+      "headSha": "2a60ba7521beb96e2dbc44798810adf51ee26cfe",
+      "migrations": 12,
+      "schemaDrift": false,
+      "scenariosPassed": 9,
+      "unitTestsPassed": 70,
+      "typecheck": "pass",
+      "eslint": "pass",
+      "build": "pass"
     }
   },
   "environment": {
@@ -75,5 +89,14 @@
     "src/components/beta-email-signup-notice.tsx": "f6e08b93b84a340729e8c0052071e4f5483f58ff0b67ad3025bdb54f636cdfd7",
     "tests/e2e/search-experience.spec.ts": "57594c0202f5ed7eb48a73ee6cb79cf5291e5f1511ab9d0dbe5374fdab8431de",
     "tests/e2e/public-routes.spec.ts": "2dbde91cb96228b5929584350afd6e77b20b37b4acd6d8729e0d0120e1868e26"
+  },
+  "verifiedCodeCommit": "2a60ba7521beb96e2dbc44798810adf51ee26cfe",
+  "providerStatusCheck": {
+    "provider": "Vercel",
+    "operation": "read-only deployment list for this commit",
+    "status": "not verified: HTTP 403",
+    "cliFallback": "Vercel CLI unavailable",
+    "branchDeploymentGuard": "unchanged: disabled",
+    "deploymentPerformed": false
   }
 }

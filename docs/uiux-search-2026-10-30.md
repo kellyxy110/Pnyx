@@ -29,6 +29,12 @@ The browser runtime is Chromium 153 from `@sparticuz/chromium` 153.0.0, used via
 
 The three media checks remain skipped because no isolated R2 configuration was provided. No merge, deployment, production database access, schema change, dependency change, or unrelated branch modification was performed. The branch-specific Vercel deployment guard remains unchanged.
 
+## Post-commit CI evidence
+
+Verified code commit: `2a60ba7521beb96e2dbc44798810adf51ee26cfe`. [GitHub run 41095644039](https://github.com/kellyxy110/Pnyx/actions/runs/41095644039) and job `124200542677` completed successfully: TypeScript, zero-warning lint, 70 unit tests, production build, all 12 migrations, no schema drift, and all nine native PostgreSQL membership/session scenarios (3.4 seconds). The disposable service was stopped after verification.
+
+A read-only Vercel deployment-list request scoped to this project/branch/commit returned HTTP 403; the Vercel CLI was unavailable. Provider deployment status therefore was not independently verified. No deployment operation was invoked, and `vercel.json` still disables deployments from this branch.
+
 ## Remaining design review
 
 - Review the final screens visually in a permitted preview, particularly profile/composer textareas and filled/error states.
