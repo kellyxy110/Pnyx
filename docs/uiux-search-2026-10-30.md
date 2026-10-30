@@ -1,5 +1,7 @@
 # Search and writing surfaces — 30 October 2026
 
+Follow-up: [visual review and additional corrections](uiux-visual-review-2026-10-30.md) resolve the preview-access limitation recorded below.
+
 Branch: `audit/pnyx-remediation-20261025`. Base: `fee4046350a55532feec6bd408fd40185705cdf9`.
 
 This is an implemented UI/UX pass grounded in repository review and automated browser checks. It is not a completed screenshot-based design audit: the cloud browser refused local-preview access. No screenshots were captured through an alternate browser surface. Visual approval, real-device review, and screen-reader evaluation remain outstanding.

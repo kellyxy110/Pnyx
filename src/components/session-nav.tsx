@@ -19,7 +19,7 @@ export function SessionNav({ user, unreadCount }: { user: User | null; unreadCou
       <span aria-hidden="true">♧</span>{unreadCount > 0 && <b>{unreadCount > 9 ? "9+" : unreadCount}</b>}
     </Link>
     {user ? <div className="product-user-menu">
-      <button type="button" className="product-user-trigger" aria-expanded={open} aria-haspopup="menu" onClick={() => setOpen((value) => !value)}>
+      <button type="button" className="product-user-trigger" aria-label={`Account menu for ${user.displayName}`} aria-expanded={open} aria-haspopup="menu" onClick={() => setOpen((value) => !value)}>
         {user.avatarUrl ? <Image src={user.avatarUrl} alt="" width={36} height={36} className="product-avatar" /> : <span className="product-avatar product-avatar-fallback" aria-hidden="true">{initials(user)}</span>}
         <span className="product-user-copy"><strong>{user.displayName}</strong><small>@{user.username}</small></span><span aria-hidden="true">⌄</span>
       </button>

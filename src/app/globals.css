@@ -342,3 +342,18 @@ footer { color:var(--muted); display:flex; font-size:.8rem; justify-content:spac
 .search-query-row .search-submit { min-height:3.5rem; }
 
 .app-shell .shell-create { color:var(--action-ink) !important; }
+
+/* Keep identity initials legible when the theme swaps the navy text token. */
+.app-shell .product-avatar-fallback,.app-shell .profile-avatar-fallback {
+  background:var(--action-bg);
+  color:var(--action-ink);
+}
+
+/* The app shell already supplies side rails; give writing the full centre column. */
+.app-shell > .community-layout { grid-template-columns:minmax(0,1fr); gap:1.5rem; }
+.app-shell .community-layout > .context-rail { position:static; }
+.app-shell .context-rail h2 { font-size:1.3rem; letter-spacing:-.03em; line-height:1.2; }
+.app-shell .community-intro { padding-top:2.5rem; padding-bottom:2rem; }
+.app-shell .community-intro h1 { font-size:clamp(2.2rem,4vw,3.5rem); letter-spacing:-.06em; line-height:1.08; max-width:20ch; }
+/* Helper text should not stretch a neighbouring field or shift its top edge. */
+.composer-fields,.profile-fields.two { align-items:start; }

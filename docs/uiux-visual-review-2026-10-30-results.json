@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-30",
+  "branch": "audit/pnyx-remediation-20261025",
+  "baseCommit": "c613daa391e2823156e20f860a43350501dda92e",
+  "visualReview": "captured and inspected through supported Sites preview",
+  "checks": {
+    "typecheck": "pass",
+    "eslint": "pass",
+    "unitTests": 70,
+    "build": "pass",
+    "fullUi": {
+      "startTime": "2026-10-30T17:38:23.740Z",
+      "duration": 100892.311,
+      "expected": 75,
+      "skipped": 3,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "finalAffectedUi": {
+      "startTime": "2026-10-30T17:41:59.458Z",
+      "duration": 16624.417,
+      "expected": 6,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "securityConfig": "pass",
+    "securityHeaders": 5
+  },
+  "privateSiteId": "appgprj_6ae4d362901081919ed0228b82fbacae",
+  "privateSitePublication": "prepared; status recorded after publication",
+  "productionChanged": false,
+  "sourceSha256": {
+    "src/app/feed/page.tsx": "ccfc26d540f4539b52e484880ff95be85cc0815c4b725d69b016f70a57d0a8b2",
+    "src/app/profile/page.tsx": "f1f463e635b9262a79f0e68261f726e1113ad444f97d423092e039fb5b9d125b",
+    "src/app/globals.css": "fe2df262014520328b251c67438e994ae4cb716fc6fa55e075570cec66cec56d",
+    "src/components/session-nav.tsx": "5e8d441f7c2e24307499e94a37b593762bc859a11233d55687ec1c87c50b4d7d",
+    "tests/e2e/authenticated-journeys.spec.ts": "8cf0fa3f1c26b69b1c997c82c9e892e399f5370e3b0db8f1fdfdd1fb0a73ab93"
+  }
+}

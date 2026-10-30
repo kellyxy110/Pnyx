@@ -8,7 +8,7 @@ Phase 1–10 remediation is committed at `0c64c3d` on `audit/pnyx-remediation-20
 
 ## UI/UX update, 30 October 2026
 
-The [search and writing-surface refresh](uiux-search-2026-10-30.md) moves search first on Explore, connects header queries, modernizes shared fields, improves filter disclosure/error recovery/pagination, restores missing component foundations, and removes invented auth activity counts. Automated verification is recorded with that report. Screenshot-based visual review and real-device/screen-reader QA remain open. The isolated R2 gate and remaining Milestone 6A work are still pending.
+The [search and writing-surface refresh](uiux-search-2026-10-30.md) moves search first on Explore, connects header queries, modernizes shared fields, improves filter disclosure/error recovery/pagination, restores missing component foundations, and removes invented auth activity counts. Automated verification is recorded with that report. A [follow-up visual review](uiux-visual-review-2026-10-30.md) now covers the private fixture preview and fixes dark-profile contrast, avatar initials, mobile account naming, and cramped composer layout. Real-device/screen-reader QA remain open. The isolated R2 gate and remaining Milestone 6A work are still pending.
 
 ## Completed milestones
 
