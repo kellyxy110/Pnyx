@@ -99,7 +99,7 @@ test.describe("controlled authenticated journeys", () => {
     expect(ratios.length).toBeGreaterThan(0);
     for (const ratio of ratios) expect(ratio).toBeGreaterThanOrEqual(4.5);
     await page.getByRole("button", { name: "Edit profile", exact: true }).click();
-    await expect(page.getByLabel("Bio", { exact: true })).toBeVisible();
+    await expect(page.getByRole("textbox", { name: "Bio", exact: true })).toBeVisible();
     scan = await new AxeBuilder({ page }).analyze();
     expect(scan.violations, JSON.stringify(scan.violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })))).toEqual([]);
   });

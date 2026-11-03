@@ -1,3 +1,4 @@
+import { availablePersonWhere } from "@/lib/content-access";
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { notify } from "@/lib/discussion";
@@ -8,21 +9,12 @@ export async function POST(_request: Request, context: { params: Promise<{ id: s
   if (!session?.user?.id) return NextResponse.json({ error: "Sign in required." }, { status: 401 });
   const { id } = await context.params;
   if (id === session.user.id) return NextResponse.json({ error: "You cannot follow yourself." }, { status: 400 });
-  const target = await prisma.user.findUnique({ where: { id }, select: { id: true, username: true, suspendedUntil: true } });
+  const target = await prisma.user.findFirst({ where: { id, profileVisibility: { not: "PRIVATE" }, AND: [availablePersonWhere(session.user.id)] }, select: { id: true, username: true, suspendedUntil: true } });
   if (!target || (target.suspendedUntil && target.suspendedUntil > new Date())) return NextResponse.json({ error: "This profile is unavailable." }, { status: 404 });
-  const existing = await prisma.userFollow.findUnique({ where: { followerId_followingId: { followerId: session.user.id, followingId: id } }, select: { followerId: true } });
-  if (!existing) {
-    try {
-      await prisma.userFollow.create({ data: { followerId: session.user.id, followingId: id } });
-      await notify(id, "FOLLOW", "You have a new follower", "Someone followed your Pnyx profile.", `/people/${target.username}`);
-    } catch (err) {
-      // A concurrent request may have created this follow between the check
-      // above and this create (composite primary key: followerId, followingId).
-      // That's a successful outcome, not an error — just skip the duplicate
-      // notification rather than surfacing a 500 for a race the DB already resolved.
-      const isDuplicateFollow = typeof err === "object" && err !== null && "code" in err && (err as { code?: string }).code === "P2002";
-      if (!isDuplicateFollow) throw err;
-    }
+  const created = await prisma.userFollow.createMany({ data: { followerId: session.user.id, followingId: id }, skipDuplicates: true });
+  if (created.count) {
+    const actor = await prisma.user.findUnique({ where: { id: session.user.id }, select: { username: true } });
+    await notify(id, "FOLLOW", "You have a new follower", "Someone followed your Pnyx profile.", actor ? `/people/${actor.username}` : undefined).catch(error => console.error("[follow] notification failed", { error: error instanceof Error ? error.message : "unknown" }));
   }
   const count = await prisma.userFollow.count({ where: { followingId: id } });
   return NextResponse.json({ following: true, followers: count });

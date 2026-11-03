@@ -1,0 +1,975 @@
+{
+  "date": "2026-11-03",
+  "branch": "audit/pnyx-remediation-20261025",
+  "baseCommit": "f4f3d4507602e44e8439dcac5c7f7805e859a94e",
+  "typecheck": "passed",
+  "lint": "passed, zero warnings",
+  "vitest": {
+    "files": 19,
+    "passed": 88
+  },
+  "build": "passed after minimatch update",
+  "api": {
+    "database": "disposable PGlite, all 12 migration SQL files applied",
+    "results": {
+      "stats": {
+        "startTime": "2026-11-03T08:14:39.278Z",
+        "duration": 4922.85,
+        "expected": 18,
+        "skipped": 0,
+        "unexpected": 0,
+        "flaky": 0
+      },
+      "cases": [
+        {
+          "title": "public profile hides private titles, draft knowledge, and private memberships",
+          "project": "",
+          "status": "expected",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "direct post API, HTML and reply reads enforce visibility for unrelated readers",
+          "project": "",
+          "status": "expected",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "private-content writes reject unrelated users before creating records",
+          "project": "",
+          "status": "expected",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "followers and members can read their scopes while private remains owner-only",
+          "project": "",
+          "status": "expected",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "owned drafts reopen the composer and are never public detail pages",
+          "project": "",
+          "status": "expected",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "feed, knowledge and search discovery omit restricted and private-Space content",
+          "project": "",
+          "status": "expected",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "private and followers-only profiles protect their follower lists",
+          "project": "",
+          "status": "expected",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "blocking removes follow edges and prevents profile, content and follow access",
+          "project": "",
+          "status": "expected",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "profile links reject unsafe protocols and normal saves cannot replace managed media",
+          "project": "",
+          "status": "expected",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "conflicting username changes return a recoverable conflict",
+          "project": "",
+          "status": "expected",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "knowledge reads enforce visibility and sanitize inaccessible source replies",
+          "project": "",
+          "status": "expected",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "knowledge creation rejects inaccessible or mismatched source references",
+          "project": "",
+          "status": "expected",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "reply author filters apply to the reply author rather than the discussion author",
+          "project": "",
+          "status": "expected",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "follow actions are idempotent and notification links point to the actor",
+          "project": "",
+          "status": "expected",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "media pointer swaps are serialized and unavailable removal keeps the old key",
+          "project": "",
+          "status": "expected",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "malformed list filters return validation errors rather than server failures",
+          "project": "",
+          "status": "expected",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "draft creation, recovery, publication, reply and removal form one persisted journey",
+          "project": "",
+          "status": "expected",
+          "results": [
+            "passed"
+          ]
+        },
+        {
+          "title": "account deletion requires confirmation and revokes its fixture session",
+          "project": "",
+          "status": "expected",
+          "results": [
+            "passed"
+          ]
+        }
+      ]
+    }
+  },
+  "playwright": {
+    "stats": {
+      "startTime": "2026-11-03T08:14:44.767Z",
+      "duration": 161112.262,
+      "expected": 90,
+      "skipped": 3,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "cases": [
+      {
+        "title": "signs in, loads the persisted profile, and exposes the session menu",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "keeps an authenticated user on the real composer surface without publishing",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "preserves Space context in the composer",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "edits and reloads the persisted profile",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "joins and leaves a Space with a persisted membership action",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "dark profile and editing fields remain readable",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "uploads and removes profile media when the isolated storage provider is enabled",
+        "project": "mobile",
+        "status": "skipped",
+        "results": [
+          "skipped"
+        ]
+      },
+      {
+        "title": "signs in, loads the persisted profile, and exposes the session menu",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "keeps an authenticated user on the real composer surface without publishing",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "preserves Space context in the composer",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "edits and reloads the persisted profile",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "joins and leaves a Space with a persisted membership action",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "dark profile and editing fields remain readable",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "uploads and removes profile media when the isolated storage provider is enabled",
+        "project": "tablet",
+        "status": "skipped",
+        "results": [
+          "skipped"
+        ]
+      },
+      {
+        "title": "signs in, loads the persisted profile, and exposes the session menu",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "keeps an authenticated user on the real composer surface without publishing",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "preserves Space context in the composer",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "edits and reloads the persisted profile",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "joins and leaves a Space with a persisted membership action",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "dark profile and editing fields remain readable",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "uploads and removes profile media when the isolated storage provider is enabled",
+        "project": "desktop",
+        "status": "skipped",
+        "results": [
+          "skipped"
+        ]
+      },
+      {
+        "title": "failed profile saves retain edits, release controls, and recover",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "cancel discards unsaved changes and additional links render after save",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "stored media is rendered directly without a remote image optimizer failure",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "profile drafts reopen in the composer, retain text on failure, and publish explicitly",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "knowledge creation retains writing after network failure and reports unavailable AI honestly",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "failed profile saves retain edits, release controls, and recover",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "cancel discards unsaved changes and additional links render after save",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "stored media is rendered directly without a remote image optimizer failure",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "profile drafts reopen in the composer, retain text on failure, and publish explicitly",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "knowledge creation retains writing after network failure and reports unavailable AI honestly",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "failed profile saves retain edits, release controls, and recover",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "cancel discards unsaved changes and additional links render after save",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "stored media is rendered directly without a remote image optimizer failure",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "profile drafts reopen in the composer, retain text on failure, and publish explicitly",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "knowledge creation retains writing after network failure and reports unavailable AI honestly",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "/ is accessible and does not overflow",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "/sign-in is accessible and does not overflow",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "/sign-up is accessible and does not overflow",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "/explore is accessible and does not overflow",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "/spaces is accessible and does not overflow",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "/knowledge is accessible and does not overflow",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "/ai is accessible and does not overflow",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "sign-up form supports keyboard focus and reduced motion",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "/ is accessible and does not overflow",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "/sign-in is accessible and does not overflow",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "/sign-up is accessible and does not overflow",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "/explore is accessible and does not overflow",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "/spaces is accessible and does not overflow",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "/knowledge is accessible and does not overflow",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "/ai is accessible and does not overflow",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "sign-up form supports keyboard focus and reduced motion",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "/ is accessible and does not overflow",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "/sign-in is accessible and does not overflow",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "/sign-up is accessible and does not overflow",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "/explore is accessible and does not overflow",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "/spaces is accessible and does not overflow",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "/knowledge is accessible and does not overflow",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "/ai is accessible and does not overflow",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "sign-up form supports keyboard focus and reduced motion",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "header query opens an immediate search and clear returns focus",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "network failure releases the search action and supports retry",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "filters are keyboard accessible at every viewport, empty results can reset them",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "pagination keeps submitted criteria even while the next query is being edited",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "expanded search reflows and has no axe violations in either theme",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "search and expanded filters fit narrow and breakpoint widths",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "sign-in text fields have readable type and visible keyboard focus",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "header query opens an immediate search and clear returns focus",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "network failure releases the search action and supports retry",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "filters are keyboard accessible at every viewport, empty results can reset them",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "pagination keeps submitted criteria even while the next query is being edited",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "expanded search reflows and has no axe violations in either theme",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "search and expanded filters fit narrow and breakpoint widths",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "sign-in text fields have readable type and visible keyboard focus",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "header query opens an immediate search and clear returns focus",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "network failure releases the search action and supports retry",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "filters are keyboard accessible at every viewport, empty results can reset them",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "pagination keeps submitted criteria even while the next query is being edited",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "expanded search reflows and has no axe violations in either theme",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "search and expanded filters fit narrow and breakpoint widths",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "sign-in text fields have readable type and visible keyboard focus",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "unfollowing updates the Following filter and survives a reload",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "Leave respects persisted ordinary member state",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "Leave respects persisted moderator state",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "failed actions leave filters and counts unchanged",
+        "project": "mobile",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "unfollowing updates the Following filter and survives a reload",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "Leave respects persisted ordinary member state",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "Leave respects persisted moderator state",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "failed actions leave filters and counts unchanged",
+        "project": "tablet",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "unfollowing updates the Following filter and survives a reload",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "Leave respects persisted ordinary member state",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "Leave respects persisted moderator state",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      },
+      {
+        "title": "failed actions leave filters and counts unchanged",
+        "project": "desktop",
+        "status": "expected",
+        "results": [
+          "passed"
+        ]
+      }
+    ]
+  },
+  "responsive": {
+    "passed": 77,
+    "failed": 0
+  },
+  "securityHeaders": {
+    "configurationPassed": 5,
+    "liveHTTP": "passed on disposable loopback app"
+  },
+  "dependencyAudit": {
+    "production": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "allDependencies": {
+      "info": 0,
+      "low": 0,
+      "moderate": 13,
+      "high": 0,
+      "critical": 0,
+      "total": 13
+    },
+    "remainingRoot": "GHSA-g3hv-75wg-m249, minimatch 3.1.5 in development-only lint tooling; optimizer described by advisory absent in installed source. Applicability remains unresolved upstream.",
+    "remediated": "typescript-estree minimatch 10.2.6 -> 11.0.1 via scoped override"
+  },
+  "nativePostgres": {
+    "status": "pending new remediation commit",
+    "previousCodeRun": {
+      "id": 41101205391,
+      "commit": "c028e7529d1f1250b47d73ff9cd3711c81c48852",
+      "conclusion": "success"
+    }
+  },
+  "deployment": {
+    "status": "blocked",
+    "reason": "Vercel team-scoped project inspection returns HTTP 404; consent required",
+    "project": "prj_RDKe8Lpjl3a3zuvjWDj7vhrVsQaW",
+    "team": "team_NuC1Fkg65uNAiysfEHuvF4rc"
+  },
+  "limitations": [
+    "Three R2 browser cases skipped: no isolated storage provider.",
+    "No production DB migrations or test writes.",
+    "No new manual screenshot or screen-reader review.",
+    "Raw full dependency audit remains nonzero; no zero-advisory claim."
+  ]
+}

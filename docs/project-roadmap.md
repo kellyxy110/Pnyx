@@ -10,6 +10,10 @@ Phase 1–10 remediation is committed at `0c64c3d` on `audit/pnyx-remediation-20
 
 The [search and writing-surface refresh](uiux-search-2026-10-30.md) moves search first on Explore, connects header queries, modernizes shared fields, improves filter disclosure/error recovery/pagination, restores missing component foundations, and removes invented auth activity counts. Automated verification is recorded with that report. A [follow-up visual review](uiux-visual-review-2026-10-30.md) now covers the private fixture preview and fixes dark-profile contrast, avatar initials, mobile account naming, and cramped composer layout. Real-device/screen-reader QA remain open. The isolated R2 gate and remaining Milestone 6A work are still pending.
 
+## End-to-end/profile update, 3 November 2026
+
+The [end-to-end/profile review](end-to-end-profile-review-2026-11-03.md) closes verified visibility leaks, strengthens restricted-source reuse, repairs profile editing/media ownership, restores draft recovery, and improves network failure handling. Its verification record distinguishes disposable local PGlite checks from native PostgreSQL CI and leaves live R2 acceptance, durable cleanup retries, real-device/screen-reader QA, and the broader Milestone 6 gates open. Deployment status is recorded with the release evidence.
+
 ## Completed milestones
 
 0. Foundation — Next.js, TypeScript, Prisma/PostgreSQL integration, validation, logging, health checks, analytics, and design system.

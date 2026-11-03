@@ -13,7 +13,7 @@
     "db:migrate": "prisma migrate deploy",
     "db:validate": "prisma validate",
     "db:seed": "tsx prisma/seed.ts",
-    "vercel-build": "prisma migrate deploy && prisma generate && next build",
+    "vercel-build": "prisma generate && next build",
     "test:e2e": "playwright test",
     "verify:postgres": "node --import tsx scripts/verify-postgres.ts",
     "audit:responsive": "node scripts/audit-responsive.mjs",
@@ -56,6 +56,9 @@
     "sharp": "$sharp",
     "@prisma/config": {
       "deepmerge-ts": "^8.0.2"
+    },
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "11.0.1"
     }
   }
 }

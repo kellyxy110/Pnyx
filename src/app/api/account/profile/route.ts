@@ -1,3 +1,4 @@
+import { readablePostWhere } from "@/lib/content-access";
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
@@ -17,9 +18,9 @@ export async function GET() {
     const [spaces, posts, replies, artifacts, bookmarks, drafts] = await Promise.all([
       prisma.spaceMember.findMany({ where: { userId: user.id }, include: { space: { select: { name: true, slug: true } } }, orderBy: { joinedAt: "desc" }, take: 8 }),
       prisma.post.findMany({ where: { authorId: user.id, isDeleted: false, isDraft: false }, select: { id: true, title: true, createdAt: true }, orderBy: { createdAt: "desc" }, take: 6 }),
-      prisma.reply.findMany({ where: { authorId: user.id, isDeleted: false }, select: { id: true, body: true, createdAt: true, post: { select: { id: true, title: true } } }, orderBy: { createdAt: "desc" }, take: 6 }),
+      prisma.reply.findMany({ where: { authorId: user.id, isDeleted: false, post: readablePostWhere(user.id) }, select: { id: true, body: true, createdAt: true, post: { select: { id: true, title: true } } }, orderBy: { createdAt: "desc" }, take: 6 }),
       prisma.artifact.findMany({ where: { authorId: user.id }, select: { id: true, title: true, status: true, updatedAt: true }, orderBy: { updatedAt: "desc" }, take: 6 }),
-      prisma.bookmark.findMany({ where: { userId: user.id }, select: { post: { select: { id: true, title: true } }, createdAt: true }, orderBy: { createdAt: "desc" }, take: 6 }),
+      prisma.bookmark.findMany({ where: { userId: user.id, post: readablePostWhere(user.id) }, select: { post: { select: { id: true, title: true } }, createdAt: true }, orderBy: { createdAt: "desc" }, take: 6 }),
       prisma.post.findMany({ where: { authorId: user.id, isDeleted: false, isDraft: true }, select: { id: true, title: true, updatedAt: true }, orderBy: { updatedAt: "desc" }, take: 6 }),
     ]);
     return NextResponse.json({ ...user, bannerUrl: publicUrlForKey(user.bannerKey), counts: user._count, activity: { spaces: spaces.map(({ space }) => space), posts, replies, artifacts, bookmarks, drafts } });
@@ -38,8 +39,9 @@ export async function PATCH(request: Request) {
     const existing = parsed.data.username ? await prisma.user.findFirst({ where: { username: parsed.data.username, NOT: { id: session.user.id } }, select: { id: true } }) : null;
     if (existing) return NextResponse.json({ error: "That username is already taken.", fieldErrors: { username: ["That username is already taken."] } }, { status: 409 });
     const user = await prisma.user.update({ where: { id: session.user.id }, data: parsed.data, select: { id: true, username: true, displayName: true, avatarUrl: true, bannerKey: true, bio: true, headline: true, location: true, websiteUrl: true, githubUrl: true, linkedinUrl: true, timezone: true, expertise: true, skills: true, interests: true, links: true, profileVisibility: true } });
-    return NextResponse.json(user);
+    return NextResponse.json({ ...user, bannerUrl: publicUrlForKey(user.bannerKey) });
   } catch (error) {
+    if (typeof error === "object" && error && "code" in error && error.code === "P2002") return NextResponse.json({ error: "That username is already taken.", fieldErrors: { username: ["That username is already taken."] } }, { status: 409 });
     logProfileError("save", session.user.id, error);
     return NextResponse.json({ error: "Your profile could not be saved right now. Please try again." }, { status: 503 });
   }

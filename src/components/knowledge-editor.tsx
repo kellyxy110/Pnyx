@@ -44,27 +44,32 @@ export function KnowledgeEditor() {
     setBusy(true);
     setMessage("");
     const sourcePostId = form.sourceDiscussion.trim() ? extractDiscussionId(form.sourceDiscussion) : undefined;
+    try {
     const response = await fetch("/api/artifacts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ spaceSlug: form.spaceSlug, type: form.type, title: form.title, summary: form.summary, body: form.body, sourcePostId }),
     });
     const result = await response.json().catch(() => null);
-    setBusy(false);
     if (!response.ok) { setMessage(result?.error ?? "Could not save this artifact. Check the required fields and try again."); return; }
     router.push(`/knowledge/${result.artifact.id}`);
+    } catch { setMessage("We couldn’t connect. Your writing is still here. Please try saving again."); }
+    finally { setBusy(false); }
   }
 
   async function assist() {
     if (!form.sourceDiscussion.trim()) { setMessage("Link a discussion first, then Scout can draft from it."); return; }
     setDraftBusy(true);
     const postId = extractDiscussionId(form.sourceDiscussion);
+    try {
     const response = await fetch(`/api/ai/draft`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ postId }) });
     const result = await response.json().catch(() => null);
-    setDraftBusy(false);
     if (!response.ok) { setMessage(result?.error ?? "Could not draft from this discussion."); return; }
+    if (!result?.text?.trim()) { setMessage(result?.message ?? "AI drafting is unavailable right now. You can continue writing manually."); return; }
     setForm((f) => ({ ...f, body: result.text ?? f.body }));
     setMessage("AI draft inserted for review. Edit it before saving.");
+    } catch { setMessage("AI drafting could not connect. Your writing is unchanged."); }
+    finally { setDraftBusy(false); }
   }
 
   const unableToSave = spacesState !== "ready" || busy;

@@ -50,4 +50,6 @@ jobs:
       - run: npm run typecheck
       - run: npm run lint -- --max-warnings=0
       - run: npm test
+      - run: npm audit --omit=dev --audit-level=low
+      - run: npm audit --audit-level=high
       - run: npm run verify:postgres

@@ -1,3 +1,4 @@
+import { readablePostWhere } from "@/lib/content-access";
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { prisma } from "@/lib/prisma";
@@ -11,7 +12,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
   const parsed = reportSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Choose a report reason." }, { status: 400 });
   const { id, replyId } = await context.params;
-  const reply = await prisma.reply.findFirst({ where: { id: replyId, postId: id, isDeleted: false }, select: { id: true, authorId: true } });
+  const reply = await prisma.reply.findFirst({ where: { id: replyId, postId: id, isDeleted: false, post: readablePostWhere(session.user.id) }, select: { id: true, authorId: true } });
   if (!reply) return NextResponse.json({ error: "Reply not found." }, { status: 404 });
   if (reply.authorId === session.user.id) return NextResponse.json({ error: "You cannot report your own reply." }, { status: 400 });
   await prisma.report.create({ data: { reporterId: session.user.id, postId: id, replyId, reason: parsed.data.reason, details: parsed.data.details } });

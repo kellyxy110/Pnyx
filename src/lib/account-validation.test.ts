@@ -18,3 +18,13 @@ describe("identity boundary validation", () => {
     expect(profileSchema.safeParse({ ...valid, githubUrl: "not-a-url" }).success).toBe(false);
   });
 });
+describe("profile link and media ownership boundaries", () => {
+  const profile = { displayName: "Profile Fixture", headline: null, location: null, websiteUrl: null, githubUrl: null, linkedinUrl: null, bio: null, timezone: null, expertise: [], skills: [], interests: [], links: [], profileVisibility: "PUBLIC" };
+  it.each(["javascript:alert(1)", "data:text/html,unsafe", "file:///etc/passwd", "https://user:password@example.test"])("rejects unsafe profile link %s", link => {
+    expect(profileSchema.safeParse({ ...profile, websiteUrl: link }).success).toBe(false);
+    expect(profileSchema.safeParse({ ...profile, links: [link] }).success).toBe(false);
+  });
+  it("ignores client avatar pointers during ordinary profile edits", () => {
+    expect(profileSchema.parse({ ...profile, avatarUrl: "https://unrelated.example.test/new.webp" })).not.toHaveProperty("avatarUrl");
+  });
+});

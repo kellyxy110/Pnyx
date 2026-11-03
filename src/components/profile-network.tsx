@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 type Person = { username: string; displayName: string; avatarUrl: string | null };
 
 function PeopleList({ title, people, empty }: { title: string; people: Person[]; empty: string }) {
-  return <section className="profile-network-list"><h2>{title}</h2>{people.length ? <ul>{people.map((person) => <li key={person.username}><Link href={`/people/${person.username}`}>{person.avatarUrl ? <Image src={person.avatarUrl} alt="" width={32} height={32} /> : <span aria-hidden="true">{person.displayName.slice(0, 1).toUpperCase()}</span>}<strong>{person.displayName}</strong><small>@{person.username}</small></Link></li>)}</ul> : <p>{empty}</p>}</section>;
+  return <section className="profile-network-list"><h2>{title}</h2>{people.length ? <ul>{people.map((person) => <li key={person.username}><Link href={`/people/${person.username}`}>{person.avatarUrl ? <Image src={person.avatarUrl} unoptimized referrerPolicy="no-referrer" alt="" width={32} height={32} /> : <span aria-hidden="true">{person.displayName.slice(0, 1).toUpperCase()}</span>}<strong>{person.displayName}</strong><small>@{person.username}</small></Link></li>)}</ul> : <p>{empty}</p>}</section>;
 }
 
 export function ProfileNetwork() {

@@ -106,10 +106,11 @@ export function SearchBrowser({ initialQuery = "" }: { initialQuery?: string }) 
         <label>Look in<select value={type} onChange={event => setType(event.target.value)}>{[["all", "Everything"], ["posts", "Discussions"], ["replies", "Replies"], ["artifacts", "Knowledge"], ["spaces", "Spaces"], ["people", "People"]].map(([value, label]) => <option value={value} key={value}>{label}</option>)}</select></label>
         <details className="search-filters">
           <summary>Refine search{activeFilterCount > 0 && <span className="search-filter-count">{activeFilterCount}<span className="sr-only"> active filters</span></span>}</summary>
+          <p className="search-hint">Author and dates filter discussions, replies, and knowledge. Verification applies to knowledge only.</p>
           <div className="search-filter-fields">
             <label>Space<select value={filters.space} onChange={event => changeFilter("space", event.target.value)}><option value="">Any Space</option>{spaceOptions.map(option => <option key={option.slug} value={option.slug}>{option.name}</option>)}</select></label>
             <label>Author username<input value={filters.author} onChange={event => changeFilter("author", event.target.value)} placeholder="e.g. alex" autoCapitalize="none" /></label>
-            <label>Verification status<select value={filters.status} onChange={event => changeFilter("status", event.target.value)}><option value="">Any public status</option><option value="PUBLISHED">Published</option><option value="COMMUNITY_REVIEWED">Community reviewed</option><option value="VERIFIED">Verified</option></select></label>
+            <label>Knowledge status<select value={filters.status} onChange={event => changeFilter("status", event.target.value)}><option value="">Any public status</option><option value="PUBLISHED">Published</option><option value="COMMUNITY_REVIEWED">Community reviewed</option><option value="VERIFIED">Verified</option></select></label>
             <label>From date<input type="date" value={filters.from} max={filters.to || undefined} onChange={event => changeFilter("from", event.target.value)} /></label>
             <label>To date<input type="date" value={filters.to} min={filters.from || undefined} onChange={event => changeFilter("to", event.target.value)} /></label>
             <button type="button" className="button-outline" onClick={() => setFilters(emptyFilters)} disabled={!activeFilterCount}>Reset filters</button>

@@ -1,12 +1,15 @@
 import Link from "next/link";
+import { auth } from "@/auth";
+import { publicPostWhere, publicArtifactWhere, availablePersonWhere } from "@/lib/content-access";
 import { prisma } from "@/lib/prisma";
 
 export async function ExploreDiscovery() {
+  const viewerId = (await auth())?.user?.id;
   const [posts, spaces, artifacts, people, topicSpaces] = await Promise.all([
-    prisma.post.findMany({ where: { isDeleted: false, isDraft: false, visibility: "PUBLIC" }, select: { id: true, title: true, type: true, space: { select: { name: true, slug: true } }, _count: { select: { replies: true, reactions: true } } }, orderBy: [{ reactions: { _count: "desc" } }, { replies: { _count: "desc" } }, { createdAt: "desc" }], take: 5 }),
+    prisma.post.findMany({ where: publicPostWhere(viewerId), select: { id: true, title: true, type: true, space: { select: { name: true, slug: true } }, _count: { select: { replies: true, reactions: true } } }, orderBy: [{ reactions: { _count: "desc" } }, { replies: { _count: "desc" } }, { createdAt: "desc" }], take: 5 }),
     prisma.space.findMany({ where: { isPublic: true }, select: { slug: true, name: true, description: true, tags: true, _count: { select: { members: true, posts: true } } }, orderBy: [{ members: { _count: "desc" } }, { posts: { _count: "desc" } }], take: 5 }),
-    prisma.artifact.findMany({ where: { status: { in: ["PUBLISHED", "COMMUNITY_REVIEWED", "VERIFIED"] }, visibility: "PUBLIC" }, select: { id: true, title: true, type: true, status: true, space: { select: { name: true } } }, orderBy: { updatedAt: "desc" }, take: 4 }),
-    prisma.user.findMany({ where: { profileVisibility: "PUBLIC", suspendedUntil: null }, select: { username: true, displayName: true, headline: true, skills: true, _count: { select: { followers: true, posts: true } } }, orderBy: [{ followers: { _count: "desc" } }, { posts: { _count: "desc" } }], take: 5 }),
+    prisma.artifact.findMany({ where: publicArtifactWhere(viewerId), select: { id: true, title: true, type: true, status: true, space: { select: { name: true } } }, orderBy: { updatedAt: "desc" }, take: 4 }),
+    prisma.user.findMany({ where: { AND: [availablePersonWhere(viewerId)], profileVisibility: "PUBLIC" }, select: { username: true, displayName: true, headline: true, skills: true, _count: { select: { followers: true, posts: true } } }, orderBy: [{ followers: { _count: "desc" } }, { posts: { _count: "desc" } }], take: 5 }),
     prisma.space.findMany({ where: { isPublic: true }, select: { slug: true, tags: true }, take: 30 }),
   ]);
   const topics = [...new Set(topicSpaces.flatMap((space) => space.tags.map((tag) => tag.trim()).filter(Boolean)))].slice(0, 12);

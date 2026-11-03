@@ -357,3 +357,6 @@ footer { color:var(--muted); display:flex; font-size:.8rem; justify-content:spac
 .app-shell .community-intro h1 { font-size:clamp(2.2rem,4vw,3.5rem); letter-spacing:-.06em; line-height:1.08; max-width:20ch; }
 /* Helper text should not stretch a neighbouring field or shift its top edge. */
 .composer-fields,.profile-fields.two { align-items:start; }
+
+.profile-form-fields { border:0; display:grid; gap:1.25rem; margin:0; min-width:0; padding:0; }
+.profile-cancel { justify-self:start; }

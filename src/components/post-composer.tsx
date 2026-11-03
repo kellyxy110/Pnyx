@@ -13,9 +13,9 @@ function spacesFromResponse(data: unknown): Space[] {
   return [];
 }
 
-type PostComposerProps = { initialSpaceSlug?: string; returnTo?: string };
+type PostComposerProps = { initialSpaceSlug?: string; returnTo?: string; initialDraftId?: string };
 
-export function PostComposer({ initialSpaceSlug, returnTo }: PostComposerProps) {
+export function PostComposer({ initialSpaceSlug, returnTo, initialDraftId }: PostComposerProps) {
   const [spaces, setSpaces] = useState<Space[]>([]);
   const [spacesState, setSpacesState] = useState<"loading" | "ready" | "empty" | "error">("loading");
   const [drafts, setDrafts] = useState<Draft[]>([]);
@@ -24,6 +24,8 @@ export function PostComposer({ initialSpaceSlug, returnTo }: PostComposerProps) 
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState<"saving" | "publishing" | null>(null);
   const lastSaved = useRef("");
+  const lastAttempted = useRef("");
+  const inFlight = useRef(false);
   const serialise = (value = form) => JSON.stringify(value);
 
   useEffect(() => {
@@ -41,6 +43,18 @@ export function PostComposer({ initialSpaceSlug, returnTo }: PostComposerProps) 
         setSpacesState(nextSpaces.length ? "ready" : "empty");
         setForm((current) => current.spaceSlug || !nextSpaces[0] ? current : { ...current, spaceSlug: nextSpaces[0].slug });
         if (draftResponse.ok) setDrafts(draftData?.drafts ?? []);
+        if (initialDraftId) {
+          const response = await fetch(`/api/posts/${encodeURIComponent(initialDraftId)}`, { cache: "no-store" });
+          const data = await response.json().catch(() => null);
+          if (!active) return;
+          if (!response.ok || !data?.post?.isDraft) setMessage("This draft is not available. You can start a new discussion.");
+          else {
+            const draft = data.post;
+            const restored = { spaceSlug: draft.space.slug, title: draft.title, body: draft.body, type: draft.type, visibility: draft.visibility };
+            setForm(restored); setDraftId(draft.id); lastSaved.current = JSON.stringify(restored); lastAttempted.current = lastSaved.current;
+            setMessage(`Editing draft: ${draft.title}`);
+          }
+        }
       } catch (error) {
         if (!active) return;
         setSpacesState("error");
@@ -49,30 +63,27 @@ export function PostComposer({ initialSpaceSlug, returnTo }: PostComposerProps) 
     }
     void loadComposerData();
     return () => { active = false; };
-  }, []);
+  }, [initialDraftId]);
 
   async function saveDraft(silent = false) {
-    if (!form.spaceSlug || !form.title.trim() || !form.body.trim() || busy) return;
+    if (!form.spaceSlug || !form.title.trim() || !form.body.trim() || inFlight.current) return;
     const payload = { ...form, isDraft: true };
-    setBusy("saving");
-    const response = await fetch(draftId ? `/api/posts/${draftId}` : "/api/posts", { method: draftId ? "PATCH" : "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-    const result = await response.json().catch(() => null);
-    if (!response.ok) { if (!silent) setMessage(result?.error ?? "Draft could not be saved."); }
-    else {
-      const id = result.post?.id as string | undefined;
-      if (id) {
-        setDraftId(id);
-        setDrafts((current) => [{ id, title: form.title, body: form.body, type: form.type, visibility: form.visibility, updatedAt: new Date().toISOString(), space: { slug: form.spaceSlug, name: spaces.find((space) => space.slug === form.spaceSlug)?.name ?? "Space" } }, ...current.filter((draft) => draft.id !== id)]);
-      }
-      lastSaved.current = serialise();
-      if (!silent) setMessage("Draft saved.");
-    }
-    setBusy(null);
+    lastAttempted.current = serialise(); inFlight.current = true; setBusy("saving");
+    try {
+      const response = await fetch(draftId ? `/api/posts/${draftId}` : "/api/posts", { method: draftId ? "PATCH" : "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+      const result = await response.json().catch(() => null);
+      if (!response.ok || !result?.post?.id) { setMessage(result?.error ?? "Draft could not be confirmed saved. Your text is still here; use Save draft to retry."); return; }
+      const id = result.post.id as string;
+      setDraftId(id);
+      setDrafts(current => [{ id, title: form.title, body: form.body, type: form.type, visibility: form.visibility, updatedAt: new Date().toISOString(), space: { slug: form.spaceSlug, name: spaces.find(space => space.slug === form.spaceSlug)?.name ?? "Space" } }, ...current.filter(draft => draft.id !== id)]);
+      lastSaved.current = serialise(); if (!silent) setMessage("Draft saved.");
+    } catch { setMessage("Autosave could not be confirmed. Your text is still here. Check your drafts before retrying."); }
+    finally { inFlight.current = false; setBusy(null); }
   }
 
   useEffect(() => {
     const current = serialise();
-    if (!form.spaceSlug || !form.title.trim() || !form.body.trim() || current === lastSaved.current || busy) return;
+    if (!form.spaceSlug || !form.title.trim() || !form.body.trim() || current === lastSaved.current || current === lastAttempted.current || busy) return;
     const timer = window.setTimeout(() => { void saveDraft(true); }, 1800);
     return () => window.clearTimeout(timer);
   }, [form, busy]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -82,26 +93,32 @@ export function PostComposer({ initialSpaceSlug, returnTo }: PostComposerProps) 
     if (!form.spaceSlug) { setMessage("Choose a Space before publishing."); return; }
     if (form.title.trim().length < 3) { setMessage("Add a clear title with at least 3 characters."); return; }
     if (!form.body.trim()) { setMessage("Write a little context before publishing."); return; }
-    setBusy("publishing"); setMessage("");
+    if (inFlight.current) return;
+    inFlight.current = true; setBusy("publishing"); setMessage("");
     const payload = { ...form, isDraft: false };
+    try {
     const response = await fetch(draftId ? `/api/posts/${draftId}` : "/api/posts", { method: draftId ? "PATCH" : "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
     const result = await response.json().catch(() => null);
-    if (!response.ok) { setMessage(result?.error ?? "Discussion could not be published."); setBusy(null); return; }
-    const id = result.post?.id;
+    if (!response.ok) { setMessage(result?.error ?? "Discussion could not be published."); return; }
+    const id = result?.post?.id;
+    if (!id) { setMessage("Publishing could not be confirmed. Check your profile before retrying."); return; }
     setMessage("Published. Opening your discussion…");
     setForm((current) => ({ ...current, title: "", body: "" }));
     setDrafts((current) => current.filter((draft) => draft.id !== draftId));
-    setDraftId(null); lastSaved.current = ""; setBusy(null);
+    setDraftId(null); lastSaved.current = ""; lastAttempted.current = "";
     if (id) {
       const safeReturnTo = returnTo && returnTo.startsWith("/") && !returnTo.startsWith("//") ? returnTo : null;
       window.setTimeout(() => window.location.assign(safeReturnTo ?? `/posts/${id}`), 600);
     }
+    } catch { setMessage("Publishing could not be confirmed. Your text is still here. Check your profile before retrying."); }
+    finally { inFlight.current = false; setBusy(null); }
   }
 
   function recover(draft: Draft) {
     setForm({ spaceSlug: draft.space.slug, type: draft.type, title: draft.title, body: draft.body, visibility: draft.visibility });
     setDraftId(draft.id);
     lastSaved.current = JSON.stringify({ spaceSlug: draft.space.slug, type: draft.type, title: draft.title, body: draft.body, visibility: draft.visibility });
+    lastAttempted.current = lastSaved.current;
     setMessage(`Editing draft: ${draft.title}`);
   }
 

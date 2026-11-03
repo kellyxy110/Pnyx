@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth, signOut } from "@/auth";
+import { deleteObject } from "@/lib/storage";
 import { prisma } from "@/lib/prisma";
 
 export async function DELETE(request: Request) {
@@ -7,7 +8,8 @@ export async function DELETE(request: Request) {
   if (!session?.user?.id) return NextResponse.json({ error: "Sign in required." }, { status: 401 });
   const body = await request.json().catch(() => null) as { confirmation?: string } | null;
   if (body?.confirmation !== "DELETE MY ACCOUNT") return NextResponse.json({ error: "Type DELETE MY ACCOUNT to confirm." }, { status: 400 });
-  await prisma.user.delete({ where: { id: session.user.id } });
+  const removed = await prisma.user.delete({ where: { id: session.user.id }, select: { avatarKey: true, bannerKey: true } });
+  await Promise.all([removed.avatarKey, removed.bannerKey].map(key => deleteObject(key).catch(error => console.error("[storage] account media cleanup failed", { error: error instanceof Error ? error.message : "unknown" }))));
   await signOut({ redirect: false });
   return NextResponse.json({ message: "Your account has been deleted." });
 }

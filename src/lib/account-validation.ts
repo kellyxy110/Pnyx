@@ -7,21 +7,24 @@ export const registrationSchema = z.object({
   password: z.string().min(12).max(128),
 });
 
+const profileLink = z.string().trim().max(2048).url().refine(value => {
+  try { const url = new URL(value); return ["https:", "http:"].includes(url.protocol) && !url.username && !url.password; } catch { return false; }
+}, "Use an http or https link without embedded credentials.");
+
 export const profileSchema = z.object({
   username: z.string().trim().toLowerCase().min(3).max(30).regex(/^[a-z0-9_-]+$/, "Use 3–30 lowercase letters, numbers, hyphens, or underscores.").optional(),
   displayName: z.string().trim().min(2).max(80),
   headline: z.string().trim().max(120).nullable(),
   location: z.string().trim().max(100).nullable(),
-  websiteUrl: z.string().url().nullable(),
-  githubUrl: z.string().url().nullable(),
-  linkedinUrl: z.string().url().nullable(),
-  avatarUrl: z.string().url().nullable(),
+  websiteUrl: profileLink.nullable(),
+  githubUrl: profileLink.nullable(),
+  linkedinUrl: profileLink.nullable(),
   bio: z.string().trim().max(500).nullable(),
   timezone: z.string().trim().max(80).nullable(),
   expertise: z.array(z.string().trim().min(1).max(40)).max(20),
   skills: z.array(z.string().trim().min(1).max(40)).max(30),
   interests: z.array(z.string().trim().min(1).max(40)).max(20),
-  links: z.array(z.string().url()).max(8),
+  links: z.array(profileLink).max(8),
   profileVisibility: z.enum(["PUBLIC", "FOLLOWERS_ONLY", "PRIVATE"]),
 });
 
