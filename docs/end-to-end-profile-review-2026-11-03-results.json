@@ -953,23 +953,35 @@
     "remediated": "typescript-estree minimatch 10.2.6 -> 11.0.1 via scoped override"
   },
   "nativePostgres": {
-    "status": "pending new remediation commit",
-    "previousCodeRun": {
-      "id": 41101205391,
-      "commit": "c028e7529d1f1250b47d73ff9cd3711c81c48852",
-      "conclusion": "success"
-    }
+    "status": "passed",
+    "commit": "fa7a291b300a2059732c013a3bccb8e14d02e598",
+    "runId": 41602584952,
+    "jobId": 125804604248,
+    "url": "https://github.com/kellyxy110/Pnyx/actions/runs/41602584952",
+    "migrationsApplied": 12,
+    "schemaDrift": "none",
+    "integrationScenariosPassed": 27,
+    "unitTestsPassed": 88,
+    "typecheck": "passed",
+    "lint": "passed",
+    "build": "passed",
+    "productionDependencyAudit": "passed, zero vulnerabilities",
+    "allDependencyHighCriticalGate": "passed, 13 moderate development-tool reports remain"
   },
   "deployment": {
     "status": "blocked",
-    "reason": "Vercel team-scoped project inspection returns HTTP 404; consent required",
+    "reason": "POST /v13/deployments returned HTTP 403: connection has no permission to create a Production Deployment for this project. Project inspection also returns 404. No CLI executable or authenticated CLI fallback available.",
     "project": "prj_RDKe8Lpjl3a3zuvjWDj7vhrVsQaW",
-    "team": "team_NuC1Fkg65uNAiysfEHuvF4rc"
+    "team": "team_NuC1Fkg65uNAiysfEHuvF4rc",
+    "attemptedCommit": "fa7a291b300a2059732c013a3bccb8e14d02e598",
+    "target": "production",
+    "created": false
   },
   "limitations": [
     "Three R2 browser cases skipped: no isolated storage provider.",
     "No production DB migrations or test writes.",
     "No new manual screenshot or screen-reader review.",
     "Raw full dependency audit remains nonzero; no zero-advisory claim."
-  ]
+  ],
+  "verifiedCodeCommit": "fa7a291b300a2059732c013a3bccb8e14d02e598"
 }

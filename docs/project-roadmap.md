@@ -12,7 +12,7 @@ The [search and writing-surface refresh](uiux-search-2026-10-30.md) moves search
 
 ## End-to-end/profile update, 3 November 2026
 
-The [end-to-end/profile review](end-to-end-profile-review-2026-11-03.md) closes verified visibility leaks, strengthens restricted-source reuse, repairs profile editing/media ownership, restores draft recovery, and improves network failure handling. Its verification record distinguishes disposable local PGlite checks from native PostgreSQL CI and leaves live R2 acceptance, durable cleanup retries, real-device/screen-reader QA, and the broader Milestone 6 gates open. Deployment status is recorded with the release evidence.
+The [end-to-end/profile review](end-to-end-profile-review-2026-11-03.md) closes verified visibility leaks, strengthens restricted-source reuse, repairs profile editing/media ownership, restores draft recovery, and improves network failure handling. Its verification record distinguishes disposable local PGlite checks from native PostgreSQL CI and leaves live R2 acceptance, durable cleanup retries, real-device/screen-reader QA, and the broader Milestone 6 gates open. Native PostgreSQL CI now passes 27 scenarios with all 12 migrations and no drift for `fa7a291`. Deployment was attempted but Vercel rejected production creation with HTTP 403; restoring connection permission is the remaining deployment blocker. Full dependency audit retains 13 moderate development-tool reports; production audit is clean.
 
 ## Completed milestones
 
