@@ -1,0 +1,65 @@
+{
+  "date": "2026-11-24",
+  "branch": "audit/pnyx-remediation-20261025",
+  "source_commit": "cdfa08c9a7df5113b4a9df06d96a928fe352dc44",
+  "native": {
+    "run_id": 45428918000,
+    "job_id": 138568476895,
+    "attempt": 1,
+    "result": "success",
+    "typescript": "pass",
+    "lint": "pass, zero warnings",
+    "unit_tests": 143,
+    "unit_files": 24,
+    "build": "pass",
+    "http_database_scenarios": 33,
+    "browser_passed": 90,
+    "r2_intentional_skips": 9,
+    "migrations": 13,
+    "schema_drift": false,
+    "full_audit_vulnerabilities": 0,
+    "production_audit_vulnerabilities": 0
+  },
+  "provider": {
+    "run_id": 45428918042,
+    "job_id": 138568604108,
+    "result": "success",
+    "http_database_scenarios": 33,
+    "browser_passed": 99,
+    "real_r2_cases": 9,
+    "account_deletion_devices": [
+      "mobile",
+      "tablet",
+      "desktop"
+    ],
+    "migrations": 13,
+    "schema_drift": false,
+    "final_recovery_counts": {
+      "attempted": 0,
+      "completed": 0,
+      "pending": 0
+    }
+  },
+  "scope": {
+    "database": "disposable CI PostgreSQL 16",
+    "bucket": "pnyx-e2e-media",
+    "identities": "synthetic test accounts",
+    "production_migration": false,
+    "deployment": false,
+    "merge": false,
+    "provider_request_enabled_after_batch": false
+  },
+  "remaining": [
+    "Pre-upload durable reservation or inventory reconciliation for objects without a persisted pointer",
+    "Production cleanup worker schedule and alerting",
+    "Production custom-domain and historical cache withdrawal acceptance",
+    "Windows checkout preservation/reconciliation",
+    "Final release identity and production-adjacent acceptance"
+  ],
+  "roadmap": {
+    "6A": "OPEN",
+    "6B": "PAUSED",
+    "6C": "PAUSED",
+    "public_api_implementation": "GATED"
+  }
+}

@@ -19,8 +19,8 @@ Start a disposable PostgreSQL 16 database on loopback with a name such as pnyx_v
 
 Install the repository's locked dependencies and generate Prisma before verification. Install the locked Playwright browser using the existing package executable; an explicitly reviewed PLAYWRIGHT_EXECUTABLE_PATH can select an already installed compatible browser.
 
-- npm run verify:postgres — native migration replay/status/drift/build and 27 HTTP scenarios. No R2.
-- npm run verify:browser — those same native checks followed by all public/authenticated browser scenarios using a newly seeded synthetic account. R2 remains disabled and its six browser cases are skipped.
+- npm run verify:postgres — native migration replay/status/drift/build and 33 HTTP/database scenarios. No R2.
+- npm run verify:browser — those same native checks followed by all public/authenticated browser scenarios using a newly seeded synthetic account. R2 remains disabled and its nine browser cases are skipped.
 - npm run verify:media — the native and browser flow with explicitly opted-in dedicated R2 configuration below. Missing/contradictory configuration fails preflight before migration/fixtures. This command is not authorized for production.
 
 The browser runner creates a disposable identity only after the native HTTP suite, then cleans that identity after browser execution. If media pointers remain, it retains the fixture account/pointers for isolated reconciliation rather than discarding the object provenance. Resolve any retained keys before disposing of that disposable database. Resource cleanup and provider errors are failures, not successful acceptance.
@@ -46,6 +46,12 @@ Also explicitly set E2E_STORAGE_ENABLED=true and three non-secret expected targe
 
 Both actual provider settings and expected declarations must agree; the live app's challenge must bind those same values. Bucket naming/declarations do not replace provider ownership/policy review. The runner creates no bucket, token, delivery domain or billable provider resource.
 
+## Verified cleanup recovery
+
+Current source `cdfa08c` replays 13 migrations without drift and passes 143 unit tests, 33 HTTP/database scenarios and all 99 provider-enabled browser cases. See [durable cleanup evidence](media-cleanup-2026-11-24.md). The provider-disabled run passes 90 browser cases with nine intentional skips.
+
+`npm run media:cleanup` requires the same opted-in disposable database and matching dedicated storage declarations. It processes at most 25 due receipts, prints counts only, and exits nonzero if receipts remain. Retry after the recorded backoff when recovering an isolated failure. The media runner invokes it before fixture disposal. No production worker or schedule is enabled.
+
 ## Prepared provider acceptance
 
 For each avatar and banner, on mobile/tablet/desktop, the prepared suite:
@@ -60,4 +66,6 @@ For each avatar and banner, on mobile/tablet/desktop, the prepared suite:
 
 The first passing provider lifecycle run is 45424156617 on 24 November 2026, with all six media cases executed; see r2-provider-acceptance-2026-11-24.md. Six skips in a storage-disabled run are not provider evidence. The route unit tests separately exercise real Sharp decoding with mocked storage/pointer failures.
 
-New uploads request Cache-Control: no-store. This corrects the prior year-long immutable policy; it does not rewrite historical object metadata, purge existing caches or override provider delivery rules. Origin HEAD absence is not proof that a previously cached public delivery URL is purged. Delivery-cache withdrawal/purge policy needs explicit provider acceptance before 6A media sign-off. Durable cleanup retries, provider-failure reconciliation, account-deletion asset acceptance and production-adjacent acceptance also remain open. Do not convert these origin tests into a claim of complete deletion propagation or completed 6A.
+The latest passing provider run is 45428918042: all nine R2 cases include the six image lifecycles plus three disposable-account deletion cases. Account deletion uploads both images, verifies deletion/session revocation, confirms both origin and development delivery URLs absent and checks no account-scoped receipts remain. Native tests separately inject provider failure to verify durable retry, backoff, transaction rollback, reference protection, target matching and concurrent-worker exclusion.
+
+New uploads request Cache-Control: no-store. This corrects the prior year-long immutable policy; it does not rewrite historical object metadata, purge existing caches or override provider delivery rules. Origin HEAD absence is not proof that a previously cached public delivery URL is purged. Delivery-cache withdrawal/purge policy needs explicit provider acceptance before 6A media sign-off. Durable retries for saved pointers and isolated account-deletion assets are verified. Pre-upload reservation or inventory reconciliation for unsaved objects, production cleanup scheduling/alerting and production-adjacent acceptance remain open. Do not convert these origin tests into a claim of complete deletion propagation or completed 6A.

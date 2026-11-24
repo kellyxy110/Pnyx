@@ -25,7 +25,7 @@ The workflow is limited to pushes on the remediation branch that change its own 
 
 The media job uses the named environment, serializes provider runs without cancelling active cleanup, creates a fresh PostgreSQL 16 service and invokes the existing guarded verify:media runner. Credentials are injected only into the verification step, after dependency/browser installation. No bucket/token creation, production access, deployment command or artifact upload is included. GitHub may create environment deployment-tracking metadata for this job; no application is deployed.
 
-Review all twelve migration results, drift, 27 HTTP scenarios and all 96 browser cases, including the six real avatar/banner cases. A disabled request, skipped media job or six skipped R2 cases is not provider acceptance. Inspect any failure before rerunning because fixture media may remain. The temporary database disappears after the job, so record any failed cleanup key from the isolated test evidence before relying on an automatic rerun; durable cleanup recovery remains a separate open requirement. Do not empty the bucket as a substitute for scoped reconciliation.
+Review all 13 migration results, drift, 33 HTTP/database scenarios and all 99 browser cases, including nine real R2 cases. A disabled request, skipped media job or nine skipped R2 cases is not provider acceptance. Inspect any failure before rerunning because fixture media may remain. The temporary database disappears after the job, so record any failed cleanup key from the isolated test evidence before relying on an automatic rerun; the isolated recovery command only covers persisted cleanup receipts; pre-upload provenance and production recovery operations remain open. Do not empty the bucket as a substitute for scoped reconciliation.
 
 After a completed attempt, disable the request in a documentation commit. Revoke or let the dedicated token expire when verification is finished. The existing isolated-verification.md runbook defines scope and remaining deletion/cache acceptance gaps.
 
@@ -35,6 +35,10 @@ Workflow YAML and request parsing are checked locally. GitHub's disabled-request
 
 Preparation commit 689415e passed the request job in [run 45408918181](https://github.com/kellyxy110/Pnyx/actions/runs/45408918181); the media job was skipped as intended. Local execution of the actual request script verified false, true and invalid string inputs. Shell syntax and YAML checks passed. No real provider tests ran.
 
-## Completed provider run
+## Latest completed cleanup acceptance
+
+Source `cdfa08c` passed [provider run 45428918042](https://github.com/kellyxy110/Pnyx/actions/runs/45428918042): 13 migrations without drift, 33 HTTP/database scenarios and all 99 browser cases, including nine real R2 cases. The three additional cases verify disposable-account deletion and both image delivery URLs on mobile/tablet/desktop. [Native run 45428918000](https://github.com/kellyxy110/Pnyx/actions/runs/45428918000) passed first attempt with 143 units, 90 browser checks, nine intentional skips, TypeScript/lint/build and zero-advisory audits. The final isolated recovery command found zero pending receipts. The request is disabled after this run. See [evidence and remaining limits](media-cleanup-2026-11-24.md).
+
+## Earlier completed provider run
 
 The environment and secret names were verified in GitHub UI. Real provider run 45424156617 passed all 96 browser cases, including six R2 cases, and 27 HTTP scenarios on commit 8fc2829. The storage-disabled native run 45424156410 passed on diagnostic attempt 2; its initial knowledge-editor timeout remains recorded. The request is disabled again. See r2-provider-acceptance-2026-11-24.md and its JSON results for the full history and remaining gates.

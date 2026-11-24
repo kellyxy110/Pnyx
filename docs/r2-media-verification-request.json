@@ -1,4 +1,4 @@
 {
-  "enabled": true,
-  "reason": "Verify durable cleanup receipts and synthetic-account deletion against the dedicated R2 bucket after local checks."
+  "enabled": false,
+  "reason": "Durable cleanup and synthetic-account deletion passed in run 45428918042; disable provider execution after recording evidence."
 }

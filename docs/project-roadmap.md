@@ -1,6 +1,12 @@
 # Pnyx roadmap and remaining work
 
-## Isolated R2 provider acceptance, 24 November 2026
+## Durable cleanup and account deletion, 24 November 2026
+
+[Durable media cleanup acceptance](media-cleanup-2026-11-24.md) passes for `cdfa08c`: 143 units, 33 HTTP/database scenarios, 13 migrations without drift, TypeScript/lint/build and zero-advisory audits. Native CI passed on its first attempt with 90 browser checks and nine intentional R2 skips; provider CI passed all 99 browser checks, including nine real R2 cases. Account deletion removed both images and their development delivery URLs on all three devices. Transactional cleanup receipts now survive account deletion, retain failed deletions for retry and prevent deleting referenced or mismatched-target objects. The provider request is disabled again.
+
+Next: durable pre-upload reservation or inventory reconciliation for objects without a saved pointer, production cleanup scheduling/alerting and production cache withdrawal acceptance. Windows source reconciliation and final release identity/production-adjacent acceptance remain open. No production migration, merge or deployment occurred. 6A remains OPEN; 6B/6C remain PAUSED.
+
+## Earlier isolated R2 provider acceptance, 24 November 2026
 
 [Real R2 lifecycle acceptance](r2-provider-acceptance-2026-11-24.md) now passes for `8fc2829`: twelve migrations without drift, 27 HTTP scenarios and all 96 browser cases, including six real avatar/banner lifecycles across mobile/tablet/desktop. The run exposed and verified a profile removal-feedback correction. The storage-disabled run passed on diagnostic attempt 2: 136 units, 27 HTTP and 90 browser checks, TypeScript/lint/build and zero-advisory audits. Its first-attempt knowledge-editor timeout remains tracked as intermittent, with root cause unproven. Provider execution is disabled after the successful run. Production delivery/cache withdrawal, durable cleanup/account-deletion evidence, Windows source reconciliation and production-adjacent release acceptance remain open. 6A remains OPEN and 6B/6C PAUSED.
 

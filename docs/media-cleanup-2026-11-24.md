@@ -18,7 +18,14 @@ npm run media:cleanup is deliberately restricted to an opted-in disposable loopb
 
 The native database suite adds provider-failure/backoff/retry, preservation when configuration is absent, referenced-object and target-mismatch refusal, transaction rollback, concurrent-worker exclusion and prior-receipt survival scenarios. Its storage delete function is replaced only at the provider boundary for deterministic failure tests. The real-provider suite adds deletion of a new synthetic account with both images, verifies session revocation, database deletion, origin absence, development delivery URL absence and empty account-scoped receipts on all three devices. It does not use a live user account.
 
-Local TypeScript, zero-warning lint, 143 unit tests and build passed during implementation. The complete candidate is submitted to native PostgreSQL and real-provider CI; final results will be appended after completion. The new thirteenth migration is only replayed in disposable CI, never production.
+Verified source commit: `cdfa08c9a7df5113b4a9df06d96a928fe352dc44`.
+
+- [Native CI 45428918000](https://github.com/kellyxy110/Pnyx/actions/runs/45428918000) passed on its first attempt: TypeScript, zero-warning lint, 143 unit tests across 24 files, build, 33 HTTP/database scenarios and 90 browser checks; nine R2 cases intentionally skipped. Full and production dependency audits each reported zero vulnerabilities.
+- [Real-provider CI 45428918042](https://github.com/kellyxy110/Pnyx/actions/runs/45428918042) passed: 33 HTTP/database scenarios and all 99 browser checks, including nine real R2 cases. The new disposable account deletion passed on mobile, tablet and desktop, verifying both origin and development delivery URL absence.
+- Both runs replayed all 13 migrations without schema drift. The new migration was applied only in disposable CI, never production.
+- The provider runner's final recovery command reported attempted=0, completed=0, pending=0. Failure/backoff/retry and concurrency were separately exercised in the native database suite with an injected provider boundary.
+
+The temporary provider request is disabled in the evidence commit. No merge, deployment or production database operation was performed. Machine-readable evidence: [results](media-cleanup-2026-11-24-results.json).
 
 ## Remaining limits
 
