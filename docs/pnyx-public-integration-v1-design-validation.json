@@ -1,0 +1,21 @@
+{
+  "status": "DESIGN_VALIDATION_PASSED",
+  "date": "2026-11-24",
+  "baseCommit": "7a4e37e5a12a3089d5c95cb2436ce35e6f3749a4",
+  "designRevision": "0.1.0",
+  "checks": {
+    "declaredGETOperations": 7,
+    "resolvedInternalReferences": 92,
+    "jsonSchemasChecked": 24,
+    "positiveSyntheticExamples": 10,
+    "rejectedNegativeSchemaExamples": 14,
+    "localMarkdownLinks": "passed",
+    "applicationCodeAndConfiguration": "unchanged"
+  },
+  "limits": [
+    "No full OpenAPI meta-schema linter was installed or run; structural and component JSON Schema checks only.",
+    "No API route or NexisHub adapter is implemented.",
+    "No application/runtime/privacy/withdrawal/load test execution or deployment certification is claimed.",
+    "Existing Milestone 6 and later capability gates remain."
+  ]
+}

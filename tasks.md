@@ -123,7 +123,7 @@ Before public launch, Pnyx must demonstrate a reliable question-to-useful-answer
 
 - [ ] Load and failure-recovery testing.
 - [ ] Backup/restore verification.
-- [ ] Deletion propagation verification.
+- [ ] Deletion propagation verification. Include dependent artifact withdrawal after source/account hard deletion and ON DELETE SET NULL; a lost source reference must not silently make copied content eligible.
 - [ ] Security and abuse testing.
 
 ## Milestone 6C — Closed beta readiness (paused until 6A closes)
@@ -134,3 +134,11 @@ Before public launch, Pnyx must demonstrate a reliable question-to-useful-answer
 ## Integration proposal reconciliation — 24 November 2026
 
 The proposal is mapped in [the reconciliation report](docs/pnyx-roadmap-reconciliation-2026-11-24.md). PIRP labels do not replace these milestone gates. Public API and advanced intelligence/account-linking/monetization work remains in the later backlog; architecture and contract design can be discussed now. No new module was implemented by this documentation review.
+
+## Public integration contract design — 24 November 2026
+
+- [x] Draft the public-only read contract, explicit projections, source eligibility, errors, pagination, retention and consumer failure behavior. See [the v1 design](docs/pnyx-public-integration-v1.md).
+- [x] Provide machine-readable OpenAPI design, synthetic examples and a future runtime acceptance matrix; document/schema checks do not certify executable endpoints.
+- [ ] Resolve and review withdrawal lineage after source/account hard deletion, clock handling, source quotas and consumer retention before implementation.
+- [ ] Implement and certify source/consumer behavior only after the existing Milestone 6 gates and a scoped implementation decision.
+- [ ] Review any later account linking, cross-product writes, intelligence, webhooks or monetization separately. These remain gated and are not authorized by contract design.

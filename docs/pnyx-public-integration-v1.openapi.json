@@ -1,0 +1,1958 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Pnyx public discovery integration contract \u2014 DESIGN ONLY",
+    "version": "0.1.0",
+    "description": "Review draft, not a deployed API or authorization to implement. Milestone 6 gates remain. No accounts, private content, replies, full bodies, cross-product writes, intelligence execution, webhooks or monetization. See companion Markdown contract and acceptance matrix."
+  },
+  "servers": [
+    {
+      "url": "https://pnyx-contract.example.invalid",
+      "description": "Reserved non-routable example origin. Replace only after implementation and release certification."
+    }
+  ],
+  "security": [],
+  "paths": {
+    "/api/public/v1/spaces": {
+      "get": {
+        "operationId": "listPublicSpaces",
+        "summary": "List public Space discovery cards",
+        "description": "DRAFT ONLY. This route is not implemented. All reads use anonymous public eligibility, explicit projection and the privacy/withdrawal rules in the companion contract. Reject unknown or repeated query parameters.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Cursor"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A current, public-only discovery representation. Empty list is a successful response.",
+            "headers": {
+              "Date": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "maxLength": 64,
+                  "minLength": 1
+                },
+                "description": "Accurate HTTP-date used for conservative lease/clock validation."
+              },
+              "Cache-Control": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "X-Content-Type-Options": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "const": "nosniff"
+                }
+              },
+              "X-Request-Id": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "maxLength": 64,
+                  "minLength": 1
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpaceList"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/public/v1/spaces/{slug}": {
+      "get": {
+        "operationId": "getPublicSpace",
+        "summary": "Read a public Space discovery card",
+        "description": "DRAFT ONLY. This route is not implemented. All reads use anonymous public eligibility, explicit projection and the privacy/withdrawal rules in the companion contract. Reject unknown or repeated query parameters.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Slug"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A current, public-only discovery representation. Empty list is a successful response.",
+            "headers": {
+              "Date": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "maxLength": 64,
+                  "minLength": 1
+                },
+                "description": "Accurate HTTP-date used for conservative lease/clock validation."
+              },
+              "Cache-Control": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "X-Content-Type-Options": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "const": "nosniff"
+                }
+              },
+              "X-Request-Id": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "maxLength": 64,
+                  "minLength": 1
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SpaceDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/public/v1/discussions": {
+      "get": {
+        "operationId": "listPublicDiscussions",
+        "summary": "List eligible public discussion cards",
+        "description": "DRAFT ONLY. This route is not implemented. All reads use anonymous public eligibility, explicit projection and the privacy/withdrawal rules in the companion contract. Reject unknown or repeated query parameters.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Space"
+          },
+          {
+            "$ref": "#/components/parameters/DiscussionType"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Cursor"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A current, public-only discovery representation. Empty list is a successful response.",
+            "headers": {
+              "Date": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "maxLength": 64,
+                  "minLength": 1
+                },
+                "description": "Accurate HTTP-date used for conservative lease/clock validation."
+              },
+              "Cache-Control": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "X-Content-Type-Options": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "const": "nosniff"
+                }
+              },
+              "X-Request-Id": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "maxLength": 64,
+                  "minLength": 1
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscussionList"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/public/v1/discussions/{id}": {
+      "get": {
+        "operationId": "getPublicDiscussion",
+        "summary": "Read an eligible public discussion card",
+        "description": "DRAFT ONLY. This route is not implemented. All reads use anonymous public eligibility, explicit projection and the privacy/withdrawal rules in the companion contract. Reject unknown or repeated query parameters.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A current, public-only discovery representation. Empty list is a successful response.",
+            "headers": {
+              "Date": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "maxLength": 64,
+                  "minLength": 1
+                },
+                "description": "Accurate HTTP-date used for conservative lease/clock validation."
+              },
+              "Cache-Control": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "X-Content-Type-Options": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "const": "nosniff"
+                }
+              },
+              "X-Request-Id": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "maxLength": 64,
+                  "minLength": 1
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscussionDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/public/v1/knowledge": {
+      "get": {
+        "operationId": "listPublicKnowledge",
+        "summary": "List eligible published public knowledge cards",
+        "description": "DRAFT ONLY. This route is not implemented. All reads use anonymous public eligibility, explicit projection and the privacy/withdrawal rules in the companion contract. Reject unknown or repeated query parameters.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Space"
+          },
+          {
+            "$ref": "#/components/parameters/KnowledgeType"
+          },
+          {
+            "$ref": "#/components/parameters/EditorialStatus"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Cursor"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A current, public-only discovery representation. Empty list is a successful response.",
+            "headers": {
+              "Date": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "maxLength": 64,
+                  "minLength": 1
+                },
+                "description": "Accurate HTTP-date used for conservative lease/clock validation."
+              },
+              "Cache-Control": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "X-Content-Type-Options": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "const": "nosniff"
+                }
+              },
+              "X-Request-Id": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "maxLength": 64,
+                  "minLength": 1
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KnowledgeList"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/public/v1/knowledge/{id}": {
+      "get": {
+        "operationId": "getPublicKnowledge",
+        "summary": "Read an eligible public knowledge card",
+        "description": "DRAFT ONLY. This route is not implemented. All reads use anonymous public eligibility, explicit projection and the privacy/withdrawal rules in the companion contract. Reject unknown or repeated query parameters.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A current, public-only discovery representation. Empty list is a successful response.",
+            "headers": {
+              "Date": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "maxLength": 64,
+                  "minLength": 1
+                },
+                "description": "Accurate HTTP-date used for conservative lease/clock validation."
+              },
+              "Cache-Control": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "X-Content-Type-Options": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "const": "nosniff"
+                }
+              },
+              "X-Request-Id": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "maxLength": 64,
+                  "minLength": 1
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/KnowledgeDetail"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/public/v1/search": {
+      "get": {
+        "operationId": "searchPublicContent",
+        "summary": "Search one public content kind using literal keywords",
+        "description": "DRAFT ONLY. This route is not implemented. All reads use anonymous public eligibility, explicit projection and the privacy/withdrawal rules in the companion contract. Reject unknown or repeated query parameters. Each response meta.kind and every data.kind must agree with the requested kind. The space filter is invalid with kind=spaces. Sorting is updatedAt descending then id descending; no relevance or semantic quality guarantee.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/Kind"
+          },
+          {
+            "$ref": "#/components/parameters/Query"
+          },
+          {
+            "$ref": "#/components/parameters/Space"
+          },
+          {
+            "$ref": "#/components/parameters/Limit"
+          },
+          {
+            "$ref": "#/components/parameters/Cursor"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A current, public-only discovery representation. Empty list is a successful response.",
+            "headers": {
+              "Date": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "maxLength": 64,
+                  "minLength": 1
+                },
+                "description": "Accurate HTTP-date used for conservative lease/clock validation."
+              },
+              "Cache-Control": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "const": "no-store"
+                }
+              },
+              "X-Content-Type-Options": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "const": "nosniff"
+                }
+              },
+              "X-Request-Id": {
+                "required": true,
+                "schema": {
+                  "type": "string",
+                  "maxLength": 64,
+                  "minLength": 1
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/SpaceList"
+                    },
+                    {
+                      "$ref": "#/components/schemas/DiscussionList"
+                    },
+                    {
+                      "$ref": "#/components/schemas/KnowledgeList"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/400"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "405": {
+            "$ref": "#/components/responses/405"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "503": {
+            "$ref": "#/components/responses/503"
+          }
+        },
+        "security": []
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SpaceReference": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "slug": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "pattern": "^[a-z0-9][a-z0-9_-]*$"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1
+          },
+          "url": {
+            "type": "string",
+            "maxLength": 2048,
+            "format": "uri",
+            "pattern": "^https://"
+          }
+        },
+        "required": [
+          "slug",
+          "name",
+          "url"
+        ]
+      },
+      "AuthorAttribution": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "displayName": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1
+          },
+          "username": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 30,
+                "minLength": 3
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "profileUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2048,
+                "format": "uri",
+                "pattern": "^https://"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "displayName",
+          "username",
+          "profileUrl"
+        ]
+      },
+      "SpaceCard": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "space"
+          },
+          "id": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$"
+          },
+          "slug": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "pattern": "^[a-z0-9][a-z0-9_-]*$"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 1
+          },
+          "excerpt": {
+            "type": "string",
+            "maxLength": 280
+          },
+          "url": {
+            "type": "string",
+            "maxLength": 2048,
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "updatedAt": {
+            "type": "string",
+            "maxLength": 32,
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "kind",
+          "id",
+          "slug",
+          "name",
+          "excerpt",
+          "url",
+          "updatedAt"
+        ]
+      },
+      "DiscussionCard": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "discussion"
+          },
+          "id": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1
+          },
+          "excerpt": {
+            "type": "string",
+            "maxLength": 280
+          },
+          "url": {
+            "type": "string",
+            "maxLength": 2048,
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "space": {
+            "$ref": "#/components/schemas/SpaceReference"
+          },
+          "author": {
+            "$ref": "#/components/schemas/AuthorAttribution"
+          },
+          "createdAt": {
+            "type": "string",
+            "maxLength": 32,
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "maxLength": 32,
+            "format": "date-time"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "DISCUSSION",
+              "QUESTION",
+              "SHOWCASE",
+              "TUTORIAL",
+              "RESEARCH",
+              "POLL"
+            ]
+          }
+        },
+        "required": [
+          "kind",
+          "id",
+          "title",
+          "excerpt",
+          "url",
+          "space",
+          "author",
+          "createdAt",
+          "updatedAt",
+          "type"
+        ]
+      },
+      "KnowledgeCard": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "type": "string",
+            "const": "knowledge"
+          },
+          "id": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 1,
+            "pattern": "^[A-Za-z0-9_-]+$"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 1
+          },
+          "excerpt": {
+            "type": "string",
+            "maxLength": 280
+          },
+          "url": {
+            "type": "string",
+            "maxLength": 2048,
+            "format": "uri",
+            "pattern": "^https://"
+          },
+          "space": {
+            "$ref": "#/components/schemas/SpaceReference"
+          },
+          "author": {
+            "$ref": "#/components/schemas/AuthorAttribution"
+          },
+          "createdAt": {
+            "type": "string",
+            "maxLength": 32,
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "maxLength": 32,
+            "format": "date-time"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "GUIDE",
+              "ANSWER",
+              "RESEARCH",
+              "BENCHMARK",
+              "CASE_STUDY"
+            ]
+          },
+          "editorialStatus": {
+            "type": "string",
+            "enum": [
+              "PUBLISHED",
+              "COMMUNITY_REVIEWED",
+              "VERIFIED"
+            ]
+          },
+          "publishedAt": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 32,
+                "format": "date-time"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "originDiscussionUrl": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2048,
+                "format": "uri",
+                "pattern": "^https://"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "kind",
+          "id",
+          "title",
+          "excerpt",
+          "url",
+          "space",
+          "author",
+          "createdAt",
+          "updatedAt",
+          "type",
+          "editorialStatus",
+          "publishedAt",
+          "originDiscussionUrl"
+        ]
+      },
+      "SpaceDetailMeta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "apiVersion": {
+            "type": "string",
+            "const": "1"
+          },
+          "requestId": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "const": "space"
+          },
+          "checkedAt": {
+            "type": "string",
+            "maxLength": 32,
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "maxLength": 32,
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "apiVersion",
+          "requestId",
+          "kind",
+          "checkedAt",
+          "expiresAt"
+        ]
+      },
+      "SpaceListMeta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "apiVersion": {
+            "type": "string",
+            "const": "1"
+          },
+          "requestId": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "const": "space"
+          },
+          "checkedAt": {
+            "type": "string",
+            "maxLength": 32,
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "maxLength": 32,
+            "format": "date-time"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2048,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "apiVersion",
+          "requestId",
+          "kind",
+          "checkedAt",
+          "expiresAt",
+          "limit",
+          "nextCursor"
+        ]
+      },
+      "SpaceDetail": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/SpaceCard"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/SpaceDetailMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ]
+      },
+      "SpaceList": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "maxItems": 50,
+            "items": {
+              "$ref": "#/components/schemas/SpaceCard"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/SpaceListMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ]
+      },
+      "DiscussionDetailMeta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "apiVersion": {
+            "type": "string",
+            "const": "1"
+          },
+          "requestId": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "const": "discussion"
+          },
+          "checkedAt": {
+            "type": "string",
+            "maxLength": 32,
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "maxLength": 32,
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "apiVersion",
+          "requestId",
+          "kind",
+          "checkedAt",
+          "expiresAt"
+        ]
+      },
+      "DiscussionListMeta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "apiVersion": {
+            "type": "string",
+            "const": "1"
+          },
+          "requestId": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "const": "discussion"
+          },
+          "checkedAt": {
+            "type": "string",
+            "maxLength": 32,
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "maxLength": 32,
+            "format": "date-time"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2048,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "apiVersion",
+          "requestId",
+          "kind",
+          "checkedAt",
+          "expiresAt",
+          "limit",
+          "nextCursor"
+        ]
+      },
+      "DiscussionDetail": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/DiscussionCard"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/DiscussionDetailMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ]
+      },
+      "DiscussionList": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "maxItems": 50,
+            "items": {
+              "$ref": "#/components/schemas/DiscussionCard"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/DiscussionListMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ]
+      },
+      "KnowledgeDetailMeta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "apiVersion": {
+            "type": "string",
+            "const": "1"
+          },
+          "requestId": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "const": "knowledge"
+          },
+          "checkedAt": {
+            "type": "string",
+            "maxLength": 32,
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "maxLength": 32,
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "apiVersion",
+          "requestId",
+          "kind",
+          "checkedAt",
+          "expiresAt"
+        ]
+      },
+      "KnowledgeListMeta": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "apiVersion": {
+            "type": "string",
+            "const": "1"
+          },
+          "requestId": {
+            "type": "string",
+            "maxLength": 64,
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "const": "knowledge"
+          },
+          "checkedAt": {
+            "type": "string",
+            "maxLength": 32,
+            "format": "date-time"
+          },
+          "expiresAt": {
+            "type": "string",
+            "maxLength": 32,
+            "format": "date-time"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50
+          },
+          "nextCursor": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 2048,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "apiVersion",
+          "requestId",
+          "kind",
+          "checkedAt",
+          "expiresAt",
+          "limit",
+          "nextCursor"
+        ]
+      },
+      "KnowledgeDetail": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/KnowledgeCard"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/KnowledgeDetailMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ]
+      },
+      "KnowledgeList": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "data": {
+            "type": "array",
+            "maxItems": 50,
+            "items": {
+              "$ref": "#/components/schemas/KnowledgeCard"
+            }
+          },
+          "meta": {
+            "$ref": "#/components/schemas/KnowledgeListMeta"
+          }
+        },
+        "required": [
+          "data",
+          "meta"
+        ]
+      },
+      "Error": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "INVALID_REQUEST",
+                  "INVALID_CURSOR",
+                  "CURSOR_EXPIRED",
+                  "NOT_FOUND",
+                  "METHOD_NOT_ALLOWED",
+                  "RATE_LIMITED",
+                  "SOURCE_UNAVAILABLE",
+                  "INTERNAL_ERROR"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "maxLength": 160,
+                "minLength": 1
+              },
+              "requestId": {
+                "type": "string",
+                "maxLength": 64,
+                "minLength": 1
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "requestId"
+            ]
+          }
+        },
+        "required": [
+          "error"
+        ]
+      },
+      "Error400": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "INVALID_REQUEST",
+                  "INVALID_CURSOR",
+                  "CURSOR_EXPIRED"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "maxLength": 160,
+                "minLength": 1
+              },
+              "requestId": {
+                "type": "string",
+                "maxLength": 64,
+                "minLength": 1
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "requestId"
+            ]
+          }
+        },
+        "required": [
+          "error"
+        ]
+      },
+      "Error404": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "NOT_FOUND"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "maxLength": 160,
+                "minLength": 1
+              },
+              "requestId": {
+                "type": "string",
+                "maxLength": 64,
+                "minLength": 1
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "requestId"
+            ]
+          }
+        },
+        "required": [
+          "error"
+        ]
+      },
+      "Error405": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "METHOD_NOT_ALLOWED"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "maxLength": 160,
+                "minLength": 1
+              },
+              "requestId": {
+                "type": "string",
+                "maxLength": 64,
+                "minLength": 1
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "requestId"
+            ]
+          }
+        },
+        "required": [
+          "error"
+        ]
+      },
+      "Error429": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "RATE_LIMITED"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "maxLength": 160,
+                "minLength": 1
+              },
+              "requestId": {
+                "type": "string",
+                "maxLength": 64,
+                "minLength": 1
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "requestId"
+            ]
+          }
+        },
+        "required": [
+          "error"
+        ]
+      },
+      "Error500": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "INTERNAL_ERROR"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "maxLength": 160,
+                "minLength": 1
+              },
+              "requestId": {
+                "type": "string",
+                "maxLength": 64,
+                "minLength": 1
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "requestId"
+            ]
+          }
+        },
+        "required": [
+          "error"
+        ]
+      },
+      "Error503": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "error": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string",
+                "enum": [
+                  "SOURCE_UNAVAILABLE"
+                ]
+              },
+              "message": {
+                "type": "string",
+                "maxLength": 160,
+                "minLength": 1
+              },
+              "requestId": {
+                "type": "string",
+                "maxLength": 64,
+                "minLength": 1
+              }
+            },
+            "required": [
+              "code",
+              "message",
+              "requestId"
+            ]
+          }
+        },
+        "required": [
+          "error"
+        ]
+      }
+    },
+    "parameters": {
+      "Limit": {
+        "name": "limit",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 50,
+          "default": 20
+        }
+      },
+      "Cursor": {
+        "name": "cursor",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 1
+        },
+        "description": "Opaque signed cursor, bound to route, normalized filters, limit, v1 and a ten-minute expiry. Never a snapshot or permission grant."
+      },
+      "Space": {
+        "name": "space",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "maxLength": 80,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        },
+        "description": "Public Space slug. A private or missing Space produces an empty list."
+      },
+      "Query": {
+        "name": "q",
+        "in": "query",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "maxLength": 120,
+          "minLength": 2
+        },
+        "description": "Trim before length validation; literal case-insensitive keyword matching. No regex, vector or AI expansion."
+      },
+      "Kind": {
+        "name": "kind",
+        "in": "query",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "spaces",
+            "discussions",
+            "knowledge"
+          ]
+        },
+        "description": "One resource type per request; mixed resource search is outside v1."
+      },
+      "Id": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "maxLength": 80,
+          "minLength": 1,
+          "pattern": "^[A-Za-z0-9_-]+$"
+        }
+      },
+      "Slug": {
+        "name": "slug",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "maxLength": 80,
+          "minLength": 1,
+          "pattern": "^[a-z0-9][a-z0-9_-]*$"
+        }
+      },
+      "DiscussionType": {
+        "name": "type",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "DISCUSSION",
+            "QUESTION",
+            "SHOWCASE",
+            "TUTORIAL",
+            "RESEARCH",
+            "POLL"
+          ]
+        }
+      },
+      "KnowledgeType": {
+        "name": "type",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "GUIDE",
+            "ANSWER",
+            "RESEARCH",
+            "BENCHMARK",
+            "CASE_STUDY"
+          ]
+        }
+      },
+      "EditorialStatus": {
+        "name": "status",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string",
+          "enum": [
+            "PUBLISHED",
+            "COMMUNITY_REVIEWED",
+            "VERIFIED"
+          ]
+        }
+      }
+    },
+    "responses": {
+      "400": {
+        "description": "Invalid, duplicated, unknown or incompatible query input; malformed or expired cursor.",
+        "headers": {
+          "Date": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1
+            },
+            "description": "Accurate HTTP-date used for conservative lease/clock validation."
+          },
+          "Cache-Control": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "no-store"
+            }
+          },
+          "X-Content-Type-Options": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "nosniff"
+            }
+          },
+          "X-Request-Id": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1
+            }
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error400"
+            }
+          }
+        }
+      },
+      "404": {
+        "description": "Unknown, private, restricted, withdrawn, moderated or otherwise unavailable resource; deliberately indistinguishable.",
+        "headers": {
+          "Date": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1
+            },
+            "description": "Accurate HTTP-date used for conservative lease/clock validation."
+          },
+          "Cache-Control": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "no-store"
+            }
+          },
+          "X-Content-Type-Options": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "nosniff"
+            }
+          },
+          "X-Request-Id": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1
+            }
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error404"
+            }
+          }
+        }
+      },
+      "405": {
+        "description": "Unsupported method. No domain write is performed.",
+        "headers": {
+          "Date": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1
+            },
+            "description": "Accurate HTTP-date used for conservative lease/clock validation."
+          },
+          "Cache-Control": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "no-store"
+            }
+          },
+          "X-Content-Type-Options": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "nosniff"
+            }
+          },
+          "X-Request-Id": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1
+            }
+          },
+          "Allow": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "GET, HEAD, OPTIONS"
+            }
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error405"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Combined public-read or search-specific quota exhausted.",
+        "headers": {
+          "Date": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1
+            },
+            "description": "Accurate HTTP-date used for conservative lease/clock validation."
+          },
+          "Cache-Control": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "no-store"
+            }
+          },
+          "X-Content-Type-Options": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "nosniff"
+            }
+          },
+          "X-Request-Id": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1
+            }
+          },
+          "Retry-After": {
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 60
+            },
+            "description": "Seconds before retry; caller must also respect its own overall deadline."
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error429"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Unexpected failure with a safe error envelope.",
+        "headers": {
+          "Date": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1
+            },
+            "description": "Accurate HTTP-date used for conservative lease/clock validation."
+          },
+          "Cache-Control": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "no-store"
+            }
+          },
+          "X-Content-Type-Options": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "nosniff"
+            }
+          },
+          "X-Request-Id": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1
+            }
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error500"
+            }
+          }
+        }
+      },
+      "503": {
+        "description": "Current eligibility or representation could not be established within budget. No stale success.",
+        "headers": {
+          "Date": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1
+            },
+            "description": "Accurate HTTP-date used for conservative lease/clock validation."
+          },
+          "Cache-Control": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "no-store"
+            }
+          },
+          "X-Content-Type-Options": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "const": "nosniff"
+            }
+          },
+          "X-Request-Id": {
+            "required": true,
+            "schema": {
+              "type": "string",
+              "maxLength": 64,
+              "minLength": 1
+            }
+          },
+          "Retry-After": {
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 60
+            },
+            "description": "Seconds before retry; caller must also respect its own overall deadline."
+          }
+        },
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error503"
+            }
+          }
+        }
+      }
+    }
+  },
+  "x-pnyx-design-status": "DRAFT_NOT_IMPLEMENTED",
+  "x-pnyx-provisional-limits": {
+    "freshnessLeaseSeconds": 60,
+    "cursorExpirySeconds": 600,
+    "combinedReadsPerMinute": 120,
+    "searchReadsPerMinute": 20,
+    "requestDeadlineMs": 5000,
+    "maxResponseBytes": 524288
+  },
+  "x-pnyx-release-gate": "Public API implementation remains gated by the existing Milestone 6 roadmap."
+}

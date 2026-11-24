@@ -97,6 +97,8 @@ Release candidate review, incident exercise, backup restore exercise, security s
 12. Community reputation and AI-assisted moderation.
 13. Native mobile applications and enterprise communities.
 
+A [public discovery contract draft](pnyx-public-integration-v1.md) supplies design-only groundwork for item 7. Its OpenAPI paths are not implemented; acceptance, source-withdrawal and existing milestone gates remain.
+
 Each future module requires its own ADR, Prisma schema/migration plan, authorization model, API contract, component hierarchy, abuse model, analytics events, accessibility plan, tests, and rollout evidence before implementation.
 
 ## Evidence index

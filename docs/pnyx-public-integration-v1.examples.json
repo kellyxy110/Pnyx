@@ -1,0 +1,215 @@
+{
+  "SpaceDetail": {
+    "data": {
+      "kind": "space",
+      "id": "fixture-space-001",
+      "slug": "ai",
+      "name": "Artificial Intelligence",
+      "url": "https://pnyx.example.invalid/spaces/ai",
+      "excerpt": "A synthetic Space description.",
+      "updatedAt": "2026-11-24T10:00:00Z"
+    },
+    "meta": {
+      "apiVersion": "1",
+      "requestId": "fixture-request-001",
+      "checkedAt": "2026-11-24T10:00:00Z",
+      "expiresAt": "2026-11-24T10:01:00Z",
+      "kind": "space"
+    }
+  },
+  "SpaceList": {
+    "data": [
+      {
+        "kind": "space",
+        "id": "fixture-space-001",
+        "slug": "ai",
+        "name": "Artificial Intelligence",
+        "url": "https://pnyx.example.invalid/spaces/ai",
+        "excerpt": "A synthetic Space description.",
+        "updatedAt": "2026-11-24T10:00:00Z"
+      }
+    ],
+    "meta": {
+      "apiVersion": "1",
+      "requestId": "fixture-request-001",
+      "checkedAt": "2026-11-24T10:00:00Z",
+      "expiresAt": "2026-11-24T10:01:00Z",
+      "kind": "space",
+      "limit": 20,
+      "nextCursor": null
+    }
+  },
+  "SpaceEmptyList": {
+    "data": [],
+    "meta": {
+      "apiVersion": "1",
+      "requestId": "fixture-request-001",
+      "checkedAt": "2026-11-24T10:00:00Z",
+      "expiresAt": "2026-11-24T10:01:00Z",
+      "kind": "space",
+      "limit": 20,
+      "nextCursor": null
+    }
+  },
+  "DiscussionDetail": {
+    "data": {
+      "kind": "discussion",
+      "id": "fixture-post-001",
+      "title": "A synthetic discussion",
+      "excerpt": "This is a plain-text discovery excerpt.",
+      "url": "https://pnyx.example.invalid/posts/fixture-post-001",
+      "space": {
+        "slug": "ai",
+        "name": "Artificial Intelligence",
+        "url": "https://pnyx.example.invalid/spaces/ai"
+      },
+      "author": {
+        "displayName": "Community contributor",
+        "username": null,
+        "profileUrl": null
+      },
+      "createdAt": "2026-11-24T10:00:00Z",
+      "updatedAt": "2026-11-24T10:00:00Z",
+      "type": "QUESTION"
+    },
+    "meta": {
+      "apiVersion": "1",
+      "requestId": "fixture-request-001",
+      "checkedAt": "2026-11-24T10:00:00Z",
+      "expiresAt": "2026-11-24T10:01:00Z",
+      "kind": "discussion"
+    }
+  },
+  "DiscussionList": {
+    "data": [
+      {
+        "kind": "discussion",
+        "id": "fixture-post-001",
+        "title": "A synthetic discussion",
+        "excerpt": "This is a plain-text discovery excerpt.",
+        "url": "https://pnyx.example.invalid/posts/fixture-post-001",
+        "space": {
+          "slug": "ai",
+          "name": "Artificial Intelligence",
+          "url": "https://pnyx.example.invalid/spaces/ai"
+        },
+        "author": {
+          "displayName": "Community contributor",
+          "username": null,
+          "profileUrl": null
+        },
+        "createdAt": "2026-11-24T10:00:00Z",
+        "updatedAt": "2026-11-24T10:00:00Z",
+        "type": "QUESTION"
+      }
+    ],
+    "meta": {
+      "apiVersion": "1",
+      "requestId": "fixture-request-001",
+      "checkedAt": "2026-11-24T10:00:00Z",
+      "expiresAt": "2026-11-24T10:01:00Z",
+      "kind": "discussion",
+      "limit": 20,
+      "nextCursor": null
+    }
+  },
+  "DiscussionEmptyList": {
+    "data": [],
+    "meta": {
+      "apiVersion": "1",
+      "requestId": "fixture-request-001",
+      "checkedAt": "2026-11-24T10:00:00Z",
+      "expiresAt": "2026-11-24T10:01:00Z",
+      "kind": "discussion",
+      "limit": 20,
+      "nextCursor": null
+    }
+  },
+  "KnowledgeDetail": {
+    "data": {
+      "kind": "knowledge",
+      "id": "fixture-knowledge-001",
+      "title": "A synthetic discussion",
+      "excerpt": "This is a plain-text discovery excerpt.",
+      "url": "https://pnyx.example.invalid/knowledge/fixture-knowledge-001",
+      "space": {
+        "slug": "ai",
+        "name": "Artificial Intelligence",
+        "url": "https://pnyx.example.invalid/spaces/ai"
+      },
+      "author": {
+        "displayName": "Community contributor",
+        "username": null,
+        "profileUrl": null
+      },
+      "createdAt": "2026-11-24T10:00:00Z",
+      "updatedAt": "2026-11-24T10:00:00Z",
+      "type": "GUIDE",
+      "editorialStatus": "PUBLISHED",
+      "publishedAt": null,
+      "originDiscussionUrl": null
+    },
+    "meta": {
+      "apiVersion": "1",
+      "requestId": "fixture-request-001",
+      "checkedAt": "2026-11-24T10:00:00Z",
+      "expiresAt": "2026-11-24T10:01:00Z",
+      "kind": "knowledge"
+    }
+  },
+  "KnowledgeList": {
+    "data": [
+      {
+        "kind": "knowledge",
+        "id": "fixture-knowledge-001",
+        "title": "A synthetic discussion",
+        "excerpt": "This is a plain-text discovery excerpt.",
+        "url": "https://pnyx.example.invalid/knowledge/fixture-knowledge-001",
+        "space": {
+          "slug": "ai",
+          "name": "Artificial Intelligence",
+          "url": "https://pnyx.example.invalid/spaces/ai"
+        },
+        "author": {
+          "displayName": "Community contributor",
+          "username": null,
+          "profileUrl": null
+        },
+        "createdAt": "2026-11-24T10:00:00Z",
+        "updatedAt": "2026-11-24T10:00:00Z",
+        "type": "GUIDE",
+        "editorialStatus": "PUBLISHED",
+        "publishedAt": null,
+        "originDiscussionUrl": null
+      }
+    ],
+    "meta": {
+      "apiVersion": "1",
+      "requestId": "fixture-request-001",
+      "checkedAt": "2026-11-24T10:00:00Z",
+      "expiresAt": "2026-11-24T10:01:00Z",
+      "kind": "knowledge",
+      "limit": 20,
+      "nextCursor": null
+    }
+  },
+  "KnowledgeEmptyList": {
+    "data": [],
+    "meta": {
+      "apiVersion": "1",
+      "requestId": "fixture-request-001",
+      "checkedAt": "2026-11-24T10:00:00Z",
+      "expiresAt": "2026-11-24T10:01:00Z",
+      "kind": "knowledge",
+      "limit": 20,
+      "nextCursor": null
+    }
+  },
+  "NotFound": {
+    "error": {
+      "code": "NOT_FOUND",
+      "message": "This resource is unavailable.",
+      "requestId": "fixture-request-404"
+    }
+  }
+}

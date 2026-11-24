@@ -1,5 +1,11 @@
 # Pnyx roadmap and remaining work
 
+## Public integration contract design, 24 November 2026
+
+A [read-only public discovery contract v1](pnyx-public-integration-v1.md), [OpenAPI design](pnyx-public-integration-v1.openapi.json), [synthetic examples](pnyx-public-integration-v1.examples.json) and [future acceptance matrix](pnyx-public-integration-v1-acceptance.md) now define the proposed boundary. Status: DRAFT, NOT IMPLEMENTED. Initial scope is public Space/discussion/published-knowledge cards and bounded keyword search, with canonical Pnyx links, explicit field allowlists and short-lived display leases. No application route, consumer integration, provider or deployment was enabled.
+
+Before implementation, resolve source-lineage withdrawal after ON DELETE SET NULL, certify clock/expiry handling and approve measured quota budgets. Account linking, shared authentication, cross-product writes, webhooks, advanced intelligence and monetization remain gated. Milestone 6A remains open, 6B/6C paused, and public API implementation remains after the existing Milestone 6 gate. Document/schema validation is not live integration certification.
+
 ## Roadmap reconciliation, 24 November 2026
 
 Milestone 6A remains **OPEN**; 6B/6C remain **PAUSED**. The [CLI handoff and integration proposal review](pnyx-roadmap-reconciliation-2026-11-24.md) reconciles every supplied handoff item, all ten proposal sections and all fourteen PIRP labels. PIRP is a proposed classification of work, not a replacement roadmap or authorization to implement later modules.
