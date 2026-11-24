@@ -34,11 +34,11 @@ export async function queueMediaCleanup(tx: Prisma.TransactionClient, userId: st
   return ids;
 }
 
-export async function processMediaCleanup(id: string, target = storageTarget(), remove: (key: string, target: StorageTarget) => Promise<void> = deleteObject) {
+export async function processMediaCleanupDetailed(id: string, target = storageTarget(), remove: (key: string, target: StorageTarget) => Promise<void> = deleteObject) {
   return prisma.$transaction(async tx => {
     const jobs = await tx.$queryRaw<{ id: string; key: string; endpoint: string; bucket: string; attempts: number; reservationExpiresAt: Date | null }[]>`SELECT "id", "key", "endpoint", "bucket", "attempts", "reservationExpiresAt" FROM "MediaCleanup" WHERE "id" = ${id} AND "nextAttemptAt" <= NOW() AND ("reservationExpiresAt" IS NULL OR "reservationExpiresAt" <= clock_timestamp()) FOR UPDATE SKIP LOCKED`;
     const job = jobs[0];
-    if (!job) return false;
+    if (!job) return "skipped" as const;
     let failure: string | null = null;
     if (!target || job.endpoint !== target.endpoint || job.bucket !== target.bucket) failure = "STORAGE_TARGET_UNAVAILABLE";
     else if (await tx.user.count({ where: { OR: [{ avatarKey: job.key }, { bannerKey: job.key }] } })) failure = "OBJECT_STILL_REFERENCED";
@@ -49,17 +49,21 @@ export async function processMediaCleanup(id: string, target = storageTarget(), 
     if (failure) {
       const delay = Math.min(3600, 30 * 2 ** Math.min(job.attempts, 7));
       await tx.mediaCleanup.update({ where: { id }, data: { attempts: { increment: 1 }, lastError: failure, nextAttemptAt: new Date(Date.now() + delay * 1000) } });
-      return false;
+      return "failed" as const;
     }
     if (job.reservationExpiresAt) {
       // An interrupted PUT may complete late. Keep provenance and sweep again;
       // only atomic pointer adoption may retire an upload reservation.
       await tx.mediaCleanup.update({ where: { id }, data: { attempts: { increment: 1 }, lastError: "UPLOAD_ABANDONED", nextAttemptAt: new Date(Date.now() + 24 * 60 * 60 * 1000) } });
-      return false;
+      return "swept" as const;
     }
     await tx.mediaCleanup.delete({ where: { id } });
-    return true;
+    return "retired" as const;
   }, { timeout: 10_000 });
+}
+
+export async function processMediaCleanup(id: string, target = storageTarget(), remove: (key: string, target: StorageTarget) => Promise<void> = deleteObject) {
+  return (await processMediaCleanupDetailed(id, target, remove)) === "retired";
 }
 
 export async function attemptMediaCleanup(ids: string[]) {

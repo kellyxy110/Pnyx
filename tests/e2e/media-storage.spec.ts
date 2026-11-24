@@ -1,3 +1,4 @@
+import { runMediaCleanupBatch, cleanupWorkerId } from "../../src/lib/media-cleanup-worker";
 import { reserveMediaUpload, processMediaCleanup } from "../../src/lib/media-cleanup";
 import { putImage } from "../../src/lib/storage";
 import { DeleteObjectCommand, HeadObjectCommand, S3Client } from "@aws-sdk/client-s3";
@@ -156,7 +157,7 @@ test.describe("dedicated R2 media acceptance", () => {
       await db.mediaCleanup.update({ where: { id: reservation }, data: { reservationExpiresAt: new Date(0), nextAttemptAt: new Date(0) } });
       for (let sweep = 0; sweep < 2; sweep++) {
         if (sweep) { await putImage(image, scopedTarget); await db.mediaCleanup.update({ where: { id: reservation }, data: { nextAttemptAt: new Date(0) } }); }
-        expect(await processMediaCleanup(reservation, scopedTarget)).toBe(false);
+        expect(await runMediaCleanupBatch(scopedTarget)).toMatchObject({ swept: 1, retired: 0 });
         await absent();
         expect((await request.get(`${storage!.publicBase}/${key}`, { maxRedirects: 0 })).status()).toBe(404);
         expect((await db.mediaCleanup.findUniqueOrThrow({ where: { id: reservation } })).lastError).toBe("UPLOAD_ABANDONED");
@@ -167,6 +168,7 @@ test.describe("dedicated R2 media acceptance", () => {
         // Exact synthetic key only. Production recovery does not retire tombstones.
         await s3.send(new DeleteObjectCommand({ Bucket: storage!.bucket, Key: key }));
         await db.mediaCleanup.deleteMany({ where: { ...scopedTarget, key } });
+        await db.mediaCleanupWorker.deleteMany({ where: { id: cleanupWorkerId(scopedTarget) } });
         await db.user.deleteMany({ where: { id, email: `${id}@example.test` } });
       } finally { s3.destroy(); await db.$disconnect(); }
     }

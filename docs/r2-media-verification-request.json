@@ -1,4 +1,4 @@
 {
-  "enabled": false,
-  "reason": "Pre-upload reservation and repeated abandoned-upload recovery passed in run 45432893170; disable provider execution after recording evidence."
+  "enabled": true,
+  "reason": "Verify bounded cleanup worker, retained reservation sweeps and read-only dedicated-bucket inventory after local checks."
 }

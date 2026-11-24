@@ -18,6 +18,7 @@ const env = {
   E2E_PASSWORD: browser ? fixturePassword : "",
   PLAYWRIGHT_BASE_URL: app.origin,
   PNYX_PGLITE_UI: "",
+  MEDIA_CLEANUP_ENABLED: "false", CRON_SECRET: "", MEDIA_CLEANUP_ENDPOINT: "", MEDIA_CLEANUP_BUCKET: "",
   PNYX_VERIFICATION_SECRET: randomBytes(32).toString("hex"),
   AUTH_SECRET: randomUUID() + randomUUID(),
   APP_URL: app.origin,
@@ -74,7 +75,10 @@ async function main() {
     }
     await fixtureDb.user.create({ data: { id: browserId, username: `browser_${randomUUID().replaceAll("-", "").slice(0, 20)}`, email: env.E2E_EMAIL, displayName: "Disposable browser fixture", passwordHash: await bcrypt.hash(fixturePassword, 10), emailVerifiedAt: new Date() } });
     await command(["playwright", "test"]);
-    if (media) await command(["tsx", "scripts/retry-media-cleanup.ts"]);
+    if (media) {
+      await command(["tsx", "scripts/retry-media-cleanup.ts"]);
+      await command(["tsx", "scripts/inventory-media.ts"]);
+    }
   }
  } finally {
   try {

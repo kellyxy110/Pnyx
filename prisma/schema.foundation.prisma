@@ -21,6 +21,16 @@ model MediaCleanup {
   @@index([nextAttemptAt])
 }
 
+model MediaCleanupWorker {
+  id String @id
+  leaseToken String?
+  leaseUntil DateTime
+  lastStartedAt DateTime?
+  lastFinishedAt DateTime?
+  lastStatus String?
+  lastSummary Json?
+}
+
 enum UserRole {
   MEMBER
   MODERATOR
