@@ -32,3 +32,5 @@ After a completed attempt, disable the request in a documentation commit. Revoke
 ## Preparation validation
 
 Workflow YAML and request parsing are checked locally. GitHub's disabled-request run verifies request execution and the media skip only; it does not validate the unexecuted media job or establish provider connectivity. Existing application evidence remains code commit 709cbf5: 136 units, 27 native HTTP and 90 browser passes; six R2 cases skipped.
+
+Preparation commit 689415e passed the request job in [run 45408918181](https://github.com/kellyxy110/Pnyx/actions/runs/45408918181); the media job was skipped as intended. Local execution of the actual request script verified false, true and invalid string inputs. Shell syntax and YAML checks passed. No real provider tests ran.
