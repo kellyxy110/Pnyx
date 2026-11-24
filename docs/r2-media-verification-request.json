@@ -1,4 +1,4 @@
 {
-  "enabled": false,
-  "reason": "R2 lifecycle and native regression verification completed; provider execution remains disabled after acceptance."
+  "enabled": true,
+  "reason": "Verify durable cleanup receipts and synthetic-account deletion against the dedicated R2 bucket after local checks."
 }

@@ -1,15 +1,18 @@
 import { NextResponse } from "next/server";
 import { auth, signOut } from "@/auth";
-import { deleteObject } from "@/lib/storage";
-import { prisma } from "@/lib/prisma";
+import { attemptMediaCleanup } from "@/lib/media-cleanup";
+import { deleteAccountWithMedia } from "@/lib/delete-account";
 
 export async function DELETE(request: Request) {
   const session = await auth();
   if (!session?.user?.id) return NextResponse.json({ error: "Sign in required." }, { status: 401 });
   const body = await request.json().catch(() => null) as { confirmation?: string } | null;
   if (body?.confirmation !== "DELETE MY ACCOUNT") return NextResponse.json({ error: "Type DELETE MY ACCOUNT to confirm." }, { status: 400 });
-  const removed = await prisma.user.delete({ where: { id: session.user.id }, select: { avatarKey: true, bannerKey: true } });
-  await Promise.all([removed.avatarKey, removed.bannerKey].map(key => deleteObject(key).catch(error => console.error("[storage] account media cleanup failed", { error: error instanceof Error ? error.message : "unknown" }))));
+  let cleanupIds: string[];
+  try {
+    cleanupIds = await deleteAccountWithMedia(session.user.id);
+  } catch { return NextResponse.json({ error: "Your account could not be safely deleted. Please try again." }, { status: 503 }); }
+  const cleaned = await attemptMediaCleanup(cleanupIds);
   await signOut({ redirect: false });
-  return NextResponse.json({ message: "Your account has been deleted." });
+  return NextResponse.json({ message: cleaned ? "Your account has been deleted." : "Your account has been deleted. Image cleanup is pending.", cleanupPending: !cleaned });
 }

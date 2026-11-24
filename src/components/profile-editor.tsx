@@ -92,7 +92,7 @@ export function ProfileEditor() {
     request.onload = () => {
       const result = (() => { try { return JSON.parse(request.responseText); } catch { return null; } })();
       if (request.status < 200 || request.status >= 300) setError(result?.error ?? "The image could not be saved. Please try again.");
-      else { setProfile((current) => current ? { ...current, ...result, bannerUrl: kind === "banner" ? result?.bannerUrl ?? current.bannerUrl : current.bannerUrl } : current); setMessage(`${kind === "avatar" ? "Avatar" : "Banner"} updated.`); router.refresh(); }
+      else { setProfile((current) => current ? { ...current, ...result, bannerUrl: kind === "banner" ? result?.bannerUrl ?? current.bannerUrl : current.bannerUrl } : current); setMessage(`${kind === "avatar" ? "Avatar" : "Banner"} updated.${result?.cleanupPending ? " Previous image cleanup is pending." : ""}`); router.refresh(); }
       setUploading(null); setProgress(0);
     };
     const form = new FormData(); form.append("kind", kind); form.append("file", file); request.send(form);
@@ -102,8 +102,9 @@ export function ProfileEditor() {
     setRemoving(kind); setError(""); setMessage("");
     try {
       const response = await fetch(`/api/account/profile/media?kind=${kind}`, { method: "DELETE" });
+      const result = await response.json().catch(() => null);
       if (!response.ok) setError("The image could not be removed. Please try again.");
-      else { setProfile(current => current ? { ...current, avatarUrl: kind === "avatar" ? null : current.avatarUrl, bannerUrl: kind === "banner" ? null : current.bannerUrl } : current); setMessage(`${kind === "avatar" ? "Avatar" : "Banner"} removed.`); router.refresh(); }
+      else { setProfile(current => current ? { ...current, avatarUrl: kind === "avatar" ? null : current.avatarUrl, bannerUrl: kind === "banner" ? null : current.bannerUrl } : current); setMessage(result?.cleanupPending ? `${kind === "avatar" ? "Avatar" : "Banner"} removed from your profile. File cleanup is pending.` : `${kind === "avatar" ? "Avatar" : "Banner"} removed.`); router.refresh(); }
     } catch { setError("We couldn’t connect. Your image has not been confirmed removed. Please try again."); }
     finally { setRemoving(null); }
   }

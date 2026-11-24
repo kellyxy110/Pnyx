@@ -1,6 +1,8 @@
 import { DeleteObjectCommand, HeadObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { PrismaClient } from "@prisma/client";
 import sharp from "sharp";
+import bcrypt from "bcryptjs";
+import { randomUUID } from "node:crypto";
 import { expect, test } from "@playwright/test";
 import { authenticatedVerificationTarget } from "../../src/lib/disposable-verification";
 import { assertVerifiedApplication } from "../support/verified-application";
@@ -88,4 +90,42 @@ test.describe("dedicated R2 media acceptance", () => {
       }
     });
   }
+
+  test("deleting a disposable account removes both real images and delivery URLs", async ({ page }) => {
+    const db = new PrismaClient();
+    const s3 = new S3Client({ region: "auto", endpoint: storage!.endpoint, credentials: { accessKeyId: process.env.R2_ACCESS_KEY_ID!, secretAccessKey: process.env.R2_SECRET_ACCESS_KEY! } });
+    const id = `media-deletion-${randomUUID()}`, email = `${id}@example.test`;
+    const keys = new Set<string>();
+    function ownKey(key: string | null): asserts key is string { if (!key || !key.startsWith(`users/${id}/`) || !/^users\/[a-zA-Z0-9_-]+\/(avatar|banner)\/[a-zA-Z0-9_-]+\.webp$/.test(key)) throw new Error("Account deletion fixture key is out of scope."); }
+    try {
+      await db.user.create({ data: { id, username: id, email, displayName: "Disposable media deletion fixture", passwordHash: await bcrypt.hash(process.env.E2E_PASSWORD!, 10), emailVerifiedAt: new Date() } });
+      await page.goto("/sign-in"); await page.getByLabel("Email", { exact: true }).fill(email); await page.getByLabel("Password", { exact: true }).fill(process.env.E2E_PASSWORD!); await page.getByRole("button", { name: "Sign in to Pnyx" }).click(); await expect(page).toHaveURL(/\/profile/);
+      await page.getByRole("button", { name: "Edit profile", exact: true }).click();
+      const image = await sharp({ create: { width: 800, height: 240, channels: 3, background: "#3050aa" } }).png().toBuffer();
+      for (const kind of ["avatar", "banner"] as const) {
+        await page.getByLabel(kind === "avatar" ? "Avatar image" : "Banner image", { exact: true }).setInputFiles({ name: `${kind}.png`, mimeType: "image/png", buffer: image });
+        await expect(page.locator(".profile-message.success")).toContainText(`${kind === "avatar" ? "Avatar" : "Banner"} updated.`);
+        const user = await db.user.findUniqueOrThrow({ where: { id }, select: { avatarKey: true, bannerKey: true } });
+        const key = user[kind === "avatar" ? "avatarKey" : "bannerKey"]; ownKey(key); keys.add(key);
+        expect((await s3.send(new HeadObjectCommand({ Bucket: storage!.bucket, Key: key }))).ContentLength).toBeGreaterThan(0);
+        expect((await page.request.get(`${storage!.publicBase}/${key}`, { maxRedirects: 0 })).status()).toBe(200);
+      }
+      const deleted = await page.request.delete("/api/account/delete", { data: { confirmation: "DELETE MY ACCOUNT" } });
+      expect(deleted.status()).toBe(200); expect((await deleted.json()).cleanupPending).toBe(false);
+      expect(await db.user.findUnique({ where: { id } })).toBeNull(); expect((await page.request.get("/api/account/profile")).status()).toBe(401);
+      for (const key of keys) {
+        await expect(s3.send(new HeadObjectCommand({ Bucket: storage!.bucket, Key: key }))).rejects.toMatchObject({ $metadata: { httpStatusCode: 404 } });
+        await expect.poll(async () => (await page.request.get(`${storage!.publicBase}/${key}`, { maxRedirects: 0 })).status()).toBe(404);
+      }
+      expect(await db.mediaCleanup.count({ where: { key: { startsWith: `users/${id}/` } } })).toBe(0);
+    } finally {
+      try {
+        const user = await db.user.findUnique({ where: { id }, select: { avatarKey: true, bannerKey: true } });
+        for (const key of [user?.avatarKey, user?.bannerKey]) if (key) { ownKey(key); keys.add(key); }
+        for (const key of keys) { ownKey(key); await s3.send(new DeleteObjectCommand({ Bucket: storage!.bucket, Key: key })); }
+        await db.mediaCleanup.deleteMany({ where: { key: { in: [...keys] } } });
+        await db.user.deleteMany({ where: { id } });
+      } finally { s3.destroy(); await db.$disconnect(); }
+    }
+  });
 });

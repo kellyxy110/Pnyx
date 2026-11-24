@@ -7,6 +7,19 @@ datasource db {
   url = env("DATABASE_URL")
 }
 
+model MediaCleanup {
+  id String @id @default(cuid())
+  endpoint String
+  bucket String
+  key String
+  attempts Int @default(0)
+  lastError String?
+  nextAttemptAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  @@unique([endpoint, bucket, key])
+  @@index([nextAttemptAt])
+}
+
 enum UserRole {
   MEMBER
   MODERATOR

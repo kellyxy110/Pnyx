@@ -3,6 +3,7 @@ import sharp from "sharp";
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { changeProfileMedia } from "@/lib/profile-media";
+import { attemptMediaCleanup } from "@/lib/media-cleanup";
 import { deleteObject, isStorageConfigured, publicUrlForKey, putImage } from "@/lib/storage";
 
 const limits = { avatar: { maxBytes: 5 * 1024 * 1024, width: 512, height: 512, minWidth: 128, minHeight: 128 }, banner: { maxBytes: 10 * 1024 * 1024, width: 1600, height: 500, minWidth: 600, minHeight: 160 } } as const;
@@ -36,8 +37,8 @@ export async function POST(request: Request) {
       await deleteObject(stored.key).catch((cleanupError) => console.error("[storage] failed to clean up unlinked upload", { kind, error: cleanupError instanceof Error ? cleanupError.message : "unknown" }));
       throw error;
     }
-    await deleteObject(change.oldKey).catch((error) => console.error("[storage] orphan cleanup failed", { kind, error: error instanceof Error ? error.message : "unknown" }));
-    return NextResponse.json({ ...change.updated, bannerUrl: publicUrlForKey(change.updated.bannerKey) });
+    const cleaned = await attemptMediaCleanup(change.cleanupIds);
+    return NextResponse.json({ ...change.updated, bannerUrl: publicUrlForKey(change.updated.bannerKey), cleanupPending: !cleaned });
   } catch (error) {
     console.error("[storage] profile media upload failed", { kind, error: error instanceof Error ? error.message : "unknown" });
     return NextResponse.json({ error: "We could not save that image. Please try again." }, { status: 503 });
@@ -51,8 +52,8 @@ export async function DELETE(request: Request) {
   if (kind !== "avatar" && kind !== "banner") return NextResponse.json({ error: "Choose a valid profile image." }, { status: 400 });
   try {
     const change = await changeProfileMedia(session.user.id, kind, null, isStorageConfigured());
-    await deleteObject(change.oldKey).catch(error => console.error("[storage] profile media deletion failed", { kind, error: error instanceof Error ? error.message : "unknown" }));
-    return NextResponse.json({ deleted: true });
+    const cleaned = await attemptMediaCleanup(change.cleanupIds);
+    return NextResponse.json({ deleted: true, cleanupPending: !cleaned });
   } catch {
     return NextResponse.json({ error: "The image could not be removed right now. Please try again." }, { status: 503 });
   }

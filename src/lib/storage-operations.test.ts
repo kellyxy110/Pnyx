@@ -22,7 +22,7 @@ describe("profile image object-store boundary", () => {
   mocks.send.mockRejectedValue(new Error("Fixture provider unavailable")); await expect(putImage(image)).rejects.toThrow("Fixture provider unavailable"); expect(mocks.destroy).toHaveBeenCalledTimes(1);
  });
  it("deletes only the requested key and releases the client", async () => {
-  await deleteObject(image.key); expect(mocks.send).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ input: { Bucket: "pnyx-e2e-fixture", Key: image.key } })); expect(mocks.destroy).toHaveBeenCalledTimes(1);
+  await deleteObject(image.key); expect(mocks.send).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ input: { Bucket: "pnyx-e2e-fixture", Key: image.key } }), expect.objectContaining({ abortSignal: expect.any(AbortSignal) })); expect(mocks.destroy).toHaveBeenCalledTimes(1);
  });
  it("propagates deletion failures and releases the client", async () => {
   mocks.send.mockRejectedValue(new Error("Fixture deletion unavailable")); await expect(deleteObject(image.key)).rejects.toThrow("Fixture deletion unavailable"); expect(mocks.destroy).toHaveBeenCalledTimes(1);
@@ -34,3 +34,6 @@ describe("profile image object-store boundary", () => {
   vi.stubEnv("R2_BUCKET_NAME", ""); await expect(putImage(image)).rejects.toThrow("STORAGE_NOT_CONFIGURED"); expect(mocks.construct).not.toHaveBeenCalled();
  });
 });
+
+it("never treats missing deletion configuration as successful cleanup", async () => { vi.stubEnv("R2_BUCKET_NAME", ""); await expect(deleteObject(image.key)).rejects.toThrow("STORAGE_NOT_CONFIGURED"); expect(mocks.send).not.toHaveBeenCalled(); });
+it("refuses a persisted cleanup target that differs from current configuration", async () => { await expect(deleteObject(image.key, {endpoint:"https://fixture.r2.cloudflarestorage.com",bucket:"pnyx-e2e-other"})).rejects.toThrow("STORAGE_TARGET_MISMATCH"); expect(mocks.send).not.toHaveBeenCalled(); });

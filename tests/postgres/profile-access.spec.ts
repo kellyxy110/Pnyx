@@ -63,6 +63,7 @@ test.afterAll(async()=>{
  for(const client of contexts)await client.dispose();
  await db.analyticsEvent.deleteMany({where:{OR:[{userId:{in:users.map(u=>u.id)}},{properties:{path:["artifactId"],equals:artifacts.sourceLeak?.id??""}}]}}).catch(()=>{});
  await db.space.deleteMany({where:{id:{in:[publicSpace?.id,privateSpace?.id].filter(Boolean)}}});
+ await db.mediaCleanup.deleteMany({where:{key:{startsWith:`users/${owner.id}/`}}});
  await db.user.deleteMany({where:{id:{in:users.map(u=>u.id)}}});await db.$disconnect();
 });
 
@@ -177,15 +178,16 @@ test("follow actions are idempotent and notification links point to the actor",a
 
 test("media pointer swaps are serialized and unavailable removal keeps the old key",async()=>{
  const image=(key:string)=>({key,url:`https://media.example.test/${key}`,contentType:"image/webp",bytes:1200,width:256,height:256});
- const a=image("fixture/a.webp"),b=image("fixture/b.webp");
- const changes=await Promise.all([changeProfileMedia(owner.id,"avatar",a),changeProfileMedia(owner.id,"avatar",b)]);
+ const target={endpoint:"https://fixture.r2.cloudflarestorage.com",bucket:"pnyx-e2e-fixture"};
+ const a=image(`users/${owner.id}/avatar/a.webp`),b=image(`users/${owner.id}/avatar/b.webp`);
+ const changes=await Promise.all([changeProfileMedia(owner.id,"avatar",a,true,target),changeProfileMedia(owner.id,"avatar",b,true,target)]);
  expect(changes.filter(c=>c.oldKey===null)).toHaveLength(1);
  const current=await db.user.findUniqueOrThrow({where:{id:owner.id}});
  expect([a.key,b.key]).toContain(current.avatarKey);
  expect(changes.map(c=>c.oldKey).filter(Boolean)).toEqual([current.avatarKey===a.key?b.key:a.key]);
  await expect(changeProfileMedia(owner.id,"avatar",null,false)).rejects.toThrow("Storage unavailable");
  expect((await db.user.findUniqueOrThrow({where:{id:owner.id}})).avatarKey).toBe(current.avatarKey);
- const removed=await changeProfileMedia(owner.id,"avatar",null);expect(removed.oldKey).toBe(current.avatarKey);
+ const removed=await changeProfileMedia(owner.id,"avatar",null,true,target);expect(removed.oldKey).toBe(current.avatarKey);
  expect((await db.user.findUniqueOrThrow({where:{id:owner.id}})).avatarKey).toBeNull();
 });
 

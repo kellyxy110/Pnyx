@@ -21,7 +21,8 @@
     "audit:security-headers": "node scripts/audit-security-headers.mjs",
     "audit:security": "npm run audit:security-config && npm run audit:security-headers",
     "verify:browser": "node --import tsx scripts/verify-postgres.ts --browser",
-    "verify:media": "node --import tsx scripts/verify-postgres.ts --browser --media"
+    "verify:media": "node --import tsx scripts/verify-postgres.ts --browser --media",
+    "media:cleanup": "node --import tsx scripts/retry-media-cleanup.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1097.0",
