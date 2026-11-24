@@ -1,6 +1,12 @@
 # Pnyx roadmap and remaining work
 
-## Durable cleanup and account deletion, 24 November 2026
+## Pre-upload provenance and interrupted uploads, 24 November 2026
+
+[Upload reservation acceptance](upload-reservations-2026-11-24.md) passes for `8519976`: 146 units, 40 HTTP/database scenarios, 14 migrations without drift, TypeScript/lint/build and zero-advisory audits. Native CI passed first attempt with 90 browser checks and 12 intentional R2 skips; provider CI passed first attempt with all 102 browser cases, including 12 real R2 cases. Provenance now exists before R2 writes, pointer adoption consumes it atomically, and expired/abandoned uploads remain recoverable through repeated exact-key sweeps. The three new real-provider cases verified a repeated late write after an earlier sweep. Provider execution is disabled after acceptance.
+
+Next: define and accept production cleanup scheduling, alerting and abandoned-reservation retention/reconciliation. Existing uploads that predate reservation tracking need inventory reconciliation. Production custom-domain/historical cache withdrawal, Windows preservation and final release identity/production-adjacent acceptance remain open. No merge, deployment or production migration occurred. 6A remains OPEN; 6B/6C PAUSED. Earlier counts and open-gap descriptions below describe their dated batches.
+
+## Earlier durable cleanup and account deletion, 24 November 2026
 
 [Durable media cleanup acceptance](media-cleanup-2026-11-24.md) passes for `cdfa08c`: 143 units, 33 HTTP/database scenarios, 13 migrations without drift, TypeScript/lint/build and zero-advisory audits. Native CI passed on its first attempt with 90 browser checks and nine intentional R2 skips; provider CI passed all 99 browser checks, including nine real R2 cases. Account deletion removed both images and their development delivery URLs on all three devices. Transactional cleanup receipts now survive account deletion, retain failed deletions for retry and prevent deleting referenced or mismatched-target objects. The provider request is disabled again.
 

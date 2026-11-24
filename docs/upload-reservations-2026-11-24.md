@@ -18,4 +18,12 @@ Abandoned reservation tombstones are retained indefinitely by application recove
 
 ## Validation
 
-Local TypeScript, lint, unit tests and build are checked before submission. Native PostgreSQL and dedicated-provider CI results will be recorded after completion. The additive fourteenth migration is for disposable verification only in this batch.
+Verified source commit: `85199763d123655f8a522fa822f78b0447940dc0`.
+
+- [Native CI 45432893019](https://github.com/kellyxy110/Pnyx/actions/runs/45432893019) passed first attempt: TypeScript, zero-warning lint, 146 unit tests across 24 files, build, 40 HTTP/database scenarios, 90 browser checks and 12 intentional R2 skips. Full and production dependency audits each reported zero vulnerabilities.
+- [Provider CI 45432893170](https://github.com/kellyxy110/Pnyx/actions/runs/45432893170) passed first attempt: 40 HTTP/database scenarios and all 102 browser cases, including 12 real R2 cases. The abandoned-upload/repeated-write case passed on mobile, tablet and desktop; the existing image lifecycle and account-deletion cases also passed.
+- Both runs replayed all 14 migrations without schema drift. The additive migration was applied only in disposable CI.
+- The provider runner's final recovery command reported attempted=0, completed=0, pending=0 after explicit synthetic fixture teardown. This does not imply that production recovery should retire abandoned tombstones.
+- Local security configuration checks passed 5/5, and runtime security headers passed against the local built application at loopback. Local TypeScript, lint, 146 unit tests and build also passed during implementation.
+
+The provider request is disabled in the evidence commit. No merge, deployment or production database operation occurred. [Machine-readable results](upload-reservations-2026-11-24-results.json).

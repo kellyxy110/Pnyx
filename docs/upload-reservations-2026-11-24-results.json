@@ -1,0 +1,79 @@
+{
+  "date": "2026-11-24",
+  "branch": "audit/pnyx-remediation-20261025",
+  "source_commit": "85199763d123655f8a522fa822f78b0447940dc0",
+  "native": {
+    "run_id": 45432893019,
+    "job_id": 138582734125,
+    "attempt": 1,
+    "result": "success",
+    "typescript": "pass",
+    "lint": "pass, zero warnings",
+    "unit_tests": 146,
+    "unit_files": 24,
+    "build": "pass",
+    "http_database_scenarios": 40,
+    "browser_passed": 90,
+    "r2_intentional_skips": 12,
+    "migrations": 14,
+    "schema_drift": false,
+    "full_audit_vulnerabilities": 0,
+    "production_audit_vulnerabilities": 0
+  },
+  "provider": {
+    "run_id": 45432893170,
+    "job_id": 138582901728,
+    "attempt": 1,
+    "result": "success",
+    "http_database_scenarios": 40,
+    "browser_passed": 102,
+    "real_r2_cases": 12,
+    "abandoned_upload_devices": [
+      "mobile",
+      "tablet",
+      "desktop"
+    ],
+    "migrations": 14,
+    "schema_drift": false,
+    "final_recovery_counts_after_synthetic_teardown": {
+      "attempted": 0,
+      "completed": 0,
+      "pending": 0
+    }
+  },
+  "local_security": {
+    "configuration_headers_passed": 5,
+    "runtime_headers": "pass on local loopback built application"
+  },
+  "recovery_contract": {
+    "upload_abort_ms": 30000,
+    "reservation_lease_ms": 900000,
+    "abandoned_success_resweep_ms": 86400000,
+    "abandoned_receipt_retention": "indefinite; operational retention policy remains open",
+    "provider_failure": "retains receipt with existing bounded backoff",
+    "test_interruption": "omit pointer adoption; repeat exact-key write, not actual process kill/network fault"
+  },
+  "scope": {
+    "database": "disposable CI PostgreSQL 16",
+    "bucket": "pnyx-e2e-media",
+    "identities": "synthetic test accounts",
+    "production_migration": false,
+    "deployment": false,
+    "merge": false,
+    "provider_request_enabled_after_batch": false
+  },
+  "remaining": [
+    "Production cleanup worker schedule and alerting",
+    "Abandoned reservation retention and operational reconciliation policy",
+    "Inventory reconciliation for uploads predating this correction",
+    "Production custom-domain and historical cache withdrawal acceptance",
+    "Windows checkout preservation/reconciliation",
+    "Final release identity and production-adjacent acceptance"
+  ],
+  "roadmap": {
+    "6A": "OPEN",
+    "6B": "PAUSED",
+    "6C": "PAUSED",
+    "public_api_implementation": "GATED"
+  }
+}
