@@ -5,6 +5,7 @@ import { registrationSchema } from "@/lib/account-validation";
 import { createToken } from "@/lib/tokens";
 import { sendAccountMail } from "@/lib/mail";
 import { isEmailSignupEnabled } from "@/lib/auth-feature-flags";
+import { accountActionUrl } from "@/lib/app-url";
 
 export async function POST(request: Request) {
   if (!isEmailSignupEnabled()) return NextResponse.json({ error: "Email registration is temporarily limited during the closed beta. Continue with Google or GitHub instead." }, { status: 403 });
@@ -17,9 +18,8 @@ export async function POST(request: Request) {
   const token = createToken();
   await prisma.emailVerificationToken.create({ data: { tokenHash: token.hash, userId: user.id, expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000) } });
   try {
-    const appUrl = process.env.APP_URL?.replace(/\/$/, "");
-    if (!appUrl) throw new Error("APP_URL_NOT_CONFIGURED");
-    const url = `${appUrl}/verify-email?token=${token.raw}`;
+    const url = accountActionUrl(`verify-email?token=${token.raw}`);
+    if (!url) throw new Error("APP_URL_NOT_CONFIGURED");
     await sendAccountMail({ to: user.email, subject: "Verify your Pnyx email", html: `<p>Welcome to Pnyx.</p><p><a href="${url}">Verify your email address</a> within 24 hours.</p>` });
   } catch (error) {
     await prisma.user.delete({ where: { id: user.id } });

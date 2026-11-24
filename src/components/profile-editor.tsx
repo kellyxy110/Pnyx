@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import { FormEvent, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { publicProfilePath } from "@/lib/profile-navigation";
 
 type Counts = { posts: number; replies: number; artifacts: number; bookmarks: number; follows: number; followers: number; spaces: number };
 type Activity = { spaces: { name: string; slug: string }[]; posts: { id: string; title: string; createdAt: string }[]; replies: { id: string; body: string; createdAt: string; post: { id: string; title: string } }[]; artifacts: { id: string; title: string; status: string; updatedAt: string }[]; bookmarks: { post: { id: string; title: string }; createdAt: string }[]; drafts: { id: string; title: string; updatedAt: string }[] };
@@ -11,6 +13,7 @@ const splitList = (value: FormDataEntryValue | null) => String(value ?? "").spli
 const nullable = (value: FormDataEntryValue | null) => String(value ?? "").trim() || null;
 
 export function ProfileEditor() {
+  const router = useRouter();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [storageEnabled, setStorageEnabled] = useState(false);
   const [error, setError] = useState("");
@@ -58,7 +61,11 @@ export function ProfileEditor() {
     const response = await fetch("/api/account/profile", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
     const result = await response.json().catch(() => null);
     if (!response.ok) setError(result?.error ?? result?.fieldErrors?.username?.[0] ?? "Your profile could not be saved. Please check each field and try again.");
-    else { setProfile((current) => current ? { ...current, ...result } : current); setMessage("Profile saved."); }
+    else {
+      const savedUsername = typeof result?.username === "string" ? result.username : payload.username;
+      router.push(publicProfilePath(savedUsername));
+      router.refresh();
+    }
     setBusy(false);
   }
 
