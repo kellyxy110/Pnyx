@@ -2,7 +2,7 @@
 
 ## 6A target-isolation implementation, 24 November 2026
 
-The [profile media cache correction](media-cache-2026-11-24.md) changes future uploads to no-store, closes SDK clients and strengthens prepared delivery checks. Actual R2 acceptance remains blocked pending isolated provider access.
+The [profile media cache correction](media-cache-2026-11-24.md) changes future uploads to no-store, closes SDK clients and strengthens prepared delivery checks. Native PostgreSQL/browser CI passes for `709cbf5`: 136 units, 27 HTTP scenarios, 90 browser checks, 12 migrations and zero-advisory audits. Six R2 checks remain skipped; actual R2 acceptance is blocked pending isolated provider access.
 
 The [test-isolation batch](test-isolation-2026-11-24.md) adds positive app/database guards, a nonce-bound running-process configuration proof, dedicated storage declarations, synthetic account lifecycle, and reproducible native HTTP/browser/media commands. The [runbook](isolated-verification.md) replaces hostname-only test opt-in. Real R2 cases are prepared but remain blocked without isolated provider credentials; delivery-cache withdrawal and cleanup acceptance stay open. The candidate updates Next.js to 15.5.29 and Prisma's scoped Effect dependency to 3.22.1, with a complete zero-advisory audit recorded after the update. Native PostgreSQL 16 CI passes for a05f1fe: 12 migrations without drift, 27 HTTP scenarios, 90 browser checks, 130 unit tests, TypeScript/lint/build and zero-advisory audits; six R2 cases remain skipped. Full evidence is recorded in the batch report. 6A remains open; no release or integration activation is implied.
 

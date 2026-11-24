@@ -1,0 +1,48 @@
+{
+  "date": "2026-11-24",
+  "branch": "audit/pnyx-remediation-20261025",
+  "verifiedCodeCommit": "709cbf551a7abbfe038e7ac012e6b906b61ff055",
+  "local": {
+    "typecheck": "passed",
+    "lint": "passed, zero warnings",
+    "unitTestsPassed": 136,
+    "unitFilesPassed": 23,
+    "build": "passed"
+  },
+  "nativeCI": {
+    "runId": 45393619182,
+    "jobId": 138443486795,
+    "url": "https://github.com/kellyxy110/Pnyx/actions/runs/45393619182",
+    "status": "success",
+    "database": "disposable native PostgreSQL 16",
+    "migrations": 12,
+    "schemaDrift": "none",
+    "httpPassed": 27,
+    "browserPassed": 90,
+    "mediaSkipped": 6,
+    "unitTestsPassed": 136,
+    "typecheck": "passed",
+    "lint": "passed",
+    "build": "passed",
+    "productionAuditVulnerabilities": 0,
+    "completeAuditVulnerabilities": 0
+  },
+  "R2": {
+    "status": "blocked",
+    "providerTestsExecuted": false,
+    "providerValuesPresent": 0,
+    "resourcesCreated": false,
+    "authentication": "Cloudflare Google sign-in in progress; no signed-in provider access verified"
+  },
+  "limitations": [
+    "Policy applies to future uploads; historical objects and cache purge unchanged",
+    "Provider-backed delivery withdrawal and account-deletion acceptance remain open",
+    "Durable cleanup reconciliation remains open"
+  ],
+  "roadmap": {
+    "milestone6A": "open",
+    "milestone6B": "paused",
+    "milestone6C": "paused"
+  },
+  "deployment": "not performed"
+}
