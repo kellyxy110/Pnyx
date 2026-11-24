@@ -1,3 +1,5 @@
+import { reserveMediaUpload, processMediaCleanup } from "../../src/lib/media-cleanup";
+import { putImage } from "../../src/lib/storage";
 import { DeleteObjectCommand, HeadObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { PrismaClient } from "@prisma/client";
 import sharp from "sharp";
@@ -128,4 +130,46 @@ test.describe("dedicated R2 media acceptance", () => {
       } finally { s3.destroy(); await db.$disconnect(); }
     }
   });
+  test("abandoned upload reservation recovers a real object and a later repeated write", async ({ request }) => {
+    const db = new PrismaClient();
+    const id = `media-reservation-${randomUUID()}`, key = `users/${id}/avatar/${randomUUID()}.webp`;
+    const scopedTarget = { endpoint: storage!.endpoint, bucket: storage!.bucket };
+    const s3 = new S3Client({ region: "auto", endpoint: storage!.endpoint, credentials: { accessKeyId: process.env.R2_ACCESS_KEY_ID!, secretAccessKey: process.env.R2_SECRET_ACCESS_KEY! } });
+    let reservation: string | undefined;
+    async function absent() {
+      try { await s3.send(new HeadObjectCommand({ Bucket: storage!.bucket, Key: key })); }
+      catch (error) { if (typeof error === "object" && error && "$metadata" in error && (error.$metadata as { httpStatusCode?: number }).httpStatusCode === 404) return; throw error; }
+      throw new Error("Synthetic reserved object remains at origin.");
+    }
+    try {
+      await db.user.create({ data: { id, username: id, email: `${id}@example.test`, displayName: "Disposable reservation fixture" } });
+      reservation = await reserveMediaUpload(id, key, scopedTarget);
+      expect((await db.mediaCleanup.findUniqueOrThrow({ where: { id: reservation } })).key).toBe(key);
+      await absent();
+      const body = await sharp({ create: { width: 256, height: 256, channels: 3, background: "#7830c4" } }).webp().toBuffer();
+      const image = { key, body, contentType: "image/webp", bytes: body.length, width: 256, height: 256 };
+      // Intentionally omit pointer adoption: models interruption after provider success.
+      await putImage(image, scopedTarget);
+      expect((await request.get(`${storage!.publicBase}/${key}`, { maxRedirects: 0 })).status()).toBe(200);
+      expect(await processMediaCleanup(reservation, scopedTarget)).toBe(false);
+      expect((await s3.send(new HeadObjectCommand({ Bucket: storage!.bucket, Key: key }))).ContentLength).toBe(body.length);
+      await db.mediaCleanup.update({ where: { id: reservation }, data: { reservationExpiresAt: new Date(0), nextAttemptAt: new Date(0) } });
+      for (let sweep = 0; sweep < 2; sweep++) {
+        if (sweep) { await putImage(image, scopedTarget); await db.mediaCleanup.update({ where: { id: reservation }, data: { nextAttemptAt: new Date(0) } }); }
+        expect(await processMediaCleanup(reservation, scopedTarget)).toBe(false);
+        await absent();
+        expect((await request.get(`${storage!.publicBase}/${key}`, { maxRedirects: 0 })).status()).toBe(404);
+        expect((await db.mediaCleanup.findUniqueOrThrow({ where: { id: reservation } })).lastError).toBe("UPLOAD_ABANDONED");
+      }
+      expect((await db.user.findUniqueOrThrow({ where: { id } })).avatarKey).toBeNull();
+    } finally {
+      try {
+        // Exact synthetic key only. Production recovery does not retire tombstones.
+        await s3.send(new DeleteObjectCommand({ Bucket: storage!.bucket, Key: key }));
+        await db.mediaCleanup.deleteMany({ where: { ...scopedTarget, key } });
+        await db.user.deleteMany({ where: { id, email: `${id}@example.test` } });
+      } finally { s3.destroy(); await db.$disconnect(); }
+    }
+  });
+
 });

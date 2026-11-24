@@ -12,11 +12,12 @@ export function isStorageConfigured() { return Boolean(getConfig()); }
 export function storageTarget(): StorageTarget | null { const config = getConfig(); return config ? { endpoint: config.endpoint.replace(/\/$/, ""), bucket: config.bucket } : null; }
 export function publicUrlForKey(key: string | null | undefined) { const config = getConfig(); return config && key ? `${config.publicBaseUrl}/${key}` : null; }
 function client(config: StorageConfig) { return new S3Client({ region: "auto", endpoint: config.endpoint, credentials: { accessKeyId: config.accessKeyId, secretAccessKey: config.secretAccessKey } }); }
-export async function putImage(input: { key: string; body: Buffer; contentType: string; bytes: number; width: number; height: number }): Promise<StoredImage> {
+export async function putImage(input: { key: string; body: Buffer; contentType: string; bytes: number; width: number; height: number }, expected?: StorageTarget): Promise<StoredImage> {
   const config = getConfig();
   if (!config) throw new Error("STORAGE_NOT_CONFIGURED");
+  if (expected && (config.endpoint.replace(/\/$/, "") !== expected.endpoint || config.bucket !== expected.bucket)) throw new Error("STORAGE_TARGET_MISMATCH");
   const storage = client(config);
-  try { await storage.send(new PutObjectCommand({ Bucket: config.bucket, Key: input.key, Body: input.body, ContentType: input.contentType, CacheControl: "no-store" })); }
+  try { await storage.send(new PutObjectCommand({ Bucket: config.bucket, Key: input.key, Body: input.body, ContentType: input.contentType, CacheControl: "no-store" }), { abortSignal: AbortSignal.timeout(30_000) }); }
   finally { storage.destroy(); }
   return { key: input.key, url: `${config.publicBaseUrl}/${input.key}`, contentType: input.contentType, bytes: input.bytes, width: input.width, height: input.height };
 }

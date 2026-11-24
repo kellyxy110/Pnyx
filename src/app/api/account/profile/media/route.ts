@@ -3,8 +3,8 @@ import sharp from "sharp";
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import { changeProfileMedia } from "@/lib/profile-media";
-import { attemptMediaCleanup } from "@/lib/media-cleanup";
-import { deleteObject, isStorageConfigured, publicUrlForKey, putImage } from "@/lib/storage";
+import { attemptMediaCleanup, reserveMediaUpload } from "@/lib/media-cleanup";
+import { storageTarget, isStorageConfigured, publicUrlForKey, putImage } from "@/lib/storage";
 
 const limits = { avatar: { maxBytes: 5 * 1024 * 1024, width: 512, height: 512, minWidth: 128, minHeight: 128 }, banner: { maxBytes: 10 * 1024 * 1024, width: 1600, height: 500, minWidth: 600, minHeight: 160 } } as const;
 type Kind = keyof typeof limits;
@@ -29,18 +29,15 @@ export async function POST(request: Request) {
     if (!metadata.width || !metadata.height || metadata.width < rule.minWidth || metadata.height < rule.minHeight) return NextResponse.json({ error: `Image must be at least ${rule.minWidth} × ${rule.minHeight} pixels.` }, { status: 400 });
     const converted = await sharp(source, { limitInputPixels: 40_000_000 }).rotate().resize({ width: rule.width, height: rule.height, fit: "inside", withoutEnlargement: true }).webp({ quality: 82 }).toBuffer({ resolveWithObject: true });
     const key = `users/${session.user.id}/${kind}/${randomUUID()}.webp`;
-    const stored = await putImage({ key, body: converted.data, contentType: "image/webp", bytes: converted.info.size, width: converted.info.width, height: converted.info.height });
-    let change;
-    try {
-      change = await changeProfileMedia(session.user.id, kind, stored);
-    } catch (error) {
-      await deleteObject(stored.key).catch((cleanupError) => console.error("[storage] failed to clean up unlinked upload", { kind, error: cleanupError instanceof Error ? cleanupError.message : "unknown" }));
-      throw error;
-    }
+    const target = storageTarget();
+    if (!target) throw new Error("Storage unavailable.");
+    const reservationId = await reserveMediaUpload(session.user.id, key, target);
+    const stored = await putImage({ key, body: converted.data, contentType: "image/webp", bytes: converted.info.size, width: converted.info.width, height: converted.info.height }, target);
+    const change = await changeProfileMedia(session.user.id, kind, stored, true, target, reservationId);
     const cleaned = await attemptMediaCleanup(change.cleanupIds);
     return NextResponse.json({ ...change.updated, bannerUrl: publicUrlForKey(change.updated.bannerKey), cleanupPending: !cleaned });
-  } catch (error) {
-    console.error("[storage] profile media upload failed", { kind, error: error instanceof Error ? error.message : "unknown" });
+  } catch {
+    console.error("[storage] profile media upload failed", { kind });
     return NextResponse.json({ error: "We could not save that image. Please try again." }, { status: 503 });
   }
 }

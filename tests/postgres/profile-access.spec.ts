@@ -1,3 +1,4 @@
+import { reserveMediaUpload } from "../../src/lib/media-cleanup";
 import { verificationTarget as localTarget } from "../../src/lib/disposable-verification";
 import { assertVerifiedApplication } from "../support/verified-application";
 import { randomUUID } from "node:crypto";
@@ -180,7 +181,8 @@ test("media pointer swaps are serialized and unavailable removal keeps the old k
  const image=(key:string)=>({key,url:`https://media.example.test/${key}`,contentType:"image/webp",bytes:1200,width:256,height:256});
  const target={endpoint:"https://fixture.r2.cloudflarestorage.com",bucket:"pnyx-e2e-fixture"};
  const a=image(`users/${owner.id}/avatar/a.webp`),b=image(`users/${owner.id}/avatar/b.webp`);
- const changes=await Promise.all([changeProfileMedia(owner.id,"avatar",a,true,target),changeProfileMedia(owner.id,"avatar",b,true,target)]);
+ const ra=await reserveMediaUpload(owner.id,a.key,target), rb=await reserveMediaUpload(owner.id,b.key,target);
+ const changes=await Promise.all([changeProfileMedia(owner.id,"avatar",a,true,target,ra),changeProfileMedia(owner.id,"avatar",b,true,target,rb)]);
  expect(changes.filter(c=>c.oldKey===null)).toHaveLength(1);
  const current=await db.user.findUniqueOrThrow({where:{id:owner.id}});
  expect([a.key,b.key]).toContain(current.avatarKey);

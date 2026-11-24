@@ -15,7 +15,7 @@ afterEach(() => vi.unstubAllEnvs());
 describe("profile image object-store boundary", () => {
  it("requests no-store for new objects and returns the managed receipt", async () => {
   expect(await putImage(image)).toEqual({ key: image.key, url: `https://media.example.test/${image.key}`, contentType: image.contentType, bytes: image.bytes, width: image.width, height: image.height });
-  expect(mocks.send).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ input: { Bucket: "pnyx-e2e-fixture", Key: image.key, Body: image.body, ContentType: "image/webp", CacheControl: "no-store" } }));
+  expect(mocks.send).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ input: { Bucket: "pnyx-e2e-fixture", Key: image.key, Body: image.body, ContentType: "image/webp", CacheControl: "no-store" } }), expect.objectContaining({ abortSignal: expect.any(AbortSignal) }));
   expect(mocks.destroy).toHaveBeenCalledTimes(1);
  });
  it("propagates upload failures and releases the client", async () => {
@@ -37,3 +37,5 @@ describe("profile image object-store boundary", () => {
 
 it("never treats missing deletion configuration as successful cleanup", async () => { vi.stubEnv("R2_BUCKET_NAME", ""); await expect(deleteObject(image.key)).rejects.toThrow("STORAGE_NOT_CONFIGURED"); expect(mocks.send).not.toHaveBeenCalled(); });
 it("refuses a persisted cleanup target that differs from current configuration", async () => { await expect(deleteObject(image.key, {endpoint:"https://fixture.r2.cloudflarestorage.com",bucket:"pnyx-e2e-other"})).rejects.toThrow("STORAGE_TARGET_MISMATCH"); expect(mocks.send).not.toHaveBeenCalled(); });
+
+it("refuses upload to a target different from its durable reservation", async () => { await expect(putImage(image,{endpoint:"https://fixture.r2.cloudflarestorage.com",bucket:"pnyx-e2e-other"})).rejects.toThrow("STORAGE_TARGET_MISMATCH");expect(mocks.send).not.toHaveBeenCalled(); });

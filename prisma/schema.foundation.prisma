@@ -13,6 +13,7 @@ model MediaCleanup {
   bucket String
   key String
   attempts Int @default(0)
+  reservationExpiresAt DateTime?
   lastError String?
   nextAttemptAt DateTime @default(now())
   createdAt DateTime @default(now())
