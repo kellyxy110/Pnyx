@@ -56,7 +56,7 @@ This is the initial implementation backlog. Work from top to bottom unless a dep
 - [x] Implement indexed search over public Spaces, posts, replies, profiles, and artifacts.
 - [x] Add filters for content type, Space, author, date, and verification status.
 - [x] Add result explanations and empty/no-results recovery.
-- [x] Add semantic retrieval only after keyword search has observable baseline metrics.
+- [ ] Add semantic retrieval only after keyword search has observable baseline metrics. Deferred: existing keyword search and RELATED AI output do not establish a semantic index.
 - [x] Exclude deleted, private, blocked, and restricted content from indexes and caches.
 - [x] Add ranking evaluation set and monitor relevance, diversity, freshness, and safety.
 
@@ -112,9 +112,12 @@ Before public launch, Pnyx must demonstrate a reliable question-to-useful-answer
 - [x] Complete truthful AI assistance surfaces backed by supported APIs only.
 - [x] Preserve Space context when starting a discussion: preselect the originating Space, explain the posting destination, and return to that Space after publishing.
 - [x] Add shared smooth scrolling and restrained page-entry motion with reduced-motion support.
-- [x] Run isolated authenticated browser journeys for profile persistence, Space membership, and scoped composer context; the remediation evidence records 51 passing browser checks and three skipped R2 cases.
-- [x] Verify critical native PostgreSQL paths: replay all 12 migrations, detect no schema drift, and pass nine real HTTP/session/concurrency scenarios. See `docs/native-postgres-verification-2026-10-25.md`.
+- [x] Run isolated authenticated browser journeys for profile persistence, Space membership, and scoped composer context; the November 3 remediation evidence records 90 passing browser checks and three skipped R2 cases. These are historical scoped runs, not current hosted acceptance.
+- [x] Verify critical native PostgreSQL paths: replay all 12 migrations, detect no schema drift, and pass 27 real HTTP/session/concurrency scenarios for `fa7a291`. See `docs/end-to-end-profile-review-2026-11-03.md`; October evidence remains historical.
 - [ ] Record production-adjacent browser acceptance, including enabled media flows; local API evidence does not replace this gate.
+- [ ] Positively validate app, database and storage test-target isolation before additional authenticated/media browser execution; excluding one production hostname is insufficient.
+- [ ] Preserve/reconcile the Windows checkout and identify the exact candidate without bulk staging or pushing main.
+- [ ] Reverify and release the remediation candidate with verified Vercel identity/access, fresh dependency evidence and an explicit release/rollback record. The older f7305ab READY handoff is not evidence that later fixes are live.
 
 ## Milestone 6B — Resilience and security (paused until 6A closes)
 
@@ -127,3 +130,7 @@ Before public launch, Pnyx must demonstrate a reliable question-to-useful-answer
 
 - [ ] Manual Lighthouse, screen-reader, and real-device QA.
 - [ ] Closed-beta recruitment, consent, feedback, and evidence review.
+
+## Integration proposal reconciliation — 24 November 2026
+
+The proposal is mapped in [the reconciliation report](docs/pnyx-roadmap-reconciliation-2026-11-24.md). PIRP labels do not replace these milestone gates. Public API and advanced intelligence/account-linking/monetization work remains in the later backlog; architecture and contract design can be discussed now. No new module was implemented by this documentation review.

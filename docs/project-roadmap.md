@@ -1,5 +1,15 @@
 # Pnyx roadmap and remaining work
 
+## Roadmap reconciliation, 24 November 2026
+
+Milestone 6A remains **OPEN**; 6B/6C remain **PAUSED**. The [CLI handoff and integration proposal review](pnyx-roadmap-reconciliation-2026-11-24.md) reconciles every supplied handoff item, all ten proposal sections and all fourteen PIRP labels. PIRP is a proposed classification of work, not a replacement roadmap or authorization to implement later modules.
+
+Current GitHub main is `f7305ab`; the remediation branch was `6cbf5ef` before this documentation update, eleven commits ahead. Its application fixes at `fa7a291` have passing recorded native CI, but are not merged into main. The supplied older production READY claim does not verify that these corrections are live. Vercel lookup of the supplied deployment currently returns 404; current production SHA is unverified. Production media reports `enabled: false` on 24 November.
+
+Next: preserve/recover the Windows checkout, strengthen positive test-target isolation, complete real isolated R2 acceptance, reverify the final candidate and resolve release access/identity. Then close 6A with evidence, execute 6B and 6C, and implement reviewed integration contracts after the existing Milestone 6 gate. Contract design can proceed now. Windows reset/bulk staging/main-push instructions are superseded by the preservation-first recovery sequence in the review.
+
+All test/audit counts below belong to their recorded runs. No fresh application test suite or dependency scan was run for this documentation reconciliation. The November 3 full audit retained thirteen moderate development-tool findings even though its production audit was clean.
+
 ## Evidence update, 25 October 2026
 
 Phase 1–10 remediation is committed at `0c64c3d` on `audit/pnyx-remediation-20261025`. Verified local evidence: TypeScript/lint/build pass, 64 unit tests, 51 browser checks, 77 responsive combinations, and zero known dependency advisories. Three R2 tests remain skipped. These results supersede the older public-route counts below without claiming production acceptance.
@@ -14,7 +24,7 @@ The [search and writing-surface refresh](uiux-search-2026-10-30.md) moves search
 
 The [end-to-end/profile review](end-to-end-profile-review-2026-11-03.md) closes verified visibility leaks, strengthens restricted-source reuse, repairs profile editing/media ownership, restores draft recovery, and improves network failure handling. Its verification record distinguishes disposable local PGlite checks from native PostgreSQL CI and leaves live R2 acceptance, durable cleanup retries, real-device/screen-reader QA, and the broader Milestone 6 gates open. Native PostgreSQL CI now passes 27 scenarios with all 12 migrations and no drift for `fa7a291`. Deployment was attempted but Vercel rejected production creation with HTTP 403; restoring connection permission is the remaining deployment blocker. Full dependency audit retains 13 moderate development-tool reports; production audit is clean.
 
-## Completed milestones
+## Implemented milestones and foundations
 
 0. Foundation — Next.js, TypeScript, Prisma/PostgreSQL integration, validation, logging, health checks, analytics, and design system.
 1. Identity and Spaces — registration, email/password authentication, recovery, profiles, permissions, Spaces, following, moderation ownership, and seed data.

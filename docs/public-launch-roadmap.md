@@ -1,12 +1,16 @@
 # Pnyx public launch roadmap
 
-Updated: 2026-10-25
+Updated: 2026-11-24
 Production: https://pnyx-psi.vercel.app  
 Repository: https://github.com/kellyxy110/Pnyx
 
 ## Current status
 
-Pnyx is in Milestone 6A — Core Product Completion. Milestones 0–5 are implemented. The remediation branch now has verified native PostgreSQL migration replay and nine critical HTTP/session/concurrency scenarios, alongside TypeScript/lint/build and 70 passing unit tests. This work has not been merged or deployed. R2 media verification and production-adjacent browser acceptance remain open within 6A; resilience/security, backup/restore, deletion propagation, manual release QA, and closed-beta evidence remain later gates. See the [native verification report](native-postgres-verification-2026-10-25.md).
+Pnyx remains in Milestone 6A — Core Product Completion. Milestones 0–5 contain implemented foundations; that does not certify every proposed integration or production workflow. GitHub main remains `f7305ab`; later remediation fixes are on `audit/pnyx-remediation-20261025`, recorded at `6cbf5ef` before the current documentation update. The November 3 candidate `fa7a291` passed 88 unit tests, 27 native HTTP scenarios, 90 local browser checks (three R2 skips), 77 responsive combinations, TypeScript/lint/build and security-header checks. All 12 migrations replayed without drift. These are historical scoped results, not a fresh November 24 run.
+
+Production media reports disabled on November 24. The supplied older Vercel READY handoff cannot establish the current production commit: deployment lookup currently returns 404 through this connection. The November 3 production deployment attempt was refused with 403. No later remediation release is verified. See the [current source/handoff reconciliation](pnyx-roadmap-reconciliation-2026-11-24.md) and [November 3 evidence](end-to-end-profile-review-2026-11-03.md).
+
+6A still requires isolated provider-backed media evidence, hardened positive test-target guards, current release identity and production-adjacent browser acceptance. 6B/6C remain paused. PIRP workstream labels map to this roadmap; public integration API implementation and advanced engines remain later work.
 
 ## Delivery roadmap
 
@@ -39,6 +43,8 @@ Keyword search, filters, explanations, permission-aware exclusions, ranking eval
 1. Authenticated application state — COMPLETE.
 2. Shared responsive three-column application shell — COMPLETE; latest local responsive audit 77/77.
 3. Isolated authenticated browser journeys and targeted native PostgreSQL verification — COMPLETE for their recorded scope. R2 media and production-adjacent browser acceptance — OPEN.
+4. Positive app/database/storage test-target guard hardening and Windows source preservation/reconciliation — OPEN.
+5. Verified deployment identity and release of the later remediation candidate — OPEN; historical deployment READY does not satisfy this item.
 
 ### Phase 6B/6C — PAUSED
 
@@ -63,7 +69,7 @@ Release candidate review, incident exercise, backup restore exercise, security s
 - Validate backup and restore procedures against an isolated database.
 - Run safe authenticated load tests against local or preview infrastructure.
 - Add Lighthouse CI and route performance budgets when a supported browser runner/CI environment is available.
-- Maintain the remediated dependency baseline; the native verification CI run reports zero known vulnerabilities.
+- Re-run dependency/security scans for the final release candidate. November 3 production audit was clean, but the complete audit retained 13 moderate development-tool findings; do not claim a current zero-advisory baseline.
 
 ## Human or external backlog
 

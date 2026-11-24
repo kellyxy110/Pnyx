@@ -3,7 +3,9 @@
 Updated: 2026-07-29  
 Production: https://pnyx-psi.vercel.app
 
-## Honest current state
+> Historical module/deployment record from July 2026. Its remaining-module list and test counts are superseded by the [24 November reconciliation](pnyx-roadmap-reconciliation-2026-11-24.md), current tasks and November 3 evidence. Historical deployment entries below do not certify the current production SHA or later remediation release.
+
+## Historical state
 
 Pnyx is not feature-complete. Infrastructure, authentication providers, Prisma migrations, deployment, and the existing API foundation are operational. The product UI still has incomplete journeys and is being completed module-by-module.
 
