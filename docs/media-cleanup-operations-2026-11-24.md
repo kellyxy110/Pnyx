@@ -12,7 +12,7 @@ The protected GET /api/internal/media-cleanup/status endpoint checks the last co
 
 Attention reports and worker errors produce sanitized structured console errors. The worker persists its latest safe summary and heartbeat. No email, Slack, webhook or paid monitoring service is called. An external monitor must poll the protected status endpoint and route log/HTTP alerts before production acceptance; that delivery is not certified here. Database failure returns sanitized 503, and a missed heartbeat remains detectable even if a process dies before logging.
 
-The inert example [schedule configuration](media-cleanup-schedule.example.json) proposes a five-minute cadence. It is outside active vercel.json. Review the actual hosting plan, scheduler API, timeouts, capacity and monitoring receiver before copying any configuration into deployment. Vercel cron authorization is documented at https://vercel.com/docs/schedules/cron-jobs/manage-cron-jobs. No retry/delivery guarantee from a scheduler replaces the database receipts.
+The inert example [schedule configuration](media-cleanup-schedule.example.json) proposes a five-minute cadence. It is outside active vercel.json. Review the actual hosting plan, scheduler API, timeouts, capacity and monitoring receiver before copying any configuration into deployment. The example uses legacy Vercel Cron; its documented Hobby once-daily limit does not support this cadence. No plan change or purchase is made. Vercel cron authorization is documented at https://vercel.com/docs/schedules/cron-jobs/manage-cron-jobs. No retry/delivery guarantee from a scheduler replaces the database receipts.
 
 ## Retention policy
 
@@ -34,7 +34,7 @@ Before production acceptance, identify the actual media hostname, bucket, every 
 
 ## Windows and release reconciliation
 
-Read-only Vercel inspection on 24 November returned no Pnyx projects in the default scope or the visible Kellyxy's projects team. Deployment lookup for pnyx-psi.vercel.app returned 404. These are connection/scope observations, not proof the live application is absent. The current deployed SHA remains unverified. No secret values were retrieved or deployment attempted.
+Read-only Vercel inspection on 24 November returned no Pnyx projects in the default scope or the visible Kellyxy's projects team. Deployment lookup for pnyx-psi.vercel.app returned 404. These are connection/scope observations, not proof the live application is absent. The current deployed SHA remains unverified. A dashboard fallback reached the Vercel login page; no sign-in method or credential was submitted. The page was preserved for the access step. No secret values were retrieved or deployment attempted.
 
 The selected workspace is Linux; C:\Users\user\Desktop\Pnyx was not accessed. Follow the preservation-first [Windows recovery sequence](pnyx-roadmap-reconciliation-2026-11-24.md) before repairing permissions/index. Preserve tracked, untracked and staged work and metadata; compare a healthy sibling clone at the exact remediation SHA. Do not reset, bulk-stage, push main or discard loose work. Windows reconciliation cannot be certified without that machine's preserved inventory and diffs.
 
@@ -42,4 +42,13 @@ Release remains gated on the Windows evidence, correct Vercel project/team acces
 
 ## Verification
 
-Local TypeScript, zero-warning lint, unit tests and build are checked during implementation. Native and dedicated-provider CI results will be appended after completion. The additive fifteenth migration is replayed only in disposable CI. Provider request is disabled again after verification.
+Verified source: `afafb69017fd38040af3de007cd9fd91ce6ae01c`.
+
+- [Native CI 45437762282](https://github.com/kellyxy110/Pnyx/actions/runs/45437762282) passed first attempt: TypeScript, zero-warning lint, 162 unit tests across 27 files, build, 50 HTTP/database scenarios and 90 browser checks; 12 real R2 cases intentionally skipped. Full and production audits each reported zero vulnerabilities.
+- [Provider CI 45437763132](https://github.com/kellyxy110/Pnyx/actions/runs/45437763132) passed first attempt: 50 HTTP/database scenarios and all 102 browser cases, including 12 real R2 cases. The existing repeated-write recovery case now invokes the bounded worker for both sweeps and passes on mobile/tablet/desktop.
+- Both runs replayed all 15 migrations without drift. The new table was created only in disposable CI.
+- Final isolated recovery counts were attempted=0, completed=0, pending=0. The subsequent complete dedicated-bucket inventory found objects=0, referenced=0, tracked=0, recent=0, review=0, unknown=0 and deletionAuthorized=false. This is test-bucket evidence, not production historical reconciliation.
+- Native tests cover idle heartbeat, retained provider failure/alerts, bounded draining, concurrent invocation exclusion, expired-process recovery/stale heartbeat, retention review, live upload protection, wrong-target detection, displaced-owner fencing and disabled HTTP routes. Unit tests cover authorization/configuration, HTTP outcomes, sanitized errors and inventory classification.
+- Local security configuration passed 5/5, runtime headers passed on loopback, and disabled cleanup/status routes returned no-store 404. Local TypeScript/lint, 162 units and build passed during implementation.
+
+The schedule definition was validated as inert JSON outside vercel.json. No hosted scheduler delivered a run; no external alert receiver was tested. Those operational activation checks remain open. The provider request is disabled again in the evidence commit. No merge, deployment, production migration or production cache change occurred. [Machine-readable results](media-cleanup-operations-2026-11-24-results.json).

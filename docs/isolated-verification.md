@@ -19,7 +19,7 @@ Start a disposable PostgreSQL 16 database on loopback with a name such as pnyx_v
 
 Install the repository's locked dependencies and generate Prisma before verification. Install the locked Playwright browser using the existing package executable; an explicitly reviewed PLAYWRIGHT_EXECUTABLE_PATH can select an already installed compatible browser.
 
-- npm run verify:postgres — native migration replay/status/drift/build and 40 HTTP/database scenarios. No R2.
+- npm run verify:postgres — native migration replay/status/drift/build and 50 HTTP/database scenarios. No R2.
 - npm run verify:browser — those same native checks followed by all public/authenticated browser scenarios using a newly seeded synthetic account. R2 remains disabled and its 12 browser cases are skipped.
 - npm run verify:media — the native and browser flow with explicitly opted-in dedicated R2 configuration below. Missing/contradictory configuration fails preflight before migration/fixtures. This command is not authorized for production.
 
@@ -48,11 +48,17 @@ Both actual provider settings and expected declarations must agree; the live app
 
 ## Verified cleanup recovery
 
-Current source `8519976` replays 14 migrations without drift and passes 146 unit tests, 40 HTTP/database scenarios and all 102 provider-enabled browser cases. See [upload reservation evidence](upload-reservations-2026-11-24.md) and [earlier durable cleanup evidence](media-cleanup-2026-11-24.md). The provider-disabled run passes 90 browser cases with 12 intentional skips.
+Current source `afafb69` replays 15 migrations without drift and passes 162 unit tests, 50 HTTP/database scenarios and all 102 provider-enabled browser cases. See [cleanup operations evidence](media-cleanup-operations-2026-11-24.md), [upload reservation evidence](upload-reservations-2026-11-24.md) and [earlier durable cleanup evidence](media-cleanup-2026-11-24.md). The provider-disabled run passes 90 browser cases with 12 intentional skips.
 
 `npm run media:cleanup` requires the same opted-in disposable database and matching dedicated storage declarations. It processes at most 25 due receipts, prints counts only, and exits nonzero if receipts remain. Retry after the recorded backoff when recovering an isolated failure. The media runner invokes it before fixture disposal. No production worker or schedule is enabled.
 
-Pre-upload reservations are protected for 15 minutes, consumed only with successful profile-pointer adoption, and retained after interrupted uploads. Expired abandoned reservations remain as tombstones after successful provider deletion and are due for another sweep after 24 hours; provider failures retain existing bounded backoff. A retained tombstone keeps command status nonzero even if its object is absent. Application recovery never auto-retires these tombstones. Operational retention and production scheduling/alerting remain open. The real-provider suite explicitly removes only its own synthetic reservation fixture receipts at teardown; that is not production retention policy.
+Pre-upload reservations are protected for 15 minutes, consumed only with successful profile-pointer adoption, and retained after interrupted uploads. Expired abandoned reservations remain as tombstones after successful provider deletion and are due for another sweep after 24 hours; provider failures retain existing bounded backoff. A retained tombstone keeps command status nonzero even if its object is absent. Application recovery never auto-retires these tombstones. The current policy preserves provenance indefinitely and alerts for review after 30 days. The default-disabled worker and protected heartbeat endpoint are verified in isolation; production scheduling, monitor delivery and record retirement evidence remain open. The real-provider suite explicitly removes only its own synthetic reservation fixture receipts at teardown; that is not production retention policy.
+
+## Read-only isolated inventory
+
+`npm run media:inventory` accepts no arguments and requires the same disposable database and matching dedicated R2 target. It performs bounded complete listing and reference/receipt classification, prints counts only and writes an ignored private timestamped report under artifacts. Review candidates are never deletion authorization. The provider runner invokes it after tests and scoped cleanup. The current run found the dedicated bucket empty; no production inventory was scanned.
+
+The isolated runner explicitly disables cleanup HTTP operations and removes cron credentials from its child environment. Native database tests exercise the worker directly with synthetic targets/provider failure injection; real-provider repeated-write tests use its bounded batch on dedicated synthetic objects. Unit tests cover authorized HTTP invocation; runtime HTTP tests prove disabled endpoints fail closed. Actual hosted schedule delivery and external notifications are not tested.
 
 ## Prepared provider acceptance
 

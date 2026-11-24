@@ -25,7 +25,7 @@ The workflow is limited to pushes on the remediation branch that change its own 
 
 The media job uses the named environment, serializes provider runs without cancelling active cleanup, creates a fresh PostgreSQL 16 service and invokes the existing guarded verify:media runner. Credentials are injected only into the verification step, after dependency/browser installation. No bucket/token creation, production access, deployment command or artifact upload is included. GitHub may create environment deployment-tracking metadata for this job; no application is deployed.
 
-Review all 14 migration results, drift, 40 HTTP/database scenarios and all 102 browser cases, including 12 real R2 cases. A disabled request, skipped media job or 12 skipped R2 cases is not provider acceptance. Inspect any failure before rerunning because fixture media may remain. The temporary database disappears after the job, so record any failed cleanup key from the isolated test evidence before relying on an automatic rerun; the isolated recovery command only covers persisted cleanup receipts; pre-upload provenance now passes, while production recovery operations and abandoned-record retention remain open. Do not empty the bucket as a substitute for scoped reconciliation.
+Review all 15 migration results, drift, 50 HTTP/database scenarios and all 102 browser cases, including 12 real R2 cases. A disabled request, skipped media job or 12 skipped R2 cases is not provider acceptance. Inspect any failure before rerunning because fixture media may remain. The temporary database disappears after the job, so record any failed cleanup key from the isolated test evidence before relying on an automatic rerun; the isolated recovery command only covers persisted cleanup receipts; pre-upload provenance now passes, while production recovery operations and abandoned-record retention remain open. Do not empty the bucket as a substitute for scoped reconciliation.
 
 After a completed attempt, disable the request in a documentation commit. Revoke or let the dedicated token expire when verification is finished. The existing isolated-verification.md runbook defines scope and remaining deletion/cache acceptance gaps.
 
@@ -35,7 +35,11 @@ Workflow YAML and request parsing are checked locally. GitHub's disabled-request
 
 Preparation commit 689415e passed the request job in [run 45408918181](https://github.com/kellyxy110/Pnyx/actions/runs/45408918181); the media job was skipped as intended. Local execution of the actual request script verified false, true and invalid string inputs. Shell syntax and YAML checks passed. No real provider tests ran.
 
-## Latest completed upload reservation acceptance
+## Latest completed operations preparation
+
+Source `afafb69` passed [provider run 45437763132](https://github.com/kellyxy110/Pnyx/actions/runs/45437763132) first attempt: 15 migrations without drift, 50 HTTP/database scenarios and all 102 browser cases, including 12 real R2 cases. Repeated abandoned-write recovery now uses the bounded worker on all three devices. The subsequent read-only dedicated-bucket inventory found zero objects; no production inventory is claimed. [Native run 45437762282](https://github.com/kellyxy110/Pnyx/actions/runs/45437762282) passed first attempt with 162 units, 90 browser checks, 12 intentional skips, TypeScript/lint/build and zero-advisory audits. The request is disabled after this run. [Evidence and inactive operational boundaries](media-cleanup-operations-2026-11-24.md).
+
+## Earlier completed upload reservation acceptance
 
 Source `8519976` passed [provider run 45432893170](https://github.com/kellyxy110/Pnyx/actions/runs/45432893170) on its first attempt: 14 migrations without drift, 40 HTTP/database scenarios and all 102 browser cases, including 12 real R2 cases. Abandoned-upload recovery and repeated late writes passed on all three devices. [Native run 45432893019](https://github.com/kellyxy110/Pnyx/actions/runs/45432893019) passed first attempt with 146 units, 90 browser checks, 12 intentional skips, TypeScript/lint/build and zero-advisory audits. The final isolated command found zero pending receipts after scoped synthetic fixture teardown. The request is disabled after this run. [Evidence and remaining operational limits](upload-reservations-2026-11-24.md).
 

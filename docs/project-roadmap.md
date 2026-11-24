@@ -1,6 +1,12 @@
 # Pnyx roadmap and remaining work
 
-## Pre-upload provenance and interrupted uploads, 24 November 2026
+## Cleanup operations preparation, 24 November 2026
+
+[Cleanup operations evidence](media-cleanup-operations-2026-11-24.md) passes for `afafb69`: 162 units, 50 HTTP/database scenarios, 15 migrations without drift, TypeScript/lint/build and zero-advisory audits. Native CI passed first attempt with 90 browser checks and 12 intentional R2 skips; provider CI passed first attempt with all 102 browser cases, including 12 real R2 cases. A default-disabled secret-protected worker now bounds batches, prevents overlapping runs with durable leases and fencing, persists heartbeat/status and emits sanitized attention reports. Retention is indefinite provenance with daily re-sweeps and mandatory review at 30 days, with no automatic purge. A read-only inventory command found the dedicated test bucket empty after teardown; no historical production inventory is claimed.
+
+The schedule example remains inert; no production schedule or external notification receiver is activated or certified. Next: restore Vercel project access and exact deployment identity, preserve/reconcile the Windows checkout, review scheduler plan/capacity and monitor delivery, then separately accept production activation, historical inventory and custom-domain/cache withdrawal. Both connector scopes returned no Pnyx projects; browser inspection reached sign-in. No merge, deployment or production migration occurred. 6A OPEN; 6B/6C PAUSED. Earlier reports remain historical evidence.
+
+## Earlier pre-upload provenance and interrupted uploads, 24 November 2026
 
 [Upload reservation acceptance](upload-reservations-2026-11-24.md) passes for `8519976`: 146 units, 40 HTTP/database scenarios, 14 migrations without drift, TypeScript/lint/build and zero-advisory audits. Native CI passed first attempt with 90 browser checks and 12 intentional R2 skips; provider CI passed first attempt with all 102 browser cases, including 12 real R2 cases. Provenance now exists before R2 writes, pointer adoption consumes it atomically, and expired/abandoned uploads remain recoverable through repeated exact-key sweeps. The three new real-provider cases verified a repeated late write after an earlier sweep. Provider execution is disabled after acceptance.
 

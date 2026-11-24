@@ -1,4 +1,4 @@
 {
-  "enabled": true,
-  "reason": "Verify bounded cleanup worker, retained reservation sweeps and read-only dedicated-bucket inventory after local checks."
+  "enabled": false,
+  "reason": "Worker recovery and read-only inventory passed in run 45437763132; disable provider execution after recording evidence."
 }

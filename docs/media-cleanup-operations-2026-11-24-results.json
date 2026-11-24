@@ -1,0 +1,101 @@
+{
+  "date": "2026-11-24",
+  "branch": "audit/pnyx-remediation-20261025",
+  "source_commit": "afafb69017fd38040af3de007cd9fd91ce6ae01c",
+  "native": {
+    "run_id": 45437762282,
+    "job_id": 138600141786,
+    "attempt": 1,
+    "result": "success",
+    "typescript": "pass",
+    "lint": "pass, zero warnings",
+    "unit_tests": 162,
+    "unit_files": 27,
+    "build": "pass",
+    "http_database_scenarios": 50,
+    "browser_passed": 90,
+    "r2_intentional_skips": 12,
+    "migrations": 15,
+    "schema_drift": false,
+    "full_audit_vulnerabilities": 0,
+    "production_audit_vulnerabilities": 0
+  },
+  "provider": {
+    "run_id": 45437763132,
+    "job_id": 138600365525,
+    "attempt": 1,
+    "result": "success",
+    "http_database_scenarios": 50,
+    "browser_passed": 102,
+    "real_r2_cases": 12,
+    "worker_repeated_write_devices": [
+      "mobile",
+      "tablet",
+      "desktop"
+    ],
+    "migrations": 15,
+    "schema_drift": false,
+    "final_recovery_counts_after_synthetic_teardown": {
+      "attempted": 0,
+      "completed": 0,
+      "pending": 0
+    },
+    "read_only_inventory": {
+      "bucket": "pnyx-e2e-media",
+      "objects": 0,
+      "referenced": 0,
+      "tracked": 0,
+      "recent": 0,
+      "review": 0,
+      "unknown": 0,
+      "deletionAuthorized": false,
+      "production_evidence": false
+    }
+  },
+  "worker": {
+    "batch_limit": 5,
+    "lease_ms": 300000,
+    "stale_heartbeat_ms": 900000,
+    "overdue_alert_ms": 900000,
+    "retention_review_ms": 2592000000,
+    "abandoned_retention": "indefinite until reviewed write-finality evidence; no automatic purge",
+    "resweep_ms": 86400000,
+    "active_schedule": false,
+    "external_alert_delivery_verified": false,
+    "status_and_structured_logs_verified": true,
+    "source_routes_default": "disabled"
+  },
+  "local_security": {
+    "configuration_headers_passed": 5,
+    "runtime_headers": "pass on loopback",
+    "disabled_worker_routes": "404, no-store"
+  },
+  "access": {
+    "default_vercel_project_search": "no Pnyx results",
+    "visible_team_project_search": "no Pnyx results",
+    "deployment_lookup": "404, deployment identity unverified",
+    "browser_dashboard": "Vercel sign-in required; no authentication submitted",
+    "windows_checkout": "not accessed; preservation/reconciliation pending"
+  },
+  "scope": {
+    "production_migration": false,
+    "deployment": false,
+    "merge": false,
+    "production_cache_purge": false,
+    "provider_request_enabled_after_batch": false
+  },
+  "remaining": [
+    "Restore correct Vercel project/team access and verify exact deployment/alias SHA",
+    "Preserve and reconcile Windows checkout/index/loose work",
+    "Review production scheduler plan, capacity, secrets and monitoring receiver; activate/test separately",
+    "Historical production inventory using explicitly approved read-only target and current snapshots",
+    "Production custom-domain and historical cache withdrawal acceptance",
+    "Migration/rollback review and production-adjacent acceptance"
+  ],
+  "roadmap": {
+    "6A": "OPEN",
+    "6B": "PAUSED",
+    "6C": "PAUSED",
+    "public_api_implementation": "GATED"
+  }
+}
