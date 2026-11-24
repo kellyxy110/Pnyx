@@ -100,7 +100,7 @@ Before public launch, Pnyx must demonstrate a reliable question-to-useful-answer
 - [x] Build the shared responsive three-column application shell.
 - [x] Complete profile identity, editable bio/headline/skills/interests/social links, privacy-aware public profiles, and persisted activity surfaces.
 - [x] Repair profile loading and onboarding handoff: OAuth and credential sign-in now land on Profile; profile failures return safe diagnostics, retry, and session recovery.
-- [ ] Configure and production-verify Cloudflare R2 avatar/banner media uploads; controls remain feature-gated until then.
+- [ ] Configure and production-verify Cloudflare R2 avatar/banner media uploads; upload persistence and cleanup code are implemented and tested, but controls remain feature-gated until the required Vercel variables are present.
 - [x] Complete follower/following actions, lists, and feed impact (separate following-system module).
 - [x] Complete authenticated community feed, composer, persisted drafts, autosave, preview, and publishing.
 - [x] Repair Composer Space loading to match the live Spaces API, with explicit loading, empty, error, and publish-validation states.

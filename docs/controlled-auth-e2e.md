@@ -16,3 +16,5 @@ The suite covers sign-in, persisted profile loading, session-menu state, scoped 
 Set `E2E_STORAGE_ENABLED=true` only when the isolated target has a dedicated R2 bucket and the test account's uploaded objects can be cleaned up. The upload journey uses `public/images/pnyx-community-collage.png` as a controlled fixture.
 
 The full multi-user discussion, reply, follow, notification, and search journeys remain a separate fixture-backed expansion. They require two isolated test accounts and cleanup hooks; no production account is used as a substitute.
+
+Latest evidence: the authenticated suite currently reports six explicit skips when its required isolation variables are absent. This is intentional safety behavior, not a passing authenticated-production claim. The public desktop suite passed 8/8 against the canonical production URL after the latest accessibility fixes.

@@ -96,6 +96,26 @@ Production evidence:
 
 Milestone 6B resilience/security and Milestone 6C closed-beta work are paused until 6A core product journeys are complete.
 
+## 2026-08-09 verification update
+
+The Space-scoped discussion handoff is now production-ready: `/spaces/[slug]` passes the Space slug and same-origin return path to the shared composer, the composer preselects the Space, and publishing returns to the originating Space. Smooth page-entry motion and scrolling respect `prefers-reduced-motion`.
+
+The profile media route now returns the derived banner URL after a successful upload and removes a newly stored object if database persistence fails. Storage configuration tests cover disabled, complete, URL derivation, and environment cleanup behavior.
+
+Evidence for commit `f7305ab`:
+
+- TypeScript: PASS.
+- ESLint: PASS.
+- Unit tests: 60/60 PASS.
+- Desktop public Playwright accessibility/overflow suite: 8/8 PASS against `https://pnyx-psi.vercel.app`.
+- Targeted Spaces and reduced-motion sign-up checks: PASS.
+- Production deployment `dpl_4WfHYhSFe39pr7iitv9XjPNA9N8q`: READY and aliased to the canonical URL.
+
+Remaining 6A release gates:
+
+- R2 variables are not present in Vercel Production/Preview, so upload persistence cannot be verified in production. Required variable names are documented in `docs/storage.md`.
+- Authenticated Playwright journeys are defined and safely skip without a dedicated non-production URL, test account, and explicit opt-in. They have not been run against production.
+
 ## Module 5 result — persisted composer workflow
 
 Implemented and deployed:

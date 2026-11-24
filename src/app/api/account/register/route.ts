@@ -23,8 +23,8 @@ export async function POST(request: Request) {
     await sendAccountMail({ to: user.email, subject: "Verify your Pnyx email", html: `<p>Welcome to Pnyx.</p><p><a href="${url}">Verify your email address</a> within 24 hours.</p>` });
   } catch (error) {
     await prisma.user.delete({ where: { id: user.id } });
-    if (error instanceof Error && (error.message === "EMAIL_PROVIDER_NOT_CONFIGURED" || error.message === "APP_URL_NOT_CONFIGURED")) return NextResponse.json({ error: "Email verification is not configured yet. Please try again later." }, { status: 503 });
-    return NextResponse.json({ error: "We could not deliver the verification email. Please try again later." }, { status: 503 });
+    if (error instanceof Error && (error.message === "EMAIL_PROVIDER_NOT_CONFIGURED" || error.message === "APP_URL_NOT_CONFIGURED")) return NextResponse.json({ error: "Email verification is not configured yet, so no account was created. Please try again later." }, { status: 503 });
+    return NextResponse.json({ error: "We could not deliver the verification email, so no account was created. Please try again later." }, { status: 503 });
   }
   return NextResponse.json({ message: "Account created. Check your email to verify it before signing in." }, { status: 201 });
 }
