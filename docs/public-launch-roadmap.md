@@ -6,11 +6,13 @@ Repository: https://github.com/kellyxy110/Pnyx
 
 ## Current status
 
+November 24 update: [isolated R2 provider lifecycle](r2-provider-acceptance-2026-11-24.md) passes on `8fc2829` with 96 browser checks (six real media cases), 27 native HTTP scenarios and twelve migrations without drift. Positive target guards are implemented and exercised. The separate storage-disabled CI attempt had one knowledge-editor feedback timeout and is being rechecked. The earlier dated counts below remain historical.
+
 Pnyx remains in Milestone 6A — Core Product Completion. Milestones 0–5 contain implemented foundations; that does not certify every proposed integration or production workflow. GitHub main remains `f7305ab`; later remediation fixes are on `audit/pnyx-remediation-20261025`, recorded at `6cbf5ef` before the current documentation update. The November 3 candidate `fa7a291` passed 88 unit tests, 27 native HTTP scenarios, 90 local browser checks (three R2 skips), 77 responsive combinations, TypeScript/lint/build and security-header checks. All 12 migrations replayed without drift. These are historical scoped results, not a fresh November 24 run.
 
 Production media reports disabled on November 24. The supplied older Vercel READY handoff cannot establish the current production commit: deployment lookup currently returns 404 through this connection. The November 3 production deployment attempt was refused with 403. No later remediation release is verified. See the [current source/handoff reconciliation](pnyx-roadmap-reconciliation-2026-11-24.md) and [November 3 evidence](end-to-end-profile-review-2026-11-03.md).
 
-6A still requires isolated provider-backed media evidence, hardened positive test-target guards, current release identity and production-adjacent browser acceptance. 6B/6C remain paused. PIRP workstream labels map to this roadmap; public integration API implementation and advanced engines remain later work.
+6A still requires production delivery/cache withdrawal and cleanup/account-deletion provider evidence, Windows source reconciliation, current release identity and production-adjacent browser acceptance. 6B/6C remain paused. PIRP workstream labels map to this roadmap; public integration API implementation and advanced engines remain later work.
 
 ## Delivery roadmap
 
@@ -42,8 +44,8 @@ Keyword search, filters, explanations, permission-aware exclusions, ranking eval
 
 1. Authenticated application state — COMPLETE.
 2. Shared responsive three-column application shell — COMPLETE; latest local responsive audit 77/77.
-3. Isolated authenticated browser journeys and targeted native PostgreSQL verification — COMPLETE for their recorded scope. R2 media and production-adjacent browser acceptance — OPEN.
-4. Positive app/database/storage test-target guard hardening and Windows source preservation/reconciliation — OPEN.
+3. Isolated authenticated browser journeys and targeted native PostgreSQL verification — COMPLETE for their recorded scope. Isolated R2 avatar/banner lifecycle — PASS on November 24; production delivery and production-adjacent browser acceptance — OPEN.
+4. Positive app/database/storage test-target guard hardening — IMPLEMENTED AND VERIFIED for the isolated runner; Windows source preservation/reconciliation — OPEN.
 5. Verified deployment identity and release of the later remediation candidate — OPEN; historical deployment READY does not satisfy this item.
 
 ### Phase 6B/6C — PAUSED

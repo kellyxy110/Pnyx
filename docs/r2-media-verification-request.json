@@ -1,4 +1,4 @@
 {
-  "enabled": true,
-  "reason": "Rerun after fixing request-interceptor teardown race exposed by 45422821869. Application correction passed native regression 45422822131."
+  "enabled": false,
+  "reason": "Dedicated R2 lifecycle passed in run 45424156617; provider execution disabled after acceptance. A separate storage-disabled CI timeout is being rechecked."
 }

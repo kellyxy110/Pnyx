@@ -21,3 +21,11 @@ The corrected candidate is being verified locally and in a fresh isolated CI att
 Corrected application commit 970251161c205057a99988380af2d86457ce47b8 passed native regression [45422822131](https://github.com/kellyxy110/Pnyx/actions/runs/45422822131): 136 units, 27 HTTP, 90 browser passes, six intentional storage-disabled skips, twelve migrations without drift, TypeScript/lint/build and zero vulnerabilities in both audits. Local checks also passed.
 
 Provider run [45422821869](https://github.com/kellyxy110/Pnyx/actions/runs/45422821869) still failed all six media cases because the newly held request interceptor was removed before its continuation completed (Route is already handled). There were 90 browser and 27 HTTP passes, with no cleanup error. The harness is corrected to wait for actual removal success before unregistering the interceptor. No provider lifecycle pass is claimed for this attempt.
+
+## Real provider lifecycle PASS
+
+[Run 45424156617](https://github.com/kellyxy110/Pnyx/actions/runs/45424156617), job 138551561699, verified commit 8fc2829d4200a4a46807406bf4ab3262de2f48aa. All twelve migrations applied without drift, build passed, 27 native HTTP scenarios passed and all 96 browser cases passed with zero skips. This includes avatar and banner upload, origin/delivery metadata and decoding, reload, replacement, prior-origin absence, pending-removal feedback, removal and cleared-pointer/replacement-origin absence on mobile, tablet and desktop. Scoped fixture cleanup completed with no reported errors. No full-bucket inventory or production delivery purge was performed.
+
+The same commit's storage-disabled native run 45424156410 passed TypeScript/lint/build, 136 units and both zero-vulnerability audits, but its first attempt had 89 browser passes, six intentional R2 skips and one desktop knowledge-editor network-failure feedback timeout. The same desktop case passed in the provider run and the preceding native run. A diagnostic rerun of only the failed job is pending; do not conceal the original timeout or treat repetition as a root-cause fix.
+
+Provider execution is disabled again in the request file after this successful attempt. GitHub environment secret values were never read or included in evidence. Keep the dedicated credential expiry/revocation under owner control.

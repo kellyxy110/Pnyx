@@ -1,0 +1,58 @@
+{
+  "date": "2026-11-24",
+  "branch": "audit/pnyx-remediation-20261025",
+  "verifiedCodeCommit": "8fc2829d4200a4a46807406bf4ab3262de2f48aa",
+  "provider": {
+    "status": "passed",
+    "runId": 45424156617,
+    "jobId": 138551561699,
+    "bucket": "pnyx-e2e-media",
+    "delivery": "development r2.dev only",
+    "migrations": 12,
+    "schemaDrift": "none",
+    "httpPassed": 27,
+    "browserPassed": 96,
+    "browserSkipped": 0,
+    "realMediaCasesPassed": 6,
+    "cleanup": "no reported errors; scoped fixture cleanup, not a bucket inventory"
+  },
+  "nativeRegression": {
+    "runId": 45424156410,
+    "firstAttempt": {
+      "status": "failed",
+      "unitTestsPassed": 136,
+      "httpPassed": 27,
+      "browserPassed": 89,
+      "browserSkipped": 6,
+      "browserFailed": 1,
+      "failure": "desktop knowledge-editor network-failure feedback timeout",
+      "typecheck": "passed",
+      "lint": "passed",
+      "build": "passed",
+      "productionAuditVulnerabilities": 0,
+      "completeAuditVulnerabilities": 0
+    },
+    "diagnosticRerun": "pending"
+  },
+  "earlierAttempts": [
+    {
+      "runId": 45420907437,
+      "status": "failed",
+      "reason": "ambiguous status and misleading removal feedback"
+    },
+    {
+      "runId": 45422821869,
+      "status": "failed",
+      "reason": "request interceptor teardown race"
+    }
+  ],
+  "requestEnabledAfterAcceptance": false,
+  "milestone6A": "open",
+  "deployment": "not performed",
+  "limitations": [
+    "Production custom-domain delivery/cache withdrawal not certified",
+    "Historical cache purge unchanged",
+    "Durable cleanup and account-deletion provider acceptance remain open",
+    "Windows checkout reconciliation and release identity/production-adjacent acceptance remain open"
+  ]
+}

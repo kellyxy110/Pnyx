@@ -58,6 +58,6 @@ For each avatar and banner, on mobile/tablet/desktop, the prepared suite:
 6. Removes through the UI, reloads, checks the cleared pointer and replacement-origin absence.
 7. Cleans only keys under that fixture user's media-kind prefix, retaining provenance on failure.
 
-No provider test is reported passed until executed with the isolated settings. Six skips without credentials are an explicit blocked media gate. The route unit tests separately exercise real Sharp decoding with mocked storage/pointer failures.
+The first passing provider lifecycle run is 45424156617 on 24 November 2026, with all six media cases executed; see r2-provider-acceptance-2026-11-24.md. Six skips in a storage-disabled run are not provider evidence. The route unit tests separately exercise real Sharp decoding with mocked storage/pointer failures.
 
 New uploads request Cache-Control: no-store. This corrects the prior year-long immutable policy; it does not rewrite historical object metadata, purge existing caches or override provider delivery rules. Origin HEAD absence is not proof that a previously cached public delivery URL is purged. Delivery-cache withdrawal/purge policy needs explicit provider acceptance before 6A media sign-off. Durable cleanup retries, provider-failure reconciliation, account-deletion asset acceptance and production-adjacent acceptance also remain open. Do not convert these origin tests into a claim of complete deletion propagation or completed 6A.
