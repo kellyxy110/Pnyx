@@ -47,8 +47,23 @@
     "headers": "configuration 5/5 and live loopback HTTP checks passed"
   },
   "nativePostgres": {
-    "status": "pending new commit CI",
-    "plan": "PostgreSQL 16: migrations/drift, 27 HTTP scenarios and full browser suite with R2 disabled"
+    "status": "passed",
+    "database": "native PostgreSQL 16 in disposable GitHub Actions service",
+    "commit": "a05f1fe74d01a6fa9b07cbc715041f6d850911e5",
+    "runId": 45387692732,
+    "jobId": 138422837096,
+    "url": "https://github.com/kellyxy110/Pnyx/actions/runs/45387692732",
+    "migrations": 12,
+    "schemaDrift": "none",
+    "httpScenariosPassed": 27,
+    "browserPassed": 90,
+    "mediaSkipped": 6,
+    "unitTestsPassed": 130,
+    "typecheck": "passed",
+    "lint": "passed",
+    "build": "passed",
+    "productionAudit": "zero vulnerabilities",
+    "completeAudit": "zero vulnerabilities"
   },
   "R2": {
     "status": "blocked",
@@ -64,5 +79,6 @@
     "Production-adjacent acceptance and release identity/access"
   ],
   "deployment": "not attempted; 6A remains open",
-  "integrationAPI": "design remains gated, not implemented"
+  "integrationAPI": "design remains gated, not implemented",
+  "verifiedCodeCommit": "a05f1fe74d01a6fa9b07cbc715041f6d850911e5"
 }

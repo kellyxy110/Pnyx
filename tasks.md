@@ -112,8 +112,8 @@ Before public launch, Pnyx must demonstrate a reliable question-to-useful-answer
 - [x] Complete truthful AI assistance surfaces backed by supported APIs only.
 - [x] Preserve Space context when starting a discussion: preselect the originating Space, explain the posting destination, and return to that Space after publishing.
 - [x] Add shared smooth scrolling and restrained page-entry motion with reduced-motion support.
-- [x] Run isolated authenticated browser journeys for profile persistence, Space membership, and scoped composer context; the November 3 remediation evidence records 90 passing browser checks and three skipped R2 cases. These are historical scoped runs, not current hosted acceptance.
-- [x] Verify critical native PostgreSQL paths: replay all 12 migrations, detect no schema drift, and pass 27 real HTTP/session/concurrency scenarios for `fa7a291`. See `docs/end-to-end-profile-review-2026-11-03.md`; October evidence remains historical.
+- [x] Run isolated authenticated browser journeys for profile persistence, Space membership, and scoped composer context; the November 24 native PostgreSQL/browser CI records 90 passing browser checks and six expanded R2 cases skipped. This is controlled local CI evidence, not production-adjacent provider acceptance.
+- [x] Verify critical native PostgreSQL paths: replay all 12 migrations, detect no schema drift, and pass 27 real HTTP/session/concurrency scenarios for `a05f1fe`. See `docs/test-isolation-2026-11-24.md`; October/November 3 evidence remains historical.
 - [ ] Record production-adjacent browser acceptance, including enabled media flows; local API evidence does not replace this gate.
 - [x] Implement positive disposable target checks and nonce-bound running-app configuration verification before authenticated/media execution; see `docs/test-isolation-2026-11-24.md` for tested scope.
 - [ ] Execute provider-backed avatar/banner, cache withdrawal and cleanup acceptance with reviewed dedicated R2 settings; prepared or skipped cases do not close this gate.
