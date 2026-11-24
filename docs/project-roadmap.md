@@ -2,7 +2,7 @@
 
 ## Isolated R2 provider acceptance, 24 November 2026
 
-[Real R2 lifecycle acceptance](r2-provider-acceptance-2026-11-24.md) now passes for `8fc2829`: twelve migrations without drift, 27 HTTP scenarios and all 96 browser cases, including six real avatar/banner lifecycles across mobile/tablet/desktop. The run exposed and verified a profile removal-feedback correction. The storage-disabled run had one knowledge-editor timeout; its diagnostic rerun and original result are tracked in the report. Provider execution is disabled after the successful run. Production delivery/cache withdrawal, durable cleanup/account-deletion evidence, Windows source reconciliation and production-adjacent release acceptance remain open. 6A remains OPEN and 6B/6C PAUSED.
+[Real R2 lifecycle acceptance](r2-provider-acceptance-2026-11-24.md) now passes for `8fc2829`: twelve migrations without drift, 27 HTTP scenarios and all 96 browser cases, including six real avatar/banner lifecycles across mobile/tablet/desktop. The run exposed and verified a profile removal-feedback correction. The storage-disabled run passed on diagnostic attempt 2: 136 units, 27 HTTP and 90 browser checks, TypeScript/lint/build and zero-advisory audits. Its first-attempt knowledge-editor timeout remains tracked as intermittent, with root cause unproven. Provider execution is disabled after the successful run. Production delivery/cache withdrawal, durable cleanup/account-deletion evidence, Windows source reconciliation and production-adjacent release acceptance remain open. 6A remains OPEN and 6B/6C PAUSED.
 
 ## Earlier 6A target-isolation implementation, 24 November 2026
 

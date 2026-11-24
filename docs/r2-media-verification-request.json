@@ -1,4 +1,4 @@
 {
   "enabled": false,
-  "reason": "Dedicated R2 lifecycle passed in run 45424156617; provider execution disabled after acceptance. A separate storage-disabled CI timeout is being rechecked."
+  "reason": "R2 lifecycle and native regression verification completed; provider execution remains disabled after acceptance."
 }

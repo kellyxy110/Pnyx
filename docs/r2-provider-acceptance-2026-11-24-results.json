@@ -32,7 +32,23 @@
       "productionAuditVulnerabilities": 0,
       "completeAuditVulnerabilities": 0
     },
-    "diagnosticRerun": "pending"
+    "diagnosticRerun": {
+      "attempt": 2,
+      "jobId": 138555761613,
+      "status": "success",
+      "unitTestsPassed": 136,
+      "migrations": 12,
+      "schemaDrift": "none",
+      "httpPassed": 27,
+      "browserPassed": 90,
+      "browserSkipped": 6,
+      "browserFailed": 0,
+      "typecheck": "passed",
+      "lint": "passed",
+      "build": "passed",
+      "productionAuditVulnerabilities": 0,
+      "completeAuditVulnerabilities": 0
+    }
   },
   "earlierAttempts": [
     {
@@ -54,5 +70,15 @@
     "Historical cache purge unchanged",
     "Durable cleanup and account-deletion provider acceptance remain open",
     "Windows checkout reconciliation and release identity/production-adjacent acceptance remain open"
-  ]
+  ],
+  "intermittentTestIssue": {
+    "test": "desktop knowledge creation retains writing after network failure and reports unavailable AI honestly",
+    "rootCause": "unproven",
+    "originalFailurePreserved": true
+  },
+  "disableCheck": {
+    "runId": 45425599312,
+    "request": "success",
+    "media": "skipped"
+  }
 }
