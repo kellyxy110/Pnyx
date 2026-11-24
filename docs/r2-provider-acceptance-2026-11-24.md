@@ -15,3 +15,9 @@ The removal handler reused upload state and left the previous update message vis
 Removal has its own pending state, clears the prior success message and announces Removing avatar/banner. Profile controls stay disabled while either media action is pending. Success assertions target the profile success message. A held real DELETE request verifies the pending removal announcement, absence of stale success and disabled Save before releasing the request and checking actual provider/database results. It does not mock successful storage or deletion.
 
 The corrected candidate is being verified locally and in a fresh isolated CI attempt; final run evidence follows after completion. Production custom-domain cache withdrawal, historical caches, durable cleanup reconciliation and account-deletion acceptance remain separate open requirements. A development r2.dev pass cannot certify production delivery.
+
+## Second attempt
+
+Corrected application commit 970251161c205057a99988380af2d86457ce47b8 passed native regression [45422822131](https://github.com/kellyxy110/Pnyx/actions/runs/45422822131): 136 units, 27 HTTP, 90 browser passes, six intentional storage-disabled skips, twelve migrations without drift, TypeScript/lint/build and zero vulnerabilities in both audits. Local checks also passed.
+
+Provider run [45422821869](https://github.com/kellyxy110/Pnyx/actions/runs/45422821869) still failed all six media cases because the newly held request interceptor was removed before its continuation completed (Route is already handled). There were 90 browser and 27 HTTP passes, with no cleanup error. The harness is corrected to wait for actual removal success before unregistering the interceptor. No provider lifecycle pass is claimed for this attempt.

@@ -72,8 +72,9 @@ test.describe("dedicated R2 media acceptance", () => {
           await expect(page.getByRole("status")).toHaveText(`Removing ${kind}…`);
           await expect(page.locator(".profile-message.success")).toHaveCount(0);
           await expect(page.getByRole("button", { name: "Save profile", exact: true })).toBeDisabled();
-        } finally { releaseRemoval(); await page.unroute(mediaRoute); }
+        } finally { releaseRemoval(); }
         await expect(page.locator(".profile-message.success")).toContainText(`${kind === "avatar" ? "Avatar" : "Banner"} removed.`);
+        await page.unroute(mediaRoute);
         await page.reload(); const removed = await db.user.findUniqueOrThrow({ where: { id: fixture.id }, select: { avatarKey: true, bannerKey: true } }); expect(removed[field]).toBeNull(); await absent(replacement);
       } finally {
         try {
