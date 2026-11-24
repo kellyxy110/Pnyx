@@ -29,7 +29,7 @@ test.describe("dedicated R2 media acceptance", () => {
         const key = user[field]; ownKey(key); keys.add(key);
         expect(user[kind === "avatar" ? "avatarMetadata" : "bannerMetadata"]).toMatchObject({ contentType: "image/webp" });
         const object = await s3.send(new HeadObjectCommand({ Bucket: storage!.bucket, Key: key }));
-        expect(object.ContentType).toBe("image/webp"); expect(object.ContentLength).toBeGreaterThan(0);
+        expect(object.ContentType).toBe("image/webp"); expect(object.ContentLength).toBeGreaterThan(0); expect(object.CacheControl).toBe("no-store");
         return key;
       }
       async function absent(key: string) {
@@ -48,6 +48,15 @@ test.describe("dedicated R2 media acceptance", () => {
         await expect(page.getByRole("status")).toContainText(`${kind === "avatar" ? "Avatar" : "Banner"} updated.`, { timeout: 15_000 });
         const original = await receipt();
         const delivery = await page.request.get(`${storage!.publicBase}/${original}`, { maxRedirects: 0 }); expect(delivery.status()).toBe(200); expect(delivery.headers()["content-type"]).toContain("image/webp");
+        const cache = delivery.headers()["cache-control"]?.toLowerCase().split(",").map(value => value.trim()) ?? [];
+        expect(cache).toContain("no-store"); expect(cache).not.toContain("immutable");
+        expect(["HIT", "STALE", "UPDATING", "REVALIDATED"]).not.toContain(delivery.headers()["cf-cache-status"]?.toUpperCase());
+        expect(Number(delivery.headers().age ?? 0)).toBe(0);
+        const deliveredBody = await delivery.body();
+        const delivered = await sharp(deliveredBody).metadata(); expect(delivered.format).toBe("webp");
+        const pixels = await sharp(deliveredBody).raw().toBuffer(); expect(pixels.byteLength).toBeGreaterThan(0);
+        expect(delivered.width).toBeGreaterThanOrEqual(kind === "avatar" ? 128 : 600);
+        expect(delivered.height).toBeGreaterThanOrEqual(kind === "avatar" ? 128 : 160);
         await page.reload(); expect(await receipt()).toBe(original);
         await page.getByRole("button", { name: "Edit profile", exact: true }).click();
         const second = await sharp(first).tint("#cc4020").png().toBuffer();

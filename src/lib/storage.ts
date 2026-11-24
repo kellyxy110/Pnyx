@@ -13,11 +13,15 @@ function client(config: StorageConfig) { return new S3Client({ region: "auto", e
 export async function putImage(input: { key: string; body: Buffer; contentType: string; bytes: number; width: number; height: number }): Promise<StoredImage> {
   const config = getConfig();
   if (!config) throw new Error("STORAGE_NOT_CONFIGURED");
-  await client(config).send(new PutObjectCommand({ Bucket: config.bucket, Key: input.key, Body: input.body, ContentType: input.contentType, CacheControl: "public, max-age=31536000, immutable" }));
+  const storage = client(config);
+  try { await storage.send(new PutObjectCommand({ Bucket: config.bucket, Key: input.key, Body: input.body, ContentType: input.contentType, CacheControl: "no-store" })); }
+  finally { storage.destroy(); }
   return { key: input.key, url: `${config.publicBaseUrl}/${input.key}`, contentType: input.contentType, bytes: input.bytes, width: input.width, height: input.height };
 }
 export async function deleteObject(key: string | null | undefined) {
   const config = getConfig();
   if (!config || !key) return;
-  await client(config).send(new DeleteObjectCommand({ Bucket: config.bucket, Key: key }));
+  const storage = client(config);
+  try { await storage.send(new DeleteObjectCommand({ Bucket: config.bucket, Key: key })); }
+  finally { storage.destroy(); }
 }

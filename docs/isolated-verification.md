@@ -52,7 +52,7 @@ For each avatar and banner, on mobile/tablet/desktop, the prepared suite:
 
 1. Refuses a fixture that already has media of that kind.
 2. Generates a synthetic raster and uploads through the real UI.
-3. Reads persisted metadata and verifies the object at the R2 origin and delivery URL.
+3. Reads persisted metadata and verifies the object at the R2 origin and delivery URL, including no-store metadata/response policy, no cached-hit/stale response and actual WebP decoding/dimensions.
 4. Reloads and verifies the same pointer.
 5. Replaces with a different image, verifies the new pointer and old-origin absence.
 6. Removes through the UI, reloads, checks the cleared pointer and replacement-origin absence.
@@ -60,4 +60,4 @@ For each avatar and banner, on mobile/tablet/desktop, the prepared suite:
 
 No provider test is reported passed until executed with the isolated settings. Six skips without credentials are an explicit blocked media gate. The route unit tests separately exercise real Sharp decoding with mocked storage/pointer failures.
 
-Origin HEAD absence is not proof that a previously cached public delivery URL is purged. Current upload metadata requests long-lived immutable caching; delivery-cache withdrawal/purge policy needs explicit provider acceptance before 6A media sign-off. Durable cleanup retries, provider-failure reconciliation, account-deletion asset acceptance and production-adjacent acceptance also remain open. Do not convert these origin tests into a claim of complete deletion propagation or completed 6A.
+New uploads request Cache-Control: no-store. This corrects the prior year-long immutable policy; it does not rewrite historical object metadata, purge existing caches or override provider delivery rules. Origin HEAD absence is not proof that a previously cached public delivery URL is purged. Delivery-cache withdrawal/purge policy needs explicit provider acceptance before 6A media sign-off. Durable cleanup retries, provider-failure reconciliation, account-deletion asset acceptance and production-adjacent acceptance also remain open. Do not convert these origin tests into a claim of complete deletion propagation or completed 6A.
