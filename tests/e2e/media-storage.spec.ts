@@ -45,7 +45,7 @@ test.describe("dedicated R2 media acceptance", () => {
         const input = page.getByLabel(kind === "avatar" ? "Avatar image" : "Banner image", { exact: true });
         const first = await sharp({ create: { width: kind === "avatar" ? 256 : 800, height: kind === "avatar" ? 256 : 240, channels: 3, background: "#2040cc" } }).png().toBuffer();
         await input.setInputFiles({ name: `${kind}-first.png`, mimeType: "image/png", buffer: first });
-        await expect(page.getByRole("status")).toContainText(`${kind === "avatar" ? "Avatar" : "Banner"} updated.`, { timeout: 15_000 });
+        await expect(page.locator(".profile-message.success")).toContainText(`${kind === "avatar" ? "Avatar" : "Banner"} updated.`, { timeout: 15_000 });
         const original = await receipt();
         const delivery = await page.request.get(`${storage!.publicBase}/${original}`, { maxRedirects: 0 }); expect(delivery.status()).toBe(200); expect(delivery.headers()["content-type"]).toContain("image/webp");
         const cache = delivery.headers()["cache-control"]?.toLowerCase().split(",").map(value => value.trim()) ?? [];
@@ -61,9 +61,19 @@ test.describe("dedicated R2 media acceptance", () => {
         await page.getByRole("button", { name: "Edit profile", exact: true }).click();
         const second = await sharp(first).tint("#cc4020").png().toBuffer();
         await input.setInputFiles({ name: `${kind}-second.png`, mimeType: "image/png", buffer: second });
-        await expect(page.getByRole("status")).toContainText(`${kind === "avatar" ? "Avatar" : "Banner"} updated.`, { timeout: 15_000 });
+        await expect(page.locator(".profile-message.success")).toContainText(`${kind === "avatar" ? "Avatar" : "Banner"} updated.`, { timeout: 15_000 });
         const replacement = await receipt(); expect(replacement).not.toBe(original); await absent(original);
-        await page.getByRole("button", { name: `Remove ${kind}`, exact: true }).click(); await expect(page.getByRole("status")).toContainText(`${kind === "avatar" ? "Avatar" : "Banner"} removed.`);
+        let releaseRemoval!: () => void;
+        const removalGate = new Promise<void>(resolve => { releaseRemoval = resolve; });
+        const mediaRoute = "**/api/account/profile/media?kind=*";
+        await page.route(mediaRoute, async route => { if (route.request().method() === "DELETE") await removalGate; await route.continue(); });
+        try {
+          await page.getByRole("button", { name: `Remove ${kind}`, exact: true }).click();
+          await expect(page.getByRole("status")).toHaveText(`Removing ${kind}…`);
+          await expect(page.locator(".profile-message.success")).toHaveCount(0);
+          await expect(page.getByRole("button", { name: "Save profile", exact: true })).toBeDisabled();
+        } finally { releaseRemoval(); await page.unroute(mediaRoute); }
+        await expect(page.locator(".profile-message.success")).toContainText(`${kind === "avatar" ? "Avatar" : "Banner"} removed.`);
         await page.reload(); const removed = await db.user.findUniqueOrThrow({ where: { id: fixture.id }, select: { avatarKey: true, bannerKey: true } }); expect(removed[field]).toBeNull(); await absent(replacement);
       } finally {
         try {

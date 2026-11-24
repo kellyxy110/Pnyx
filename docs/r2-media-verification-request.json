@@ -1,4 +1,4 @@
 {
   "enabled": true,
-  "reason": "Owner saved both test S3 credentials; environment UI verified both secret names and exactly one allowed remediation branch on 24 November 2026."
+  "reason": "Rerun after correcting media removal feedback and strict status assertions exposed by run 45420907437; provider calls and scoped cleanup completed without cleanup errors."
 }
