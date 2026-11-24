@@ -115,7 +115,8 @@ Before public launch, Pnyx must demonstrate a reliable question-to-useful-answer
 - [x] Run isolated authenticated browser journeys for profile persistence, Space membership, and scoped composer context; the November 3 remediation evidence records 90 passing browser checks and three skipped R2 cases. These are historical scoped runs, not current hosted acceptance.
 - [x] Verify critical native PostgreSQL paths: replay all 12 migrations, detect no schema drift, and pass 27 real HTTP/session/concurrency scenarios for `fa7a291`. See `docs/end-to-end-profile-review-2026-11-03.md`; October evidence remains historical.
 - [ ] Record production-adjacent browser acceptance, including enabled media flows; local API evidence does not replace this gate.
-- [ ] Positively validate app, database and storage test-target isolation before additional authenticated/media browser execution; excluding one production hostname is insufficient.
+- [x] Implement positive disposable target checks and nonce-bound running-app configuration verification before authenticated/media execution; see `docs/test-isolation-2026-11-24.md` for tested scope.
+- [ ] Execute provider-backed avatar/banner, cache withdrawal and cleanup acceptance with reviewed dedicated R2 settings; prepared or skipped cases do not close this gate.
 - [ ] Preserve/reconcile the Windows checkout and identify the exact candidate without bulk staging or pushing main.
 - [ ] Reverify and release the remediation candidate with verified Vercel identity/access, fresh dependency evidence and an explicit release/rollback record. The older f7305ab READY handoff is not evidence that later fixes are live.
 

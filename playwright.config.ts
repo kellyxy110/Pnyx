@@ -7,14 +7,15 @@ export default defineConfig({
   testDir: "./tests/e2e",
   timeout: 30_000,
   expect: { timeout: 5_000 },
-  fullyParallel: true,
+  fullyParallel: process.env.E2E_ALLOW_AUTHENTICATED !== "true",
+  workers: process.env.E2E_ALLOW_AUTHENTICATED === "true" ? 1 : undefined,
   reporter: [["list"], ["html", { outputFolder: "artifacts/playwright-report", open: "never" }]],
   use: {
     baseURL,
     browserName: "chromium",
     launchOptions: executablePath ? { executablePath } : undefined,
-    trace: "retain-on-failure",
-    screenshot: "only-on-failure",
+    trace: process.env.E2E_ALLOW_AUTHENTICATED === "true" ? "off" : "retain-on-failure",
+    screenshot: process.env.E2E_ALLOW_AUTHENTICATED === "true" ? "off" : "only-on-failure",
     video: "off",
   },
   projects: [

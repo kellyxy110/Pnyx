@@ -24,4 +24,4 @@ Configure these in Vercel Production and Preview without committing values:
 
 ## Operational verification
 
-Before enabling uploads for users, configure a dedicated R2 bucket and public delivery domain, then verify upload, replacement, deletion, cache behavior, and account-deletion cleanup in Production with a controlled test account. Do not use database binaries for media.
+Before enabling uploads for users, follow [isolated verification](isolated-verification.md) with a dedicated test bucket and disposable local database/account. Run upload, replacement, reload and origin deletion there first. Delivery-cache behavior, account-deletion cleanup and later production-adjacent acceptance require their own evidence; do not run fixture writes or destructive tests against production. Do not use database binaries for media.

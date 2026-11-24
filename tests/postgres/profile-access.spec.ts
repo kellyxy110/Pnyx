@@ -1,3 +1,5 @@
+import { verificationTarget as localTarget } from "../../src/lib/disposable-verification";
+import { assertVerifiedApplication } from "../support/verified-application";
 import { randomUUID } from "node:crypto";
 import { expect, request, test, type APIRequestContext } from "@playwright/test";
 import { PrismaClient } from "@prisma/client";
@@ -5,15 +7,10 @@ import bcrypt from "bcryptjs";
 import { verificationTarget } from "./target";
 import { changeProfileMedia } from "../../src/lib/profile-media";
 
-// The native runner keeps its original strict guard. A separately opted-in local
-// PGlite run is permitted only against the fixed disposable loopback UI database.
-let origin: string;
-if (process.env.PNYX_PGLITE_UI === "1") {
-  const dbUrl = new URL(process.env.DATABASE_URL ?? ""); const app = new URL(process.env.APP_URL ?? "");
-  if (dbUrl.hostname !== "127.0.0.1" || dbUrl.pathname !== "/pnyx_ui" || app.origin !== "http://127.0.0.1:3000" || process.env.E2E_ALLOW_AUTHENTICATED !== "true") throw new Error("Disposable profile verification target rejected.");
-  origin = app.origin;
-} else { origin = verificationTarget(process.env).app.origin; }
+const { app } = process.env.PNYX_PGLITE_UI === "1" ? localTarget(process.env, true) : verificationTarget(process.env);
+const origin = app.origin;
 const db = new PrismaClient();
+let applicationVerified = false;
 const prefix = `release-${randomUUID().slice(0, 8)}`;
 const password = process.env.PNYX_FIXTURE_PASSWORD ?? `Fixture-A1-${randomUUID()}`;
 const users = ["owner", "follower", "stranger", "deletable"].map(kind => ({ id: `${prefix}-${kind}`, username: `${prefix}-${kind}`, email: `${prefix}-${kind}@example.test`, displayName: `${prefix} ${kind}` }));
@@ -34,6 +31,7 @@ async function login(user: typeof owner) {
 }
 
 test.beforeAll(async()=>{
+ const guard=await request.newContext({baseURL:origin});try{await assertVerifiedApplication(guard); applicationVerified = true;}finally{await guard.dispose();}
  const passwordHash=await bcrypt.hash(password,10);
  for(const user of users)await db.user.create({data:{...user,passwordHash,emailVerifiedAt:new Date(),links:["https://example.test/notes"]}});
  publicSpace=await db.space.create({data:{slug:`${prefix}-public`,name:`${prefix} public Space`,description:"Disposable public Space"}});
@@ -61,6 +59,7 @@ test.beforeEach(async()=>{
  await db.userFollow.create({data:{followerId:follower.id,followingId:owner.id}});
 });
 test.afterAll(async()=>{
+ if(!applicationVerified){await db.$disconnect();return;}
  for(const client of contexts)await client.dispose();
  await db.analyticsEvent.deleteMany({where:{OR:[{userId:{in:users.map(u=>u.id)}},{properties:{path:["artifactId"],equals:artifacts.sourceLeak?.id??""}}]}}).catch(()=>{});
  await db.space.deleteMany({where:{id:{in:[publicSpace?.id,privateSpace?.id].filter(Boolean)}}});

@@ -19,14 +19,16 @@
     "audit:responsive": "node scripts/audit-responsive.mjs",
     "audit:security-config": "node scripts/audit-security-config.mjs",
     "audit:security-headers": "node scripts/audit-security-headers.mjs",
-    "audit:security": "npm run audit:security-config && npm run audit:security-headers"
+    "audit:security": "npm run audit:security-config && npm run audit:security-headers",
+    "verify:browser": "node --import tsx scripts/verify-postgres.ts --browser",
+    "verify:media": "node --import tsx scripts/verify-postgres.ts --browser --media"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1097.0",
     "@aws-sdk/s3-request-presigner": "^3.1097.0",
     "@prisma/client": "^6.13.0",
     "bcryptjs": "^3.0.3",
-    "next": "^15.4.5",
+    "next": "15.5.29",
     "next-auth": "^5.0.0-beta.32",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
@@ -55,7 +57,8 @@
     "postcss": "8.5.23",
     "sharp": "$sharp",
     "@prisma/config": {
-      "deepmerge-ts": "^8.0.2"
+      "deepmerge-ts": "^8.0.2",
+      "effect": "3.22.1"
     },
     "@typescript-eslint/typescript-estree": {
       "minimatch": "11.0.1"

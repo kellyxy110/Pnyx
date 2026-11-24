@@ -1,10 +1,12 @@
+import { authenticatedVerificationTarget } from "../../src/lib/disposable-verification";
+import { assertVerifiedApplication } from "../support/verified-application";
 import { readFile } from "node:fs/promises";
 import { expect, test, type Page } from "@playwright/test";
-const baseURL=process.env.PLAYWRIGHT_BASE_URL??"http://127.0.0.1:3000";
-const enabled=process.env.E2E_ALLOW_AUTHENTICATED==="true"&&Boolean(process.env.E2E_EMAIL&&process.env.E2E_PASSWORD)&&new URL(baseURL).hostname==="127.0.0.1";
+const enabled = Boolean(authenticatedVerificationTarget(process.env));
 async function signIn(page:Page){await page.goto('/sign-in');await page.getByLabel('Email',{exact:true}).fill(process.env.E2E_EMAIL!);await page.getByLabel('Password',{exact:true}).fill(process.env.E2E_PASSWORD!);await page.getByRole('button',{name:'Sign in to Pnyx'}).click();await expect(page).toHaveURL(/\/profile/);await expect(page.getByRole('button',{name:'Edit profile',exact:true})).toBeVisible();}
 test.describe('disposable profile and author workflows',()=>{
- test.skip(!enabled,'Requires explicit disposable loopback credentials.');
+ test.skip(!enabled,'Requires positively verified disposable fixtures.');
+ test.beforeAll(async({request})=>{if(enabled)await assertVerifiedApplication(request);});
  test('failed profile saves retain edits, release controls, and recover',async({page})=>{
   await signIn(page);await page.getByRole('button',{name:'Edit profile',exact:true}).click();
   const bio=page.getByRole('textbox',{name:'Bio',exact:true});await bio.fill('Edits retained through a connection failure.');let fail=true;

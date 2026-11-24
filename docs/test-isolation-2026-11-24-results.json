@@ -1,0 +1,68 @@
+{
+  "date": "2026-11-24",
+  "baseCommit": "26923eeebde1f4f07c7521fd8a84bb9a641da682",
+  "branch": "audit/pnyx-remediation-20261025",
+  "typecheck": "passed",
+  "lint": "passed, zero warnings",
+  "vitest": {
+    "files": 22,
+    "passed": 130
+  },
+  "build": {
+    "status": "passed",
+    "next": "15.5.29"
+  },
+  "localAPI": {
+    "database": "disposable PGlite; all twelve migration SQL files applied",
+    "stats": {
+      "startTime": "2026-11-24T11:44:39.907Z",
+      "duration": 3945.622,
+      "expected": 18,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "browser": {
+    "database": "disposable PGlite",
+    "stats": {
+      "startTime": "2026-11-24T11:44:44.535Z",
+      "duration": 155922.188,
+      "expected": 90,
+      "skipped": 6,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "mediaSkips": "six real R2 cases: two kinds across three devices"
+  },
+  "security": {
+    "dependencyAudit": {
+      "info": 0,
+      "low": 0,
+      "moderate": 0,
+      "high": 0,
+      "critical": 0,
+      "total": 0
+    },
+    "headers": "configuration 5/5 and live loopback HTTP checks passed"
+  },
+  "nativePostgres": {
+    "status": "pending new commit CI",
+    "plan": "PostgreSQL 16: migrations/drift, 27 HTTP scenarios and full browser suite with R2 disabled"
+  },
+  "R2": {
+    "status": "blocked",
+    "configuredValuesPresent": 0,
+    "requiredProviderValues": 5,
+    "resourcesProvisioned": false,
+    "providerBackedTestsExecuted": false
+  },
+  "remaining": [
+    "Dedicated R2 provider configuration and actual media acceptance",
+    "Delivery-cache withdrawal and durable cleanup/account-deletion provider evidence",
+    "Windows checkout preservation/reconciliation",
+    "Production-adjacent acceptance and release identity/access"
+  ],
+  "deployment": "not attempted; 6A remains open",
+  "integrationAPI": "design remains gated, not implemented"
+}

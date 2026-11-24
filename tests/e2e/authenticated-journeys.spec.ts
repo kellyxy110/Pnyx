@@ -1,12 +1,12 @@
+import { authenticatedVerificationTarget } from "../../src/lib/disposable-verification";
+import { assertVerifiedApplication } from "../support/verified-application";
 import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
 const email = process.env.E2E_EMAIL;
 const password = process.env.E2E_PASSWORD;
-const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? "http://127.0.0.1:3000";
-const canonicalProduction = "https://pnyx-psi.vercel.app";
-const canRun = process.env.E2E_ALLOW_AUTHENTICATED === "true" && Boolean(email && password) && baseURL.replace(/\/$/, "") !== canonicalProduction;
-const storageCanRun = canRun && process.env.E2E_STORAGE_ENABLED === "true";
+const target = authenticatedVerificationTarget(process.env);
+const canRun = Boolean(target);
 
 async function signIn(page: import("@playwright/test").Page) {
   await page.goto("/sign-in", { waitUntil: "domcontentloaded" });
@@ -17,7 +17,8 @@ async function signIn(page: import("@playwright/test").Page) {
 }
 
 test.describe("controlled authenticated journeys", () => {
-  test.skip(!canRun, "Requires E2E_ALLOW_AUTHENTICATED=true, dedicated test credentials, and a non-production PLAYWRIGHT_BASE_URL.");
+  test.skip(!canRun, "Requires positively verified disposable app/database and synthetic credentials.");
+  test.beforeAll(async ({ request }) => { if (canRun) await assertVerifiedApplication(request); });
 
   test("signs in, loads the persisted profile, and exposes the session menu", async ({ page }) => {
     await signIn(page);
@@ -104,14 +105,4 @@ test.describe("controlled authenticated journeys", () => {
     expect(scan.violations, JSON.stringify(scan.violations.map(v => ({ id: v.id, nodes: v.nodes.map(n => n.target) })))).toEqual([]);
   });
 
-  test("uploads and removes profile media when the isolated storage provider is enabled", async ({ page }) => {
-    test.skip(!storageCanRun, "Requires isolated R2 storage and E2E_STORAGE_ENABLED=true.");
-    await signIn(page);
-    await page.getByRole("button", { name: "Edit profile" }).click();
-    const avatar = page.locator('input[type="file"]').first();
-    await avatar.setInputFiles("public/images/pnyx-community-collage.png");
-    await expect(page.getByRole("status")).toContainText("Avatar updated.", { timeout: 15_000 });
-    await page.getByRole("button", { name: "Remove avatar" }).click();
-    await expect(page.getByRole("status")).toContainText("Avatar removed.", { timeout: 15_000 });
-  });
 });

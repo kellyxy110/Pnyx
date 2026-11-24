@@ -1,5 +1,9 @@
 # Pnyx roadmap and remaining work
 
+## 6A target-isolation implementation, 24 November 2026
+
+The [test-isolation batch](test-isolation-2026-11-24.md) adds positive app/database guards, a nonce-bound running-process configuration proof, dedicated storage declarations, synthetic account lifecycle, and reproducible native HTTP/browser/media commands. The [runbook](isolated-verification.md) replaces hostname-only test opt-in. Real R2 cases are prepared but remain blocked without isolated provider credentials; delivery-cache withdrawal and cleanup acceptance stay open. The candidate updates Next.js to 15.5.29 and Prisma's scoped Effect dependency to 3.22.1, with a complete zero-advisory audit recorded after the update. Current verification and CI scope are recorded in the batch report, not inferred from older counts. 6A remains open; no release or integration activation is implied.
+
 ## Public integration contract design, 24 November 2026
 
 A [read-only public discovery contract v1](pnyx-public-integration-v1.md), [OpenAPI design](pnyx-public-integration-v1.openapi.json), [synthetic examples](pnyx-public-integration-v1.examples.json) and [future acceptance matrix](pnyx-public-integration-v1-acceptance.md) now define the proposed boundary. Status: DRAFT, NOT IMPLEMENTED. Initial scope is public Space/discussion/published-knowledge cards and bounded keyword search, with canonical Pnyx links, explicit field allowlists and short-lived display leases. No application route, consumer integration, provider or deployment was enabled.

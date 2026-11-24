@@ -1,3 +1,4 @@
+import { assertVerifiedApplication } from "../support/verified-application";
 import { randomUUID } from "node:crypto";
 import { expect, request, test, type APIRequestContext } from "@playwright/test";
 import { PrismaClient } from "@prisma/client";
@@ -6,6 +7,7 @@ import { verificationTarget } from "./target";
 
 const { app } = verificationTarget(process.env);
 const db = new PrismaClient();
+let applicationVerified = false;
 const runId = randomUUID().replaceAll("-", "");
 const password = process.env.PNYX_FIXTURE_PASSWORD ?? `Fixture-A1-${randomUUID()}`;
 const accounts = ["member", "moderator", "deleted", "suspended"].map(kind => ({
@@ -40,6 +42,8 @@ async function assertResponses(responses: Awaited<ReturnType<APIRequestContext["
 }
 
 test.beforeAll(async () => {
+  const guard = await request.newContext({ baseURL: app.origin });
+  try { await assertVerifiedApplication(guard); applicationVerified = true; } finally { await guard.dispose(); }
   const passwordHash = await bcrypt.hash(password, 10);
   for (const account of accounts) await db.user.create({ data: { ...account, displayName: "Native verification member", passwordHash, emailVerifiedAt: new Date() } });
   await db.space.create({ data: { id: spaceId, slug, name: "Native verification", description: "Disposable integration fixture" } });
@@ -48,6 +52,7 @@ test.beforeAll(async () => {
 test.beforeEach(async () => { await db.spaceMember.deleteMany({ where: { spaceId } }); });
 test.afterEach(async () => { for (const client of contexts.splice(0)) await client.dispose(); });
 test.afterAll(async () => {
+  if (!applicationVerified) { await db.$disconnect(); return; }
   await db.space.deleteMany({ where: { id: spaceId } });
   await db.user.deleteMany({ where: { id: { in: accounts.map(account => account.id) } } });
   await db.$disconnect();

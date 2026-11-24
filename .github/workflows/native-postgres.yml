@@ -7,6 +7,9 @@ on:
       - .github/workflows/native-postgres.yml
       - scripts/verify-postgres.ts
       - tests/postgres/**
+      - tests/e2e/**
+      - tests/support/**
+      - playwright.config.ts
       - playwright.postgres.config.ts
       - src/**
       - prisma/**
@@ -52,4 +55,5 @@ jobs:
       - run: npm test
       - run: npm audit --omit=dev --audit-level=low
       - run: npm audit --audit-level=high
-      - run: npm run verify:postgres
+      - run: ./node_modules/.bin/playwright install --with-deps chromium
+      - run: npm run verify:browser
