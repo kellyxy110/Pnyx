@@ -59,11 +59,11 @@ export function AiAssistPanel({ postId }: { postId: string }) {
     }
   }
 
-  return <section className="panel border-[var(--blue)]/30" aria-labelledby="ai-assist-title">
+  return <section className="panel ai-tools" aria-labelledby="ai-assist-title">
     <div className="flex flex-wrap items-start justify-between gap-3">
       <div>
         <p className="eyebrow">AI assistance</p>
-        <h2 id="ai-assist-title" className="text-xl font-semibold text-[var(--navy)]">Make this discussion easier to use</h2>
+        <h2 id="ai-assist-title" className="text-xl font-semibold text-[var(--navy)]">AI tools for this discussion</h2>
         <p className="help mt-1">Generated text is a draft, not a verified answer. Only this public discussion is used.</p>
       </div>
       <span className="badge">AI-assisted</span>

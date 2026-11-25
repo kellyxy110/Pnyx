@@ -1,0 +1,46 @@
+/* Scoped workspace system: marketing and authentication keep their display scale. */
+.app-shell{font-family:Inter,"Geist",-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;line-height:1.55;grid-template-columns:180px minmax(0,1fr) 210px;column-gap:clamp(1.25rem,2.5vw,2.5rem)}
+.app-shell h1{color:var(--ink);font-size:clamp(1.625rem,2.5vw,2rem);font-weight:650;letter-spacing:-.025em;line-height:1.25;margin:0 0 1rem;overflow-wrap:anywhere}
+.app-shell h2,.app-shell .section-heading h2,.app-shell .community-intro h1{color:var(--ink);font-size:clamp(1.25rem,2vw,1.5rem);font-weight:650;letter-spacing:-.02em;line-height:1.3;margin-bottom:.75rem}
+.app-shell h3{letter-spacing:-.01em;line-height:1.4}.app-shell p,.app-shell li{overflow-wrap:anywhere}
+.app-shell .eyebrow{font-size:.6875rem;letter-spacing:.1em;margin-bottom:.75rem}
+.app-shell .surface-hero,.app-shell .surface-section,.app-shell .search-surface{padding-top:2rem}.app-shell .surface-hero{padding-bottom:0}
+.app-shell .surface-hero>p:not(.eyebrow),.app-shell .search-heading>p:last-child{font-size:1rem;line-height:1.65;max-width:65ch}
+.app-shell .section-heading{align-items:start;gap:1rem;margin-bottom:1.25rem}.app-shell .section-heading>p{font-size:.875rem;margin-bottom:0}
+.app-shell .help{font-size:.875rem;line-height:1.6}.app-shell .panel label,.app-shell .search-refinements label{font-size:.875rem;font-weight:600}
+.app-shell label small,.app-shell label .help{font-weight:400}.app-shell .panel{box-shadow:none}
+.app-shell .shell-sidebar a{font-size:.875rem;font-weight:600;min-height:44px}.app-shell .shell-sidebar,.app-shell .shell-context{padding-top:2rem}
+.app-shell .shell-context strong{font-size:.875rem}.app-shell .shell-context span{font-size:.8125rem;line-height:1.5}.app-shell .shell-context>a{background:var(--surface);padding:1rem}
+.app-shell .shell-search input{padding-right:5rem}.app-shell .product-header{min-height:80px}
+.app-shell :is(section,article,form)[id]{scroll-margin-top:6.5rem}.app-shell :is(input,select,textarea){scroll-margin-top:7rem}
+.app-shell .button-primary,.app-shell .button-outline{font-size:.875rem;font-weight:600;min-height:44px}
+.app-shell button[aria-pressed="true"]{background:var(--soft);border-color:var(--blue)}
+.app-shell .danger-action{color:#b42332}:root[data-theme="dark"] .app-shell .danger-action{color:#ffb4bc}
+/* Writing and search use the column otherwise reserved for generic shortcuts. */
+.app-shell.workspace-focused{grid-template-columns:180px minmax(0,1fr)}.app-shell .shell-context[hidden]{display:none}
+.workspace-focused>.surface-section,.workspace-focused>.search-surface{width:100%;max-width:960px}
+.knowledge-editor{display:grid;gap:1.5rem;margin-top:1.5rem}.knowledge-editor>label{display:grid;gap:.5rem}.knowledge-editor>.help{margin:0}
+.knowledge-metadata{border-top:1px solid var(--line);display:grid;gap:1.25rem;padding-top:1.5rem}.knowledge-metadata>button{justify-self:start}.knowledge-metadata label span{display:block}
+.knowledge-editor textarea{min-height:7rem}.knowledge-editor textarea[rows="12"]{min-height:20rem}
+.app-shell .editor-actions{align-items:center;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:.75rem;justify-content:start;padding:1.25rem 0 0}.editor-actions .help{flex-basis:100%}
+/* Reading order: title, author, body, actions, assistance, replies. */
+.discussion-detail{padding-top:2rem}.discussion-detail>a{display:inline-flex;min-height:44px;align-items:center;font-size:.875rem}
+.app-shell .discussion-article{padding:clamp(1.25rem,3vw,2rem)}
+.app-shell .discussion-article h1{font-size:clamp(1.75rem,3vw,2.25rem);line-height:1.2;margin-top:1rem;max-width:32ch}
+.discussion-byline{color:var(--muted);font-size:.875rem;line-height:1.6;margin:0 0 1.75rem}
+.discussion-body{color:var(--ink);font-size:1.0625rem;line-height:1.75;max-width:70ch;white-space:pre-wrap}
+.discussion-actions{align-items:center;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1.75rem;padding-top:1rem}
+.discussion-manage{margin-left:auto}.discussion-manage summary{border:1px solid var(--field-line);border-radius:.75rem;cursor:pointer;font-size:.875rem;min-height:44px;padding:.7rem 1rem}
+.discussion-manage>div{display:flex;flex-wrap:wrap;gap:.5rem;padding-top:.5rem}
+.app-shell .ai-tools h2{font-size:1.125rem;margin-bottom:.5rem}.ai-tools{border-left:3px solid var(--blue)}.ai-tools .eyebrow{margin-bottom:.5rem}
+.reply-composer{display:grid;gap:1rem}.reply-composer>button{justify-self:start}.reply-composer label{display:grid;gap:.65rem}.reply-composer textarea{min-height:9rem}
+/* Discovery groups live content into readable sections. */
+.discovery-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.25rem}.discovery-grid>:first-child{grid-column:1/-1}
+.discovery-secondary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1.25rem;margin-top:1.25rem}
+.discovery ul{list-style:none;margin:0;padding:0}.discovery li+li{border-top:1px solid var(--line);margin-top:1rem;padding-top:1rem}
+.discovery li>a{display:inline-block;line-height:1.5}.discovery li>a:hover{color:var(--blue);text-decoration:underline;text-underline-offset:3px}.discovery li p{margin-bottom:.4rem}
+.discovery .section-heading{flex-direction:column;gap:0}.discovery .section-heading>p{max-width:65ch}
+.app-shell .search-heading h1{font-size:clamp(1.625rem,2.5vw,2rem);letter-spacing:-.025em}.app-shell .search-heading{margin-bottom:1.25rem}
+.app-shell .search-workbench{box-shadow:none;border-top-width:1px}.app-shell .search-hint{font-size:.8125rem}
+@media(max-width:1100px){.app-shell,.app-shell.workspace-focused{grid-template-columns:160px minmax(0,1fr)}}
+@media(max-width:760px){.app-shell,.app-shell.workspace-focused{display:block}.app-shell .surface-hero,.app-shell .surface-section,.app-shell .search-surface,.discussion-detail{padding-top:1.5rem}.app-shell .product-header{min-height:72px}.discovery-grid,.discovery-secondary{grid-template-columns:minmax(0,1fr)}.app-shell .discussion-body{font-size:1rem}.discussion-manage{margin-left:0}.app-shell .section-heading{flex-direction:column}}

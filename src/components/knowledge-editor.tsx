@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 type Space = { slug: string; name: string };
@@ -44,35 +45,44 @@ export function KnowledgeEditor() {
     setBusy(true);
     setMessage("");
     const sourcePostId = form.sourceDiscussion.trim() ? extractDiscussionId(form.sourceDiscussion) : undefined;
+    try {
     const response = await fetch("/api/artifacts", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ spaceSlug: form.spaceSlug, type: form.type, title: form.title, summary: form.summary, body: form.body, sourcePostId }),
     });
     const result = await response.json().catch(() => null);
-    setBusy(false);
     if (!response.ok) { setMessage(result?.error ?? "Could not save this artifact. Check the required fields and try again."); return; }
     router.push(`/knowledge/${result.artifact.id}`);
+    } catch { setMessage("We couldn’t connect. Your writing is still here. Please try saving again."); }
+    finally { setBusy(false); }
   }
 
   async function assist() {
     if (!form.sourceDiscussion.trim()) { setMessage("Link a discussion first, then Scout can draft from it."); return; }
     setDraftBusy(true);
     const postId = extractDiscussionId(form.sourceDiscussion);
+    try {
     const response = await fetch(`/api/ai/draft`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ postId }) });
     const result = await response.json().catch(() => null);
-    setDraftBusy(false);
     if (!response.ok) { setMessage(result?.error ?? "Could not draft from this discussion."); return; }
+    if (!result?.text?.trim()) { setMessage(result?.message ?? "AI drafting is unavailable right now. You can continue writing manually."); return; }
     setForm((f) => ({ ...f, body: result.text ?? f.body }));
     setMessage("AI draft inserted for review. Edit it before saving.");
+    } catch { setMessage("AI drafting could not connect. Your writing is unchanged."); }
+    finally { setDraftBusy(false); }
   }
 
   const unableToSave = spacesState !== "ready" || busy;
 
   return (
-    <form onSubmit={submit} className="panel space-y-4" aria-label="Create a knowledge artifact">
-      <p className="help mt-2">AI assistance only uses a discussion you link below, and never publishes automatically — you always review and save.</p>
-      <div className="grid gap-3 sm:grid-cols-2">
+    <form onSubmit={submit} className="panel knowledge-editor" aria-label="Create a knowledge artifact">
+      <p className="help mt-2">Write in your own words, or link a discussion below for an AI draft you can review.</p>
+      <label>Title<input required minLength={3} maxLength={200} value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Name the knowledge clearly" /></label>
+      <label>Summary<textarea rows={3} maxLength={1000} value={form.summary} onChange={(e) => setForm({ ...form, summary: e.target.value })} placeholder="What will readers learn?" /></label>
+      <label>Content<textarea required rows={12} maxLength={50000} value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} placeholder="Write or edit the durable explanation in plain text." /></label>
+      <div className="knowledge-metadata">
+      <div className="composer-fields">
         <label>Space
           <select required value={form.spaceSlug} disabled={spacesState !== "ready"} onChange={(e) => setForm({ ...form, spaceSlug: e.target.value })} aria-describedby="knowledge-space-help">
             <option value="">{spacesState === "loading" ? "Loading Spaces…" : spacesState === "empty" ? "No Spaces available" : "Choose a Space"}</option>
@@ -82,20 +92,20 @@ export function KnowledgeEditor() {
         </label>
         <label>Type
           <select value={form.type} onChange={(e) => setForm({ ...form, type: e.target.value })}>
-            {["GUIDE", "ANSWER", "RESEARCH", "BENCHMARK", "CASE_STUDY"].map((t) => <option key={t}>{t}</option>)}
+            {["GUIDE", "ANSWER", "RESEARCH", "BENCHMARK", "CASE_STUDY"].map((t) => <option key={t} value={t}>{t.toLowerCase().replaceAll("_", " ")}</option>)}
           </select>
         </label>
       </div>
-      <label>Link a discussion <span className="help">(optional)</span>
-        <input value={form.sourceDiscussion} onChange={(e) => setForm({ ...form, sourceDiscussion: e.target.value })} placeholder="Paste a discussion link, e.g. https://pnyx.app/posts/…" />
+      <label>Discussion link (optional)
+        <input value={form.sourceDiscussion} onChange={(e) => setForm({ ...form, sourceDiscussion: e.target.value })} placeholder="Paste a discussion link, e.g. /posts/…" />
         <span className="help">Only link a discussion you&rsquo;re allowed to reuse. The original discussion and its author stay attributed on the artifact.</span>
       </label>
       <button type="button" className="button-outline" disabled={draftBusy} onClick={() => void assist()}>{draftBusy ? "Drafting…" : "Assist from linked discussion"}</button>
-      <label>Title<input required minLength={3} maxLength={200} value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Name the knowledge clearly" /></label>
-      <label>Summary<textarea rows={3} maxLength={1000} value={form.summary} onChange={(e) => setForm({ ...form, summary: e.target.value })} placeholder="What will readers learn?" /></label>
-      <label>Body<textarea required rows={12} maxLength={50000} value={form.body} onChange={(e) => setForm({ ...form, body: e.target.value })} placeholder="Write or edit the durable explanation in Markdown." /></label>
-      <footer className="flex gap-2">
+      </div>
+      <footer className="editor-actions">
         <button className="button-primary" disabled={unableToSave}>{busy ? "Saving…" : "Save draft"}</button>
+        <Link href="/knowledge" className="button-outline">Cancel</Link>
+        <span className="help">Saved as a private draft. Publishing is a separate step.</span>
       </footer>
       {message && <p role="status" className="help">{message}</p>}
     </form>

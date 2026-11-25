@@ -3,12 +3,14 @@ import { prisma } from "@/lib/prisma";
 import { createToken } from "@/lib/tokens";
 import { sendAccountMail } from "@/lib/mail";
 import { accountActionUrl } from "@/lib/app-url";
+import { parseJson, recoveryEmailSchema } from "@/lib/recovery-validation";
 
 export async function POST(request: Request) {
   if (!process.env.RESEND_API_KEY || !process.env.EMAIL_FROM || !accountActionUrl("reset-password?token=redacted")) return NextResponse.json({ error: "Password recovery is not configured yet." }, { status: 503 });
-  const body = await request.json().catch(() => null) as { email?: string } | null;
-  const email = body?.email?.trim().toLowerCase();
-  if (!email) return NextResponse.json({ error: "Enter a valid email address." }, { status: 400 });
+  const body = await request.json().catch(() => null);
+  const parsed = parseJson(body, recoveryEmailSchema);
+  if (!parsed) return NextResponse.json({ error: "Enter a valid email address." }, { status: 400 });
+  const email = parsed.email;
   const user = await prisma.user.findUnique({ where: { email } });
   if (user) {
     const token = createToken();

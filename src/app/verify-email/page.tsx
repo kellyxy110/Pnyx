@@ -39,7 +39,7 @@ export default function VerifyEmailPage() {
         <h1>{state === "checking" ? "Confirming your email" : state === "success" ? "You’re verified" : "Verification link issue"}</h1>
         <p className={state === "error" ? "auth-error" : state === "success" ? "auth-success" : "auth-form-note"}>{message}</p>
         {state === "success" && <Link className="auth-submit auth-submit-link" href="/sign-in">Continue to sign in</Link>}
-        {state === "error" && <Link className="auth-submit auth-submit-link" href="/sign-up">Return to sign up</Link>}
+        {state === "error" && <div className="grid gap-3"><Link className="auth-submit auth-submit-link" href="/sign-in">Return to sign in</Link><Link className="button-outline" href="/sign-up">Create an account</Link><p className="auth-form-note">Need another link? Use the resend-verification option on the sign-in page.</p></div>}
       </section>
     </AuthShell>
   );
